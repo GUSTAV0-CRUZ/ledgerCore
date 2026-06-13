@@ -3,9 +3,9 @@ spring:
     name: service-bancary
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/nome_do_seu_banco
-    username: seu_usuario
-    password: sua_senha
+    url: jdbc:postgresql://localhost:5432/service-bancary
+    username: user
+    password: password
     driver-class-name: org.postgresql.Driver
 
     jpa:
