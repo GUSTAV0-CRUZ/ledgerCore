@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: service-bancary
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/nome_do_seu_banco
+    username: seu_usuario
+    password: sua_senha
+    driver-class-name: org.postgresql.Driver
+
+    jpa:
+      database: POSTGRESQL
+      database-platform: org.hibernate.dialect.PostgreSQLDialect
+      generate-ddl: true
+      show-sql: true
+      hibernate:
+        ddl-auto: update
+
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+    virtual-host: /
+

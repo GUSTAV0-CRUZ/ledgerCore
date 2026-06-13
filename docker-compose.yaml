@@ -1,0 +1,37 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: postgres_service-bancary
+    environment:
+      POSTGRES_USER: 'user'
+      POSTGRES_PASSWORD: 'password'
+      POSTGRES_DB: 'service-bancary'
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - ledger-core
+
+  rabbitmq:
+    image: rabbitmq:3.13-management
+    container_name: rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: 'guest'
+      RABBITMQ_DEFAULT_PASS: 'guest'
+      RABBITMQ_DEFAULT_VHOST: /
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - ledger-core
+
+volumes:
+  rabbitmq_data:
+  postgres_data:
+
+networks:
+  ledger-core:
+    driver: bridge
