@@ -14,7 +14,7 @@ public class DepositAccountService implements DepositAccountUseCase {
 
   @Override
   public Account execute(DepositAccountCommand depositAccountCommand) {
-    var account = accountRepository.findById(depositAccountCommand.id());
+    var account = accountRepository.findByIdOrException(depositAccountCommand.id());
 
     account.deposit(depositAccountCommand.amount());
 

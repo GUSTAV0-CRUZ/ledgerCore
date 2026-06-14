@@ -1,12 +1,12 @@
-package dev.cruzs.gustavo.service_bancary.application.domain.enums;
+package dev.cruzs.gustavo.service_bancary.domain.enums;
 
-public enum TypeAccountEnum {
+public enum AccountTypeEnum {
   CURRENT("CURRENT"),
   SAVINGS("SAVINGS");
 
   private final String value;
 
-  TypeAccountEnum(String value) {
+  AccountTypeEnum(String value) {
     this.value = value;
   }
 

@@ -14,7 +14,7 @@ public class WithdrawAccountService implements WithdrawAccountUseCase {
 
   @Override
   public Account execute(WithdrawAccountCommand command) {
-    var account = accountRepository.findById(command.id());
+    var account = accountRepository.findByIdOrException(command.id());
 
     account.withdraw(command.amount());
 

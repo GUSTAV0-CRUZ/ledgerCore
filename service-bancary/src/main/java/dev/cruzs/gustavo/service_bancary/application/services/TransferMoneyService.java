@@ -16,8 +16,8 @@ public class TransferMoneyService implements TransferMoneyUseCase {
 
   @Override
   public Account execute(TransferMoneyCommand command) {
-    var accountSender = accountRepository.findById(command.sender());
-    var accountRecipient = accountRepository.findById(command.recipient());
+    var accountSender = accountRepository.findByIdOrException(command.sender());
+    var accountRecipient = accountRepository.findByIdOrException(command.recipient());
 
     accountSender.withdraw(command.amount());
     accountRecipient.deposit(command.amount());
