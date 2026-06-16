@@ -8,13 +8,12 @@ spring:
     password: password
     driver-class-name: org.postgresql.Driver
 
-    jpa:
-      database: POSTGRESQL
-      database-platform: org.hibernate.dialect.PostgreSQLDialect
-      generate-ddl: true
-      show-sql: true
-      hibernate:
-        ddl-auto: update
+  jpa:
+    database: POSTGRESQL
+    generate-ddl: true
+    show-sql: true
+    hibernate:
+      ddl-auto: update
 
   rabbitmq:
     host: localhost
@@ -23,3 +22,20 @@ spring:
     password: guest
     virtual-host: /
 
+  cloud:
+    function:
+      definition: createAccountConsumer;depositAccountConsumer;withdrawAccountConsumer;transferMoneyAccountConsumer
+    stream:
+      bindings:
+        createAccountConsumer-in-0:
+          destination: exchange-account-bancary
+          group: queue-create-account
+        depositAccountConsumer-in-0:
+          destination: exchange-account-bancary
+          group: queue-deposit-account
+        withdrawAccountConsumer-in-0:
+          destination: exchange-account-bancary
+          group: queue-withdraw-acount
+        transferMoneyAccountConsumer-in-0:
+          destination: exchange-account-bancary
+          group: queue-transferMoney-account

@@ -8,8 +8,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -47,12 +45,10 @@ public class AccountModel implements Serializable {
   @Column(nullable = false)
   private BigDecimal balance;
 
-  @JdbcTypeCode(SqlTypes.ENUM)
   @Enumerated(EnumType.STRING)
   @Column(nullable = false, name = "type_account")
   private AccountTypeEnum typeAccount;
 
-  @JdbcTypeCode(SqlTypes.ENUM)
   @Enumerated(EnumType.STRING)
   @Column(nullable = false, name = "status_account")
   private AccountStatusEnum status;
