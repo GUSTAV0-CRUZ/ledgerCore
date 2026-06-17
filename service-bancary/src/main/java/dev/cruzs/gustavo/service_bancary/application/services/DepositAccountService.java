@@ -18,6 +18,11 @@ public class DepositAccountService implements DepositAccountUseCase {
 
     account.deposit(depositAccountCommand.amount());
 
-    return accountRepository.save(account);
+    this.accountRepository.updateBalance(
+        depositAccountCommand.id(),
+        account.getBalance()
+    );
+
+    return account;
   }
 }

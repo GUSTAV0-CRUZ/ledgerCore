@@ -1,5 +1,6 @@
 package dev.cruzs.gustavo.service_bancary.adapters.configs;
 
+import dev.cruzs.gustavo.service_bancary.adapters.outbound.persistence.decorators.TransactionalTransferMoneyDecorator;
 import dev.cruzs.gustavo.service_bancary.application.ports.inbound.CreateAccountUseCase;
 import dev.cruzs.gustavo.service_bancary.application.ports.inbound.DepositAccountUseCase;
 import dev.cruzs.gustavo.service_bancary.application.ports.inbound.TransferMoneyUseCase;
@@ -37,6 +38,8 @@ public class UseCaseConfig {
 
   @Bean
   public TransferMoneyUseCase transferMoneyUseCase() {
-    return new TransferMoneyService(this.accountRepository);
+    TransferMoneyUseCase transferMoneyUseCase = new TransferMoneyService(this.accountRepository);
+
+    return new TransactionalTransferMoneyDecorator(transferMoneyUseCase);
   }
 }

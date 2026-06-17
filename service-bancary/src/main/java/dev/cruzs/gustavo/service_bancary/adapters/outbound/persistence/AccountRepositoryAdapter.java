@@ -5,7 +5,9 @@ import dev.cruzs.gustavo.service_bancary.adapters.outbound.persistence.models.Ac
 import dev.cruzs.gustavo.service_bancary.adapters.outbound.persistence.repositories.AccountJpaRepository;
 import dev.cruzs.gustavo.service_bancary.application.ports.outbound.AccountRepository;
 import dev.cruzs.gustavo.service_bancary.domain.Account;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -40,5 +42,13 @@ public class AccountRepositoryAdapter implements AccountRepository {
     if (accountModel == null) return Optional.empty();
 
     return Optional.of(AccountMap.mapToAccount(accountModel));
+  }
+
+  @Transactional
+  @Override
+  public void updateBalance(UUID id, BigDecimal amount) {
+    int row = this.accountJpaRepository.updateBalance(id, amount);
+
+    if (row == 0) throw new IllegalArgumentException("Account not updated balance");
   }
 }

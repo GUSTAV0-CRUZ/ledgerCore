@@ -17,7 +17,11 @@ public class WithdrawAccountService implements WithdrawAccountUseCase {
     var account = accountRepository.findByIdOrException(command.id());
 
     account.withdraw(command.amount());
+    this.accountRepository.updateBalance(
+        command.id(),
+        account.getBalance()
+    );
 
-    return accountRepository.save(account);
+    return account;
   }
 }

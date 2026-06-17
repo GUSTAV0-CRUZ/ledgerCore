@@ -22,7 +22,8 @@ public class TransferMoneyService implements TransferMoneyUseCase {
     accountSender.withdraw(command.amount());
     accountRecipient.deposit(command.amount());
 
-    accountRepository.saveAll(Arrays.asList(accountSender, accountRecipient));
+    this.accountRepository.updateBalance(command.sender(), accountSender.getBalance());
+    this.accountRepository.updateBalance(command.recipient(), accountRecipient.getBalance());
 
     return accountSender;
   }
