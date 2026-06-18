@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface AccountJpaRepository extends JpaRepository<AccountModel, UUID> {
@@ -15,4 +16,6 @@ public interface AccountJpaRepository extends JpaRepository<AccountModel, UUID> 
   @Modifying
   @Query("UPDATE AccountModel a SET a.balance = :balance WHERE a.id = :id")
   int updateBalance(@Param("id") UUID id, @Param("balance") BigDecimal balance);
+
+  Optional<AccountModel> findByUserId(UUID userId);
 }

@@ -8,7 +8,6 @@ import dev.cruzs.gustavo.service_bancary.domain.Account;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -29,15 +28,17 @@ public class AccountRepositoryAdapter implements AccountRepository {
   }
 
   @Override
-  public void saveAll(List<Account> accounts) {
-    List<AccountModel> accountModels = accounts.stream().map(AccountMap::mapToAccountModel).toList();
+  public Optional<Account> findById(UUID id) {
+    AccountModel accountModel = this.accountJpaRepository.findById(id).orElse(null);
 
-    this.accountJpaRepository.saveAll(accountModels);
+    if (accountModel == null) return Optional.empty();
+
+    return Optional.of(AccountMap.mapToAccount(accountModel));
   }
 
   @Override
-  public Optional<Account> findById(UUID id) {
-    AccountModel accountModel = this.accountJpaRepository.findById(id).orElse(null);
+  public Optional<Account> findByUserId(UUID userId) {
+    AccountModel accountModel = this.accountJpaRepository.findByUserId(userId).orElse(null);
 
     if (accountModel == null) return Optional.empty();
 

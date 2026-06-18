@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+
+enum AccountStatusEnum {
+  ACTIVE = 0;
+  BLOCKED = 1;
+  SUSPENDED = 2;
+  CLOSED = 3;
+}
+
+enum AccountTypeEnum {
+  CURRENT = 0;
+  SAVINGS = 1;
+}
+
+message AccountResponse {
+  string id = 1;
+  string user_id = 2;
+  int32 agency = 3;
+  string number = 4;
+  string balance = 5;
+  AccountTypeEnum typeAccount = 6;
+  AccountStatusEnum status = 7;
+}
+
+message FindAccountByUserIdRequest {
+  string user_id = 1;
+}
+
+service AccountService {
+  rpc FindAccountByUserId (FindAccountByUserIdRequest) returns (AccountResponse);
+}
