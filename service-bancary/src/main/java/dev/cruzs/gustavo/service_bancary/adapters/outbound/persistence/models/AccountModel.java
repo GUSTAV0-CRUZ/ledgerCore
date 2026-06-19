@@ -27,7 +27,7 @@ public class AccountModel implements Serializable {
   @Id
   private UUID id;
 
-  @Column(nullable = false, name = "user_id")
+  @Column(nullable = false, name = "user_id", unique = true)
   private UUID userId;
 
   @Column(nullable = false, name = "Bank_code")

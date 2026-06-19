@@ -1,15 +1,9 @@
 package dev.cruzs.gustavo.service_bancary.adapters.configs;
 
 import dev.cruzs.gustavo.service_bancary.adapters.outbound.persistence.decorators.TransactionalTransferMoneyDecorator;
-import dev.cruzs.gustavo.service_bancary.application.ports.inbound.CreateAccountUseCase;
-import dev.cruzs.gustavo.service_bancary.application.ports.inbound.DepositAccountUseCase;
-import dev.cruzs.gustavo.service_bancary.application.ports.inbound.TransferMoneyUseCase;
-import dev.cruzs.gustavo.service_bancary.application.ports.inbound.WithdrawAccountUseCase;
+import dev.cruzs.gustavo.service_bancary.application.ports.inbound.*;
 import dev.cruzs.gustavo.service_bancary.application.ports.outbound.AccountRepository;
-import dev.cruzs.gustavo.service_bancary.application.services.CreateAccountService;
-import dev.cruzs.gustavo.service_bancary.application.services.DepositAccountService;
-import dev.cruzs.gustavo.service_bancary.application.services.TransferMoneyService;
-import dev.cruzs.gustavo.service_bancary.application.services.WithdrawAccountService;
+import dev.cruzs.gustavo.service_bancary.application.services.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -41,5 +35,10 @@ public class UseCaseConfig {
     TransferMoneyUseCase transferMoneyUseCase = new TransferMoneyService(this.accountRepository);
 
     return new TransactionalTransferMoneyDecorator(transferMoneyUseCase);
+  }
+
+  @Bean
+  public FindAccountByUserIdUseCase findAccountByUserIdUseCase() {
+    return new FindAccountByUserIdService(this.accountRepository);
   }
 }
