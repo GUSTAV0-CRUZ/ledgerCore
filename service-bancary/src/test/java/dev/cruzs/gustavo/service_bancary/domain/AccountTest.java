@@ -1,7 +1,8 @@
 package dev.cruzs.gustavo.service_bancary.domain;
 
-import dev.cruzs.gustavo.service_bancary.domain.enums.AccountStatusEnum;
-import dev.cruzs.gustavo.service_bancary.domain.enums.AccountTypeEnum;
+import dev.cruzs.gustavo.service_bancary.account.domain.Account;
+import dev.cruzs.gustavo.service_bancary.account.domain.enums.AccountStatusEnum;
+import dev.cruzs.gustavo.service_bancary.account.domain.enums.AccountTypeEnum;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
