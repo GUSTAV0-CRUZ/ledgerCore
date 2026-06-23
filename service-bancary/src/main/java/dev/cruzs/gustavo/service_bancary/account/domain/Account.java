@@ -8,7 +8,7 @@ import java.util.UUID;
 
 public class Account {
   private final UUID id;
-  private final UUID userId;
+  private UUID userId;
   public static final Integer BANK_CODE = 999;
   public static final String INSTITUTION = "LedgerCore Bank - institution";
   private Integer agency;
@@ -27,7 +27,7 @@ public class Account {
       AccountStatusEnum status
   ) {
     this.id = id;
-    this.userId = userId;
+    this.checkUserId(userId);
     this.changeAgency(agency);
     this.changeNumber(number);
     this.changeBalance(balance);
@@ -73,29 +73,39 @@ public class Account {
     );
   }
 
+  private void checkUserId(UUID userId) {
+    if (userId == null) throw new IllegalArgumentException("userId can't be null");
+    this.userId = userId;
+  }
+
   public void changeAgency(Integer newAgency) {
+    if (newAgency == null) throw new IllegalArgumentException("Agency can't be null");
     if (newAgency < 0) throw new IllegalArgumentException("Agency can't be negative");
 
     this.agency = newAgency;
   }
 
   public void changeNumber(String newNumber) {
+    if (newNumber == null) throw new IllegalArgumentException("Number can't be null");
     if (newNumber.isEmpty()) throw new IllegalArgumentException("Number can't be empty");
 
     this.number = newNumber;
   }
 
   private void changeBalance(BigDecimal balance) {
+    if (balance == null) throw new IllegalArgumentException("Balance can't be null");
     if (balance.compareTo(BigDecimal.ZERO) < 0) throw new IllegalArgumentException("Balance can't be negative");
 
     this.balance = balance;
   }
 
    public void changeTypeAccount(AccountTypeEnum newType) {
+     if (newType == null) throw new IllegalArgumentException("TypeAccount can't be null");
     this.typeAccount = newType;
    }
 
   public void changeAccountStatus(AccountStatusEnum newStatus) {
+    if (newStatus == null) throw new IllegalArgumentException("StatusAccount can't be null");
     this.status = newStatus;
   }
 
@@ -130,10 +140,11 @@ public class Account {
 
   public void validateActive() {
     if (!this.status.equals(AccountStatusEnum.ACTIVE))
-      throw new IllegalArgumentException("Account status can't be ACTIVE");
+      throw new IllegalArgumentException("Account must be ACTIVE");
   }
 
   private void validateAmount(BigDecimal amount) {
+    if (amount == null) throw new IllegalArgumentException("Amount can't be null");
     if (amount.compareTo(BigDecimal.ZERO) < 0)
       throw new IllegalArgumentException("Amount can't be negative");
   }

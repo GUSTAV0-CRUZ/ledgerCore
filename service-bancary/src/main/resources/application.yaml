@@ -26,6 +26,15 @@ spring:
     function:
       definition: createAccountConsumer;depositAccountConsumer;withdrawAccountConsumer;transferMoneyAccountConsumer
     stream:
+      default:
+        consumer:
+          max-attempts: 3
+          backOffInitialInterval: 5000
+          error-channel-enabled: true
+          retryable-exceptions:
+            java.lang.IllegalArgumentException: false
+            org.springframework.dao.DataIntegrityViolationException: false
+            dev.cruzs.gustavo.service_bancary.account.domain.exceptions.DuplicateAccountException: false
       bindings:
         createAccountConsumer-in-0:
           destination: exchange-account-bancary
@@ -39,3 +48,8 @@ spring:
         transferMoneyAccountConsumer-in-0:
           destination: exchange-account-bancary
           group: queue-transferMoney-account
+      rabbit:
+        default:
+          consumer:
+            auto-bind-dlq: true
+            republish-to-dlq: true

@@ -1,6 +1,6 @@
 package dev.cruzs.gustavo.service_bancary.account.application.ports.outbound;
 
-import dev.cruzs.gustavo.service_bancary.account.application.ports.outbound.exceptions.NotFoundException;
+import dev.cruzs.gustavo.service_bancary.account.domain.exceptions.NotFoundAccountException;
 import dev.cruzs.gustavo.service_bancary.account.domain.Account;
 
 import java.math.BigDecimal;
@@ -14,6 +14,6 @@ public interface AccountRepository {
   void updateBalance(UUID id, BigDecimal amount);
 
   default Account findByIdOrException(UUID id) {
-    return this.findById(id).orElseThrow(() -> new NotFoundException("Account not found"));
+    return this.findById(id).orElseThrow(() -> new NotFoundAccountException("Account not found"));
   }
 }

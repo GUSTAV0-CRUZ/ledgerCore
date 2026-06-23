@@ -1,10 +1,12 @@
 package dev.cruzs.gustavo.service_bancary.account.adapters.outbound.persistence;
 
+import dev.cruzs.gustavo.service_bancary.account.domain.exceptions.DuplicateAccountException;
 import dev.cruzs.gustavo.service_bancary.account.adapters.outbound.persistence.maps.AccountMap;
 import dev.cruzs.gustavo.service_bancary.account.adapters.outbound.persistence.models.AccountModel;
 import dev.cruzs.gustavo.service_bancary.account.adapters.outbound.persistence.repositories.AccountJpaRepository;
 import dev.cruzs.gustavo.service_bancary.account.application.ports.outbound.AccountRepository;
 import dev.cruzs.gustavo.service_bancary.account.domain.Account;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
@@ -22,7 +24,14 @@ public class AccountRepositoryAdapter implements AccountRepository {
   public Account save(Account account) {
     AccountModel accountModel = AccountMap.mapToAccountModel(account);
 
-    this.accountJpaRepository.save(accountModel);
+    try {
+      this.accountJpaRepository.save(accountModel);
+    } catch (DataIntegrityViolationException dataIntegrityViolationException) {
+      throw  new DuplicateAccountException(
+          "Duplicate key in account",
+          dataIntegrityViolationException
+      );
+    }
 
     return AccountMap.mapToAccount(accountModel);
   }
