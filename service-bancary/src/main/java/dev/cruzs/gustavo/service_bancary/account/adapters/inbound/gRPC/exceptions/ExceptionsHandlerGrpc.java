@@ -13,4 +13,11 @@ public class ExceptionsHandlerGrpc {
         .withDescription(exception.getMessage())
         .withCause(exception);
   }
+
+  @GrpcExceptionHandler(IllegalArgumentException.class)
+  public Status illegalArgumentExceptionHandler(IllegalArgumentException exception) {
+    return Status.INVALID_ARGUMENT
+        .withDescription(exception.getMessage())
+        .withCause(exception);
+  }
 }
