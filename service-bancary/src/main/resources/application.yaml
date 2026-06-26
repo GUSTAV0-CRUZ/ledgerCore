@@ -24,7 +24,12 @@ spring:
 
   cloud:
     function:
-      definition: createAccountConsumer;depositAccountConsumer;withdrawAccountConsumer;transferMoneyAccountConsumer
+      definition:
+        createAccountConsumer;
+        depositAccountConsumer;
+        withdrawAccountConsumer;
+        transferMoneyAccountConsumer;
+        createUserConsumer;
     stream:
       default:
         consumer:
@@ -48,6 +53,9 @@ spring:
         transferMoneyAccountConsumer-in-0:
           destination: exchange-account-bancary
           group: queue-transferMoney-account
+        createUserConsumer-in-0:
+          destination: exchange-user
+          group: queue-create-user
       rabbit:
         default:
           consumer:
