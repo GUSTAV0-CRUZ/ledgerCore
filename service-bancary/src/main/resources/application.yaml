@@ -39,7 +39,8 @@ spring:
           retryable-exceptions:
             java.lang.IllegalArgumentException: false
             org.springframework.dao.DataIntegrityViolationException: false
-            dev.cruzs.gustavo.service_bancary.account.domain.exceptions.DuplicateAccountException: false
+            dev.cruzs.gustavo.service_bancary.account.domain.exceptions.DuplicateAttributeAccountException: false
+            dev.cruzs.gustavo.service_bancary.user.domain.exceptions.DuplicateAttributeUserException: false
       bindings:
         createAccountConsumer-in-0:
           destination: exchange-account-bancary

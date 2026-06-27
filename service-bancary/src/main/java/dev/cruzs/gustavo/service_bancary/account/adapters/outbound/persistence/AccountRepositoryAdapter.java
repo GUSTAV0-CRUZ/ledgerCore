@@ -1,6 +1,6 @@
 package dev.cruzs.gustavo.service_bancary.account.adapters.outbound.persistence;
 
-import dev.cruzs.gustavo.service_bancary.account.domain.exceptions.DuplicateAccountException;
+import dev.cruzs.gustavo.service_bancary.account.domain.exceptions.DuplicateAttributeAccountException;
 import dev.cruzs.gustavo.service_bancary.account.adapters.outbound.persistence.maps.AccountMap;
 import dev.cruzs.gustavo.service_bancary.account.adapters.outbound.persistence.models.AccountModel;
 import dev.cruzs.gustavo.service_bancary.account.adapters.outbound.persistence.repositories.AccountJpaRepository;
@@ -27,7 +27,7 @@ public class AccountRepositoryAdapter implements AccountRepository {
     try {
       this.accountJpaRepository.save(accountModel);
     } catch (DataIntegrityViolationException dataIntegrityViolationException) {
-      throw  new DuplicateAccountException(
+      throw  new DuplicateAttributeAccountException(
           "Duplicate key in account",
           dataIntegrityViolationException
       );

@@ -5,6 +5,8 @@ import dev.cruzs.gustavo.service_bancary.user.adapters.outbound.persistence.mode
 import dev.cruzs.gustavo.service_bancary.user.adapters.outbound.persistence.repository.UserJpaRepository;
 import dev.cruzs.gustavo.service_bancary.user.application.ports.outbound.UserRepository;
 import dev.cruzs.gustavo.service_bancary.user.domain.User;
+import dev.cruzs.gustavo.service_bancary.user.domain.exceptions.DuplicateAttributeUserException;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -19,9 +21,14 @@ public class UserRepositoryAdapter implements UserRepository {
   @Override
   public User save(User user) {
     UserModel userModel = UserMap.mapToUserModel(user);
-    userJpaRepository.save(userModel);
 
-    return UserMap.mapToUser(userModel);
+    try {
+      userJpaRepository.save(userModel);
+
+      return UserMap.mapToUser(userModel);
+    } catch (DataIntegrityViolationException error) {
+      throw new DuplicateAttributeUserException("Duplicate attribute in user", error);
+    }
   }
 
   @Override
