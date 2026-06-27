@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Configuration;
 import java.util.function.Consumer;
 
 @Configuration
-public class MessagingConfig {
+public class MessagingAccountConfig {
   @Bean
   public AccountConsumer accountConsumer(
       CreateAccountUseCase createAccountUseCase,

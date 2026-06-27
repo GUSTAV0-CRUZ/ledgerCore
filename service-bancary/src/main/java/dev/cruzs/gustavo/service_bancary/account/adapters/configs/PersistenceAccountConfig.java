@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class PersistenceConfig {
+public class PersistenceAccountConfig {
   @Bean
   public AccountRepository accountRepositoryAdapter(AccountJpaRepository accountJpaRepository) {
     return new AccountRepositoryAdapter(accountJpaRepository);

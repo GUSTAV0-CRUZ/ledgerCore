@@ -29,7 +29,7 @@ spring:
         depositAccountConsumer;
         withdrawAccountConsumer;
         transferMoneyAccountConsumer;
-        createUserConsumer;
+        createUserConsumer
     stream:
       default:
         consumer:

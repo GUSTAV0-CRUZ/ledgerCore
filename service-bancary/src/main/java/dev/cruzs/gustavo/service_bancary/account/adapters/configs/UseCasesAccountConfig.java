@@ -8,10 +8,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class UseCaseConfig {
+public class UseCasesAccountConfig {
   private final AccountRepository accountRepository;
 
-  public UseCaseConfig(AccountRepository accountRepository) {
+  public UseCasesAccountConfig(AccountRepository accountRepository) {
     this.accountRepository = accountRepository;
   }
 
