@@ -42,12 +42,14 @@ public class User {
   }
 
   public void changeName(String newName) {
+    if (newName == null) throw new IllegalArgumentException("Name cannot be null");
     if (newName.length() < 3) throw new IllegalArgumentException("Name too short, size minimum 3!");
 
     this.name = newName;
   }
 
   public void changeDateOfBirth(LocalDate newDateOfBirth) {
+    if (newDateOfBirth == null) throw new IllegalArgumentException("Date of birth cannot be null");
     LocalDate limitDateMax = LocalDate.now().minusYears(120);
     LocalDate limitDateMin = LocalDate.now().minusYears(16);
     if (newDateOfBirth.isBefore(limitDateMax)) throw new IllegalArgumentException("Date too long!");
@@ -57,13 +59,14 @@ public class User {
   }
 
   public void changeEmail(String newEmail) {
-    if (newEmail.isEmpty()) throw new IllegalArgumentException("Email cannot be empty!");
+    if (newEmail == null || newEmail.isEmpty()) throw new IllegalArgumentException("Email cannot be empty or null!");
     if (!EMAIL_REGEX.matcher(newEmail).matches()) throw  new IllegalArgumentException("Email is invalid!");
 
     this.email = newEmail;
   }
 
   public void changePassword(String newPassword) {
+    if (newPassword == null) throw new IllegalArgumentException("Password cannot be null!");
     if (newPassword.length() < 8) throw new IllegalArgumentException("Password too short, size minimum 8!");
 
     this.password = newPassword;
