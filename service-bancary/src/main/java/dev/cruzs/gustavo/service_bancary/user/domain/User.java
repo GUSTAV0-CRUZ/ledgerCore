@@ -5,7 +5,9 @@ import java.util.UUID;
 import java.util.regex.Pattern;
 
 public class User {
-  private final static Pattern EMAIL_REGEX =Pattern.compile("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$");
+  private final static Pattern EMAIL_REGEX = Pattern.compile("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$");
+  private final static LocalDate LIMITMAXDATEOFBIRTH = LocalDate.now().minusYears(120);
+  private final static LocalDate LIMITMINDATEOFBIRTH = LocalDate.now().minusYears(16);
 
   private final UUID id;
   private String name;
@@ -50,10 +52,8 @@ public class User {
 
   public void changeDateOfBirth(LocalDate newDateOfBirth) {
     if (newDateOfBirth == null) throw new IllegalArgumentException("Date of birth cannot be null");
-    LocalDate limitDateMax = LocalDate.now().minusYears(120);
-    LocalDate limitDateMin = LocalDate.now().minusYears(16);
-    if (newDateOfBirth.isBefore(limitDateMax)) throw new IllegalArgumentException("Date too long!");
-    if (newDateOfBirth.isAfter(limitDateMin)) throw new IllegalArgumentException("User must be at least 16 years old!!");
+    if (newDateOfBirth.isBefore(LIMITMAXDATEOFBIRTH)) throw new IllegalArgumentException("Date too long!");
+    if (newDateOfBirth.isAfter(LIMITMINDATEOFBIRTH)) throw new IllegalArgumentException("User must be at least 16 years old!");
 
     this.dateOfBirth = newDateOfBirth;
   }
