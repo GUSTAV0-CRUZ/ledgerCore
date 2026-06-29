@@ -38,6 +38,7 @@ spring:
           error-channel-enabled: true
           retryable-exceptions:
             java.lang.IllegalArgumentException: false
+            java.time.format.DateTimeParseException: false
             org.springframework.dao.DataIntegrityViolationException: false
             dev.cruzs.gustavo.service_bancary.account.domain.exceptions.DuplicateAttributeAccountException: false
             dev.cruzs.gustavo.service_bancary.user.domain.exceptions.DuplicateAttributeUserException: false
