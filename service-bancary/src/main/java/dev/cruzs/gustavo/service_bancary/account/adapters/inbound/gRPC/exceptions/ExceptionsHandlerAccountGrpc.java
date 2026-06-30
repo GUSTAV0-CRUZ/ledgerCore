@@ -6,7 +6,7 @@ import net.devh.boot.grpc.server.advice.GrpcAdvice;
 import net.devh.boot.grpc.server.advice.GrpcExceptionHandler;
 
 @GrpcAdvice
-public class ExceptionsHandlerGrpc {
+public class ExceptionsHandlerAccountGrpc {
   @GrpcExceptionHandler(NotFoundAccountException.class)
   public Status notFoundAccountExceptionHandler(NotFoundAccountException exception) {
     return Status.NOT_FOUND
