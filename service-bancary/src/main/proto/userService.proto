@@ -8,6 +8,7 @@ message UserResponse {
   string name = 2;
   string dateOfBirth = 3;
   string email = 4;
+  string cpf = 5;
 }
 
 message FindUserByIdRequest {

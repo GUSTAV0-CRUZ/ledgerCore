@@ -9,10 +9,13 @@ import dev.cruzs.gustavo.service_bancary.account.application.ports.inbound.comma
 import dev.cruzs.gustavo.service_bancary.account.application.ports.inbound.commands.TransferMoneyCommand;
 import dev.cruzs.gustavo.service_bancary.account.application.ports.inbound.commands.WithdrawAccountCommand;
 import dev.cruzs.gustavo.service_bancary.account.domain.Account;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.function.Consumer;
 
 public class AccountConsumer {
+  private final Logger logger = LoggerFactory.getLogger(AccountConsumer.class);
   private final CreateAccountUseCase createAccountUseCase;
   private final DepositAccountUseCase depositAccountUseCase;
   private final WithdrawAccountUseCase withdrawAccountUseCase;
@@ -33,45 +36,32 @@ public class AccountConsumer {
   public Consumer<CreateAccountCommand> createAccountConsumer() {
     return createAccountCommand -> {
       Account account = this.createAccountUseCase.execute(createAccountCommand);
-      System.out.println("Account Id: " + account.getId() + " created.");
+      logger.info("Account Id: {} created.", account.getId());
     };
   }
 
   public Consumer<DepositAccountCommand> depositAccountConsumer() {
     return depositAccountCommand -> {
       Account account = this.depositAccountUseCase.execute(depositAccountCommand);
-      System.out.println(
-          "Account Id: (" +
-          account.getId() +
-          ") deposit amount: " +
-          depositAccountCommand.amount()
-      );
+      logger.info("Account Id: ({}) deposit amount: {}", account.getId(), depositAccountCommand.amount());
     };
   }
 
   public Consumer<WithdrawAccountCommand> withdrawAccountConsumer() {
     return withdrawAccountCommand -> {
       Account account = this.withdrawAccountUseCase.execute(withdrawAccountCommand);
-      System.out.println(
-          "Account Id: (" +
-          account.getId() +
-          ") withdraw amount: " +
-          withdrawAccountCommand.amount()
-      );
+      logger.info("Account Id: ({}) withdraw amount: {}", account.getId(), withdrawAccountCommand.amount());
     };
   }
 
   public Consumer<TransferMoneyCommand> transferMoneyAccountConsumer() {
     return transferMoneyCommand -> {
       Account account = this.transferMoneyUseCase.execute(transferMoneyCommand);
-      System.out.println(
-          "Account Id: (" +
-          transferMoneyCommand.sender() +
-          ") transfer money with amount: " +
-          transferMoneyCommand.amount() +
-          " for account Id: (" +
-          transferMoneyCommand.recipient() +
-          ")"
+      logger.info(
+          "Account Id: ({}) transfer money with amount: {} for account Id: ({})",
+          transferMoneyCommand.sender(),
+          transferMoneyCommand.amount(),
+          transferMoneyCommand.recipient()
       );
     };
   }

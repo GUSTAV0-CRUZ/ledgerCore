@@ -10,11 +10,14 @@ import dev.cruzs.gustavo.service_bancary.account.domain.Account;
 import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.server.service.GrpcService;
 import dev.cruzs.gustavo.service_bancary.account.adapters.inbound.gRPC.generated.AccountServiceGrpc.AccountServiceImplBase;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.UUID;
 
 @GrpcService
 public class AccountService extends AccountServiceImplBase {
+  private final Logger logger = LoggerFactory.getLogger(AccountService.class);
   private final FindAccountByUserIdUseCase findAccountByUserIdUseCase;
 
   public AccountService(FindAccountByUserIdUseCase findAccountByUserIdUseCase) {
@@ -37,6 +40,7 @@ public class AccountService extends AccountServiceImplBase {
         .build();
 
     responseObserver.onNext(accountResponse);
+    logger.info("find account with id: {}", account.getId());
     responseObserver.onCompleted();
   }
 }

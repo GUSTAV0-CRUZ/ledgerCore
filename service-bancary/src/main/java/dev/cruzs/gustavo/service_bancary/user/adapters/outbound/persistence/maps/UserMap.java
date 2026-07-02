@@ -10,7 +10,7 @@ public class UserMap {
         userModel.getName(),
         userModel.getDateOfBirth(),
         userModel.getEmail(),
-        userModel.getPassword()
+        userModel.getCpf()
     );
   }
 
@@ -20,7 +20,7 @@ public class UserMap {
         user.getName(),
         user.getDateOfBirth(),
         user.getEmail(),
-        user.getPassword()
+        user.getCpf()
     );
   }
 }

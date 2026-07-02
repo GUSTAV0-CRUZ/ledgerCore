@@ -2,7 +2,6 @@ package dev.cruzs.gustavo.service_bancary.user.adapters.configs;
 
 import dev.cruzs.gustavo.service_bancary.user.application.ports.inbound.CreateUserUseCase;
 import dev.cruzs.gustavo.service_bancary.user.application.ports.inbound.FindUserByIdUseCase;
-import dev.cruzs.gustavo.service_bancary.user.application.ports.outbound.Hashing;
 import dev.cruzs.gustavo.service_bancary.user.application.ports.outbound.UserRepository;
 import dev.cruzs.gustavo.service_bancary.user.application.services.CreateUserService;
 import dev.cruzs.gustavo.service_bancary.user.application.services.FindUserByIdService;
@@ -18,8 +17,8 @@ public class UseCasesUserConfig {
   }
 
   @Bean
-  public CreateUserUseCase createUserUseCase(Hashing hashing) {
-    return new CreateUserService(this.userRepository, hashing);
+  public CreateUserUseCase createUserUseCase() {
+    return new CreateUserService(this.userRepository);
   }
 
   @Bean

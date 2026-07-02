@@ -8,11 +8,14 @@ import dev.cruzs.gustavo.service_bancary.user.application.ports.inbound.commands
 import dev.cruzs.gustavo.service_bancary.user.domain.User;
 import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.server.service.GrpcService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.UUID;
 
 @GrpcService
 public class UserService extends UserServiceGrpc.UserServiceImplBase {
+  private final Logger logger = LoggerFactory.getLogger(UserService.class);
   private final FindUserByIdUseCase findUserByIdUseCase;
 
   public UserService(FindUserByIdUseCase findUserByIdUseCase) {
@@ -30,9 +33,11 @@ public class UserService extends UserServiceGrpc.UserServiceImplBase {
         .setName(user.getName())
         .setDateOfBirth(user.getDateOfBirth().toString())
         .setEmail(user.getEmail())
+        .setCpf(user.getCpf())
         .build();
 
     responseObserver.onNext(userResponse);
+    logger.info("find user with id: {}", user.getId());
     responseObserver.onCompleted();
   }
 }

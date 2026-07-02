@@ -9,48 +9,54 @@ public class User {
   private final static LocalDate LIMITMAXDATEOFBIRTH = LocalDate.now().minusYears(120);
   private final static LocalDate LIMITMINDATEOFBIRTH = LocalDate.now().minusYears(16);
 
-  private final UUID id;
+  private UUID id;
   private String name;
   private LocalDate dateOfBirth;
   private String email;
-  private String password;
+  private String cpf;
 
-  private User(UUID id, String name, LocalDate dateOfBirth, String email, String password) {
-    this.id = id;
-    this.changeName(name);
-    this.changeDateOfBirth(dateOfBirth);
-    this.changeEmail(email);
-    this.changePassword(password);
+  private User(UUID id, String name, LocalDate dateOfBirth, String email, String cpf) {
+    this.checkId(id);
+    this.checkName(name);
+    this.checkDateOfBirth(dateOfBirth);
+    this.checkEmail(email);
+    this.checkCpf(cpf);
   }
 
-  public static User create(String name, LocalDate dateOfBirth, String email, String password) {
-    return new User(
-        UUID.randomUUID(),
-        name,
-        dateOfBirth,
-        email,
-        password
-    );
-  }
-
-  public static User restore(UUID id, String name, LocalDate dateOfBirth, String email, String password) {
+  public static User create(UUID id, String name, LocalDate dateOfBirth, String email, String cpf) {
     return new User(
         id,
         name,
         dateOfBirth,
         email,
-        password
+        cpf
     );
   }
 
-  public void changeName(String newName) {
+  public static User restore(UUID id, String name, LocalDate dateOfBirth, String email, String cpf) {
+    return new User(
+        id,
+        name,
+        dateOfBirth,
+        email,
+        cpf
+    );
+  }
+
+  private void checkId(UUID id) {
+    if (id == null) throw new IllegalArgumentException("ID cannot be null");
+
+    this.id = id;
+  }
+
+  private void checkName(String newName) {
     if (newName == null) throw new IllegalArgumentException("Name cannot be null");
     if (newName.length() < 3) throw new IllegalArgumentException("Name too short, size minimum 3!");
 
     this.name = newName;
   }
 
-  public void changeDateOfBirth(LocalDate newDateOfBirth) {
+  private void checkDateOfBirth(LocalDate newDateOfBirth) {
     if (newDateOfBirth == null) throw new IllegalArgumentException("Date of birth cannot be null");
     if (newDateOfBirth.isBefore(LIMITMAXDATEOFBIRTH)) throw new IllegalArgumentException("Date too long!");
     if (newDateOfBirth.isAfter(LIMITMINDATEOFBIRTH)) throw new IllegalArgumentException("User must be at least 16 years old!");
@@ -58,18 +64,17 @@ public class User {
     this.dateOfBirth = newDateOfBirth;
   }
 
-  public void changeEmail(String newEmail) {
+  private void checkEmail(String newEmail) {
     if (newEmail == null || newEmail.isEmpty()) throw new IllegalArgumentException("Email cannot be empty or null!");
     if (!EMAIL_REGEX.matcher(newEmail).matches()) throw  new IllegalArgumentException("Email is invalid!");
 
     this.email = newEmail;
   }
 
-  public void changePassword(String newPassword) {
-    if (newPassword == null) throw new IllegalArgumentException("Password cannot be null!");
-    if (newPassword.length() < 8) throw new IllegalArgumentException("Password too short, size minimum 8!");
+  private void checkCpf(String newCpf) {
+    if (newCpf == null || newCpf.isEmpty()) throw new IllegalArgumentException("Cpf cannot be null or empty!");
 
-    this.password = newPassword;
+    this.cpf = newCpf;
   }
 
   public UUID getId() {
@@ -88,7 +93,7 @@ public class User {
     return email;
   }
 
-  public String getPassword() {
-    return password;
+  public String getCpf() {
+    return cpf;
   }
 }
