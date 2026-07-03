@@ -1,114 +1,128 @@
 package dev.cruzs.gustavo.service_bancary.user.domain;
 
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class UserTest {
-  private User user;
+  private static User user;
 
-  @BeforeEach
-  void setUp() {
+  @BeforeAll
+  public static void setup() {
     user = User.create(
+        UUID.randomUUID(),
         "Gustavo Cruz",
-        LocalDate.parse("2001-01-01"),
+        LocalDate.parse("2006-01-01"),
         "gustavo.cruzs.dev@gmail.com",
-        "12345678"
+        "123.456.789-74"
     );
   }
 
   @Test
-  @DisplayName("Should update name of user with success")
-  void changeNameSuccess() {
-    this.user.changeName("Name Updated");
-    assertEquals("Name Updated", user.getName());
+  @DisplayName("Create user with success")
+  void createUserSuccess() {
+    UUID id = UUID.randomUUID();
+    String name = "Gustavo Cruz";
+    LocalDate dateOfBirth = LocalDate.parse("2001-01-01");
+    String email = "gustavo.cruzs.dev@gmail.com";
+    String cpf = "123.456.789-74";
+
+    User result = User.create(
+        id,
+        name,
+        dateOfBirth,
+        email,
+        cpf
+    );
+
+    assertEquals(id, result.getId());
+    assertEquals(name, result.getName());
+    assertEquals(dateOfBirth, result.getDateOfBirth());
+    assertEquals(email, result.getEmail());
+    assertEquals(cpf, result.getCpf());
   }
 
   @Test
-  @DisplayName("Should not update name of user with error: (Name cannot be null)")
-  void changeNameErrorCase1() {
+  @DisplayName("Should return the error: (Name cannot be null)")
+  void checkNameErrorCase1() {
     IllegalArgumentException result = assertThrows(
         IllegalArgumentException.class,
-        () -> this.user.changeName(null)
+        () -> User.create(user.getId(), null, user.getDateOfBirth(), user.getEmail(), user.getCpf())
     );
 
     assertEquals("Name cannot be null", result.getMessage());
   }
 
   @Test
-  @DisplayName("Should not update name of user with error: (Name too short, size minimum 3!)")
-  void changeNameErrorCase2() {
+  @DisplayName("Should not creat user, with error: (Name too short, size minimum 3!)")
+  void checkNameErrorCase2() {
     IllegalArgumentException result = assertThrows(
         IllegalArgumentException.class,
-        () -> this.user.changeName("Gu")
+        () -> User.create(user.getId(), "Gu", user.getDateOfBirth(), user.getEmail(), user.getCpf())
     );
 
     assertEquals("Name too short, size minimum 3!", result.getMessage());
   }
 
   @Test
-  @DisplayName("Should update dateOfBirth of user with success")
-  void changeDateOfBirthSuccess() {
-    this.user.changeDateOfBirth(LocalDate.parse("2006-06-06"));
-
-    assertEquals(LocalDate.parse("2006-06-06"), user.getDateOfBirth());
-  }
-
-  @Test
-  @DisplayName("Should not update dateOfBirth of user with error: (Date of birth cannot be null)")
-  void changeDateOfBirthCase1() {
+  @DisplayName("Should return the error: (Date of birth cannot be null)")
+  void checkDateOfBirthCase1() {
     IllegalArgumentException result = assertThrows(
         IllegalArgumentException.class,
-        () -> this.user.changeDateOfBirth(null)
+        () -> User.create(user.getId(), user.getName(), null, user.getEmail(), user.getCpf())
     );
 
     assertEquals("Date of birth cannot be null", result.getMessage());
   }
 
   @Test
-  @DisplayName("Should not update dateOfBirth of user with error: (Date too long!)")
-  void changeDateOfBirthCase2() {
+  @DisplayName("Should return the error: (Date too long!)")
+  void checkDateOfBirthCase2() {
     IllegalArgumentException result = assertThrows(
         IllegalArgumentException.class,
-        () -> this.user.changeDateOfBirth(LocalDate.now().minusYears(121))
+        () -> User.create(
+            user.getId(),
+            user.getName(),
+            LocalDate.now().minusYears(121),
+            user.getEmail(),
+            user.getCpf()
+        )
     );
 
     assertEquals("Date too long!", result.getMessage());
   }
 
   @Test
-  @DisplayName("Should not update dateOfBirth of user with error: (User must be at least 16 years old!)")
-  void changeDateOfBirthCase3() {
+  @DisplayName("Should return the error: (User must be at least 16 years old!)")
+  void checkDateOfBirthCase3() {
     IllegalArgumentException result = assertThrows(
         IllegalArgumentException.class,
-        () -> this.user.changeDateOfBirth(LocalDate.now().minusYears(15))
+        () -> User.create(user.getId(),
+            user.getName(),
+            LocalDate.now().minusYears(15),
+            user.getEmail(),
+            user.getCpf()
+        )
     );
 
     assertEquals("User must be at least 16 years old!", result.getMessage());
   }
 
   @Test
-  @DisplayName("Should update email of user with success")
-  void changeEmailSuccess() {
-    this.user.changeEmail("emailUpdated@gmail.com");
-    assertEquals("emailUpdated@gmail.com", user.getEmail());
-  }
-
-  @Test
-  @DisplayName("Should not update email of user with error: (Email cannot be empty or null!)")
-  void changeEmailErrorCase1() {
+  @DisplayName("Should return the error: (Email cannot be empty or null!)")
+  void checkEmailErrorCase1() {
     IllegalArgumentException result1 = assertThrows(
         IllegalArgumentException.class,
-        () -> this.user.changeEmail(null)
+        () -> User.create(user.getId(), user.getName(), user.getDateOfBirth(), null, user.getCpf())
     );
-
     IllegalArgumentException result2 = assertThrows(
         IllegalArgumentException.class,
-        () -> this.user.changeEmail("")
+        () -> User.create(user.getId(), user.getName(), user.getDateOfBirth(), "", user.getCpf())
     );
 
     assertEquals("Email cannot be empty or null!", result1.getMessage());
@@ -116,42 +130,40 @@ class UserTest {
   }
 
   @Test
-  @DisplayName("Should not update email of user with error: (Email is invalid!)")
-  void changeEmailErrorCase2() {
+  @DisplayName("Should return the error: (Email is invalid!)")
+  void checkEmailErrorCase2() {
     IllegalArgumentException result1 = assertThrows(
         IllegalArgumentException.class,
-        () -> this.user.changeEmail("email@")
+        () -> User.create(user.getId(), user.getName(), user.getDateOfBirth(), "email@", user.getCpf())
     );
 
     assertEquals("Email is invalid!", result1.getMessage());
   }
 
   @Test
-  @DisplayName("Should update password of user with success")
-  void changePasswordSuccess() {
-    this.user.changePassword("newPassword");
-    assertEquals("newPassword", user.getPassword());
+  @DisplayName("Should return the error: (Cpf cannot be null or empty!)")
+  void checkCpfErrorCase1() {
+    IllegalArgumentException result1 = assertThrows(
+        IllegalArgumentException.class,
+        () -> User.create(user.getId(), user.getName(), user.getDateOfBirth(), user.getEmail(), null)
+    );
+    IllegalArgumentException result2 = assertThrows(
+        IllegalArgumentException.class,
+        () -> User.create(user.getId(), user.getName(), user.getDateOfBirth(), user.getEmail(), "")
+    );
+
+    assertEquals("Cpf cannot be null or empty!", result1.getMessage());
+    assertEquals("Cpf cannot be null or empty!", result2.getMessage());
   }
 
   @Test
-  @DisplayName("Should not update password of user with error: (Password cannot be null!)")
-  void changePasswordErrorCase1() {
+  @DisplayName("Should return the error: (Cpf too short, size minimum 11!)")
+  void checkCpfErrorCase2() {
     IllegalArgumentException result = assertThrows(
         IllegalArgumentException.class,
-        () -> this.user.changePassword(null)
+        () -> User.create(user.getId(), user.getName(), user.getDateOfBirth(), user.getEmail(), "1234567890")
     );
 
-    assertEquals("Password cannot be null!", result.getMessage());
-  }
-
-  @Test
-  @DisplayName("Should not update password of user with error: (Password too short, size minimum 8!)")
-  void changePasswordErrorCase2() {
-    IllegalArgumentException result = assertThrows(
-        IllegalArgumentException.class,
-        () -> this.user.changePassword("1234567")
-    );
-
-    assertEquals("Password too short, size minimum 8!", result.getMessage());
+    assertEquals("Cpf too short, size minimum 11!", result.getMessage());
   }
 }

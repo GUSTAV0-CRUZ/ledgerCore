@@ -1,4 +1,4 @@
-package dev.cruzs.gustavo.service_bancary.domain;
+package dev.cruzs.gustavo.service_bancary.account.domain;
 
 import dev.cruzs.gustavo.service_bancary.account.domain.Account;
 import dev.cruzs.gustavo.service_bancary.account.domain.enums.AccountStatusEnum;

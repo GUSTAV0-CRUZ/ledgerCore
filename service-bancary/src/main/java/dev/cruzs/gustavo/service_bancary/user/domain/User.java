@@ -73,6 +73,7 @@ public class User {
 
   private void checkCpf(String newCpf) {
     if (newCpf == null || newCpf.isEmpty()) throw new IllegalArgumentException("Cpf cannot be null or empty!");
+    if (newCpf.length() < 11) throw new IllegalArgumentException("Cpf too short, size minimum 11!");
 
     this.cpf = newCpf;
   }
