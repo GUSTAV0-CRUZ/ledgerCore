@@ -33,7 +33,7 @@ public class UserService extends UserServiceGrpc.UserServiceImplBase {
         .setName(user.getName())
         .setDateOfBirth(user.getDateOfBirth().toString())
         .setEmail(user.getEmail())
-        .setCpf(user.getCpf())
+        .setCpf(user.getCpf().getCpfInString())
         .build();
 
     responseObserver.onNext(userResponse);

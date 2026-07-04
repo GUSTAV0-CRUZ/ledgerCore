@@ -20,7 +20,7 @@ public class UserMap {
         user.getName(),
         user.getDateOfBirth(),
         user.getEmail(),
-        user.getCpf()
+        user.getCpf().getCpfInString()
     );
   }
 }

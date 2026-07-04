@@ -1,5 +1,7 @@
 package dev.cruzs.gustavo.service_bancary.user.domain;
 
+import dev.cruzs.gustavo.service_bancary.user.domain.valueObjects.Cpf;
+
 import java.time.LocalDate;
 import java.util.UUID;
 import java.util.regex.Pattern;
@@ -13,7 +15,7 @@ public class User {
   private String name;
   private LocalDate dateOfBirth;
   private String email;
-  private String cpf;
+  private Cpf cpf;
 
   private User(UUID id, String name, LocalDate dateOfBirth, String email, String cpf) {
     this.checkId(id);
@@ -73,9 +75,8 @@ public class User {
 
   private void checkCpf(String newCpf) {
     if (newCpf == null || newCpf.isEmpty()) throw new IllegalArgumentException("Cpf cannot be null or empty!");
-    if (newCpf.length() < 11) throw new IllegalArgumentException("Cpf too short, size minimum 11!");
 
-    this.cpf = newCpf;
+    this.cpf = new Cpf(newCpf);
   }
 
   public UUID getId() {
@@ -94,7 +95,7 @@ public class User {
     return email;
   }
 
-  public String getCpf() {
+  public Cpf getCpf() {
     return cpf;
   }
 }
