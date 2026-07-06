@@ -3,6 +3,10 @@ package dev.cruzs.gustavo.service_bancary.user.domain;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EmptySource;
+import org.junit.jupiter.params.provider.NullSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -19,7 +23,7 @@ class UserTest {
         "Gustavo Cruz",
         LocalDate.parse("2006-01-01"),
         "gustavo.cruzs.dev@gmail.com",
-        "123.456.789-74"
+        "584.247.280-50"
     );
   }
 
@@ -30,7 +34,7 @@ class UserTest {
     String name = "Gustavo Cruz";
     LocalDate dateOfBirth = LocalDate.parse("2001-01-01");
     String email = "gustavo.cruzs.dev@gmail.com";
-    String cpf = "123.456.789-74";
+    String cpf = "584.247.280-50";
 
     User result = User.create(
         id,
@@ -44,7 +48,7 @@ class UserTest {
     assertEquals(name, result.getName());
     assertEquals(dateOfBirth, result.getDateOfBirth());
     assertEquals(email, result.getEmail());
-    assertEquals(cpf, result.getCpf());
+    assertEquals(cpf.replaceAll("[^0-9]", ""), result.getCpf().getCpfInString());
   }
 
   @Test
@@ -52,7 +56,7 @@ class UserTest {
   void checkNameErrorCase1() {
     IllegalArgumentException result = assertThrows(
         IllegalArgumentException.class,
-        () -> User.create(user.getId(), null, user.getDateOfBirth(), user.getEmail(), user.getCpf())
+        () -> User.create(user.getId(), null, user.getDateOfBirth(), user.getEmail(), user.getCpf().getCpfInString())
     );
 
     assertEquals("Name cannot be null", result.getMessage());
@@ -63,7 +67,7 @@ class UserTest {
   void checkNameErrorCase2() {
     IllegalArgumentException result = assertThrows(
         IllegalArgumentException.class,
-        () -> User.create(user.getId(), "Gu", user.getDateOfBirth(), user.getEmail(), user.getCpf())
+        () -> User.create(user.getId(), "Gu", user.getDateOfBirth(), user.getEmail(), user.getCpf().getCpfInString())
     );
 
     assertEquals("Name too short, size minimum 3!", result.getMessage());
@@ -74,7 +78,7 @@ class UserTest {
   void checkDateOfBirthCase1() {
     IllegalArgumentException result = assertThrows(
         IllegalArgumentException.class,
-        () -> User.create(user.getId(), user.getName(), null, user.getEmail(), user.getCpf())
+        () -> User.create(user.getId(), user.getName(), null, user.getEmail(), user.getCpf().getCpfInString())
     );
 
     assertEquals("Date of birth cannot be null", result.getMessage());
@@ -90,7 +94,7 @@ class UserTest {
             user.getName(),
             LocalDate.now().minusYears(121),
             user.getEmail(),
-            user.getCpf()
+            user.getCpf().getCpfInString()
         )
     );
 
@@ -106,7 +110,7 @@ class UserTest {
             user.getName(),
             LocalDate.now().minusYears(15),
             user.getEmail(),
-            user.getCpf()
+            user.getCpf().getCpfInString()
         )
     );
 
@@ -118,11 +122,11 @@ class UserTest {
   void checkEmailErrorCase1() {
     IllegalArgumentException result1 = assertThrows(
         IllegalArgumentException.class,
-        () -> User.create(user.getId(), user.getName(), user.getDateOfBirth(), null, user.getCpf())
+        () -> User.create(user.getId(), user.getName(), user.getDateOfBirth(), null, user.getCpf().getCpfInString())
     );
     IllegalArgumentException result2 = assertThrows(
         IllegalArgumentException.class,
-        () -> User.create(user.getId(), user.getName(), user.getDateOfBirth(), "", user.getCpf())
+        () -> User.create(user.getId(), user.getName(), user.getDateOfBirth(), "", user.getCpf().getCpfInString())
     );
 
     assertEquals("Email cannot be empty or null!", result1.getMessage());
@@ -134,36 +138,45 @@ class UserTest {
   void checkEmailErrorCase2() {
     IllegalArgumentException result1 = assertThrows(
         IllegalArgumentException.class,
-        () -> User.create(user.getId(), user.getName(), user.getDateOfBirth(), "email@", user.getCpf())
+        () -> User.create(user.getId(), user.getName(), user.getDateOfBirth(), "email@", user.getCpf().getCpfInString())
     );
 
     assertEquals("Email is invalid!", result1.getMessage());
   }
 
-  @Test
+  @ParameterizedTest
+  @NullSource
+  @EmptySource
   @DisplayName("Should return the error: (Cpf cannot be null or empty!)")
-  void checkCpfErrorCase1() {
-    IllegalArgumentException result1 = assertThrows(
+  void checkCpfErrorCase1(String invalidCpf) {
+    IllegalArgumentException result = assertThrows(
         IllegalArgumentException.class,
-        () -> User.create(user.getId(), user.getName(), user.getDateOfBirth(), user.getEmail(), null)
-    );
-    IllegalArgumentException result2 = assertThrows(
-        IllegalArgumentException.class,
-        () -> User.create(user.getId(), user.getName(), user.getDateOfBirth(), user.getEmail(), "")
+        () -> User.create(user.getId(), user.getName(), user.getDateOfBirth(), user.getEmail(), invalidCpf)
     );
 
-    assertEquals("Cpf cannot be null or empty!", result1.getMessage());
-    assertEquals("Cpf cannot be null or empty!", result2.getMessage());
+    assertEquals("Cpf cannot be null or empty!", result.getMessage());
   }
 
   @Test
-  @DisplayName("Should return the error: (Cpf too short, size minimum 11!)")
+  @DisplayName("Should return the error: (Cpf must have exactly 11 digits!)")
   void checkCpfErrorCase2() {
     IllegalArgumentException result = assertThrows(
         IllegalArgumentException.class,
         () -> User.create(user.getId(), user.getName(), user.getDateOfBirth(), user.getEmail(), "1234567890")
     );
 
-    assertEquals("Cpf too short, size minimum 11!", result.getMessage());
+    assertEquals("Cpf must have exactly 11 digits!", result.getMessage());
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = {"12345678901", "11111111111"})
+  @DisplayName("Should return the error: (Invalid CPF!)")
+  void checkCpfErrorCase3(String invalidCpf) {
+    IllegalArgumentException result = assertThrows(
+        IllegalArgumentException.class,
+        () -> User.create(user.getId(), user.getName(), user.getDateOfBirth(), user.getEmail(), invalidCpf)
+    );
+
+    assertEquals("Invalid CPF!", result.getMessage());
   }
 }
