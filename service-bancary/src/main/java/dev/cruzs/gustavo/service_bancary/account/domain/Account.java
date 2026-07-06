@@ -28,10 +28,10 @@ public class Account {
   ) {
     this.id = id;
     this.checkUserId(userId);
-    this.changeAgency(agency);
-    this.changeNumber(number);
-    this.changeBalance(balance);
-    this.changeTypeAccount(typeAccount);
+    this.checkAgency(agency);
+    this.checkNumber(number);
+    this.checkBalance(balance);
+    this.checkTypeAccount(typeAccount);
     this.changeAccountStatus(status);
   }
 
@@ -74,32 +74,31 @@ public class Account {
   }
 
   private void checkUserId(UUID userId) {
-    if (userId == null) throw new IllegalArgumentException("userId can't be null");
+    if (userId == null) throw new IllegalArgumentException("UserId can't be null");
     this.userId = userId;
   }
 
-  public void changeAgency(Integer newAgency) {
+  private void checkAgency(Integer newAgency) {
     if (newAgency == null) throw new IllegalArgumentException("Agency can't be null");
     if (newAgency < 0) throw new IllegalArgumentException("Agency can't be negative");
 
     this.agency = newAgency;
   }
 
-  public void changeNumber(String newNumber) {
-    if (newNumber == null) throw new IllegalArgumentException("Number can't be null");
-    if (newNumber.isEmpty()) throw new IllegalArgumentException("Number can't be empty");
+  private void checkNumber(String newNumber) {
+    if (newNumber == null || newNumber.isEmpty()) throw new IllegalArgumentException("Number can't be null or empty");
 
     this.number = newNumber;
   }
 
-  private void changeBalance(BigDecimal balance) {
+  private void checkBalance(BigDecimal balance) {
     if (balance == null) throw new IllegalArgumentException("Balance can't be null");
     if (balance.compareTo(BigDecimal.ZERO) < 0) throw new IllegalArgumentException("Balance can't be negative");
 
     this.balance = balance;
   }
 
-   public void changeTypeAccount(AccountTypeEnum newType) {
+   private void checkTypeAccount(AccountTypeEnum newType) {
      if (newType == null) throw new IllegalArgumentException("TypeAccount can't be null");
     this.typeAccount = newType;
    }

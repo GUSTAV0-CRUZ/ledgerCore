@@ -1,11 +1,12 @@
 package dev.cruzs.gustavo.service_bancary.account.domain;
 
-import dev.cruzs.gustavo.service_bancary.account.domain.Account;
 import dev.cruzs.gustavo.service_bancary.account.domain.enums.AccountStatusEnum;
 import dev.cruzs.gustavo.service_bancary.account.domain.enums.AccountTypeEnum;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -79,57 +80,123 @@ class AccountTest {
   }
 
   @Test
-  @DisplayName("Should updated the agency of account with success")
-  void changeAgencySuccess() {
-    account.changeAgency(888);
+  @DisplayName("Should return error: (UserId can't be null)")
+  void checkUserIdErrorCase1() {
+    IllegalArgumentException result = assertThrows(
+        IllegalArgumentException.class,
+        () -> Account.create(
+            null,
+            account.getAgency(),
+            account.getNumber(),
+            account.getBalance(),
+            account.getTypeAccount()
+        )
+    );
 
-    assertEquals(888, account.getAgency());
+    assertEquals("UserId can't be null", result.getMessage());
   }
 
   @Test
-  @DisplayName("Should not updated the agency of account with error: (Agency can't be negative)")
-  void changeAgencyError() {
+  @DisplayName("Should return error: (Agency can't be null)")
+  void checkAgencyErrorCase1() {
     IllegalArgumentException result = assertThrows(
         IllegalArgumentException.class,
-        () -> account.changeAgency(-1)
+        () -> Account.create(
+            account.getUserId(),
+            null,
+            account.getNumber(),
+            account.getBalance(),
+            account.getTypeAccount()
+        )
+    );
+
+    assertEquals("Agency can't be null", result.getMessage());
+  }
+
+  @Test
+  @DisplayName("Should return error: (Agency can't be negative)")
+  void checkAgencyErrorCase2() {
+    IllegalArgumentException result = assertThrows(
+        IllegalArgumentException.class,
+        () -> Account.create(
+            account.getUserId(),
+            -1,
+            account.getNumber(),
+            account.getBalance(),
+            account.getTypeAccount()
+        )
     );
 
     assertEquals("Agency can't be negative", result.getMessage());
   }
 
-  @Test
-  @DisplayName("Should updated the number of account with success")
-  void changeNumberSuccess() {
-    account.changeNumber("888888-8");
-
-    assertEquals("888888-8", account.getNumber());
-  }
-
-  @Test
-  @DisplayName("Should not updated the number of account with error: (Number can't be empty)")
-  void changeNumberError() {
+  @ParameterizedTest
+  @NullAndEmptySource
+  @DisplayName("Should return error: (Number can't be null or empty)")
+  void checkNumberError(String invalidNumber) {
     var result = assertThrows(
         IllegalArgumentException.class,
-        () -> account.changeNumber("")
+        () -> Account.create(
+            account.getUserId(),
+            account.getAgency(),
+            invalidNumber,
+            account.getBalance(),
+            account.getTypeAccount()
+        )
     );
 
-    assertEquals("Number can't be empty", result.getMessage());
+    assertEquals("Number can't be null or empty", result.getMessage());
   }
 
   @Test
-  @DisplayName("Should updated the typeAccount of account with success")
-  void changeTypeAccountSuccess() {
-    account.changeTypeAccount(AccountTypeEnum.SAVINGS);
+  @DisplayName("Should return error: (Balance can't be null)")
+  void checkBalanceErrorCase1() {
+    var result = assertThrows(
+        IllegalArgumentException.class,
+        () -> Account.create(
+            account.getUserId(),
+            account.getAgency(),
+            account.getNumber(),
+            null,
+            account.getTypeAccount()
+        )
+    );
 
-    assertEquals(AccountTypeEnum.SAVINGS, account.getTypeAccount());
+    assertEquals("Balance can't be null", result.getMessage());
   }
 
   @Test
-  @DisplayName("Should updated the accountStatus of account with success")
-  void changeAccountStatusSuccess() {
-    account.changeAccountStatus(AccountStatusEnum.BLOCKED);
+  @DisplayName("Should return error: (Balance can't be negative)")
+  void checkBalanceErrorCase2() {
+    var result = assertThrows(
+        IllegalArgumentException.class,
+        () -> Account.create(
+            account.getUserId(),
+            account.getAgency(),
+            account.getNumber(),
+            BigDecimal.valueOf(-1),
+            account.getTypeAccount()
+        )
+    );
 
-    assertEquals(AccountStatusEnum.BLOCKED, account.getStatus());
+    assertEquals("Balance can't be negative", result.getMessage());
+  }
+
+  @Test
+  @DisplayName("Should return error: (TypeAccount can't be null)")
+  void checkTypeAccountError() {
+    var result = assertThrows(
+        IllegalArgumentException.class,
+        () -> Account.create(
+            account.getUserId(),
+            account.getAgency(),
+            account.getNumber(),
+            account.getBalance(),
+            null
+        )
+    );
+
+    assertEquals("TypeAccount can't be null", result.getMessage());
   }
 
   @Test
@@ -140,7 +207,7 @@ class AccountTest {
   }
 
   @Test
-  @DisplayName("Should validated account with error: (Account status can't be ACTIVE)")
+  @DisplayName("Should return error: (Account must be ACTIVE)")
   void validateActiveError() {
     account.changeAccountStatus(AccountStatusEnum.BLOCKED);
     var result = assertThrows(
@@ -148,7 +215,7 @@ class AccountTest {
         () -> account.validateActive()
     );
 
-    assertEquals("Account status can't be ACTIVE", result.getMessage());
+    assertEquals("Account must be ACTIVE", result.getMessage());
   }
 
   @Test
