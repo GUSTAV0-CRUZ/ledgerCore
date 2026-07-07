@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -18,12 +19,14 @@ class HistoryTest {
   @DisplayName("Should create history with success")
   void createHistorySuccess() {
     UUID accountId = UUID.randomUUID();
+    BigDecimal amount = BigDecimal.valueOf(99.99);
     String destinataryName = "Gustavo Cruz";
     String institutionName = "ledger core - Institution";
     LocalDateTime transferDate = LocalDateTime.now();
 
     History result = History.create(
         accountId,
+        amount,
         destinataryName,
         institutionName,
         transferDate
@@ -31,6 +34,7 @@ class HistoryTest {
 
     assertNotNull(result.getId());
     assertEquals(accountId, result.getAccountId());
+    assertEquals(amount, result.getAmount());
     assertEquals(destinataryName, result.getDestinataryName());
     assertEquals(institutionName, result.getInstitutionName());
     assertEquals(transferDate, result.getTransferDate());
@@ -40,6 +44,7 @@ class HistoryTest {
   static void setUp() {
     history = History.create(
       UUID.randomUUID(),
+      BigDecimal.valueOf(99.99),
       "Gustavo Cruz",
       "ledger core - Institution",
       LocalDateTime.now()
@@ -53,6 +58,7 @@ class HistoryTest {
         IllegalArgumentException.class,
         () -> History.create(
             null,
+            history.getAmount(),
             history.getDestinataryName(),
             history.getInstitutionName(),
             history.getTransferDate()
@@ -60,6 +66,23 @@ class HistoryTest {
     );
 
     assertEquals("AccountId must not be null", result.getMessage());
+  }
+
+  @Test
+  @DisplayName("Should return error: (Amount must not be null)")
+  void checkAmountError() {
+    IllegalArgumentException result = assertThrows(
+        IllegalArgumentException.class,
+        () -> History.create(
+            history.getAccountId(),
+            null,
+            history.getDestinataryName(),
+            history.getInstitutionName(),
+            history.getTransferDate()
+        )
+    );
+
+    assertEquals("Amount must not be null", result.getMessage());
   }
 
   @ParameterizedTest
@@ -70,6 +93,7 @@ class HistoryTest {
         IllegalArgumentException.class,
         () -> History.create(
             history.getAccountId(),
+            history.getAmount(),
             destinataryName,
             history.getInstitutionName(),
             history.getTransferDate()
@@ -86,6 +110,7 @@ class HistoryTest {
         IllegalArgumentException.class,
         () -> History.create(
             history.getAccountId(),
+            history.getAmount(),
             "gu",
             history.getInstitutionName(),
             history.getTransferDate()
@@ -103,6 +128,7 @@ class HistoryTest {
         IllegalArgumentException.class,
         () -> History.create(
             history.getAccountId(),
+            history.getAmount(),
             history.getDestinataryName(),
             institutionName,
             history.getTransferDate()
@@ -119,6 +145,7 @@ class HistoryTest {
         IllegalArgumentException.class,
         () -> History.create(
             history.getAccountId(),
+            history.getAmount(),
             history.getDestinataryName(),
             "lc",
             history.getTransferDate()
@@ -135,6 +162,7 @@ class HistoryTest {
         IllegalArgumentException.class,
         () -> History.create(
             history.getAccountId(),
+            history.getAmount(),
             history.getDestinataryName(),
             history.getInstitutionName(),
             null

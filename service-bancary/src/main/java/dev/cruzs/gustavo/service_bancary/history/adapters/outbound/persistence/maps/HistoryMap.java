@@ -8,6 +8,7 @@ public class HistoryMap {
     return new HistoryModel(
         history.getId(),
         history.getAccountId(),
+        history.getAmount(),
         history.getDestinataryName(),
         history.getInstitutionName(),
         history.getTransferDate()
@@ -17,6 +18,7 @@ public class HistoryMap {
     return History.restore(
         historyModel.getId(),
         historyModel.getAccountId(),
+        historyModel.getAmount(),
         historyModel.getDestinataryName(),
         historyModel.getInstitutionName(),
         historyModel.getTransferDate()

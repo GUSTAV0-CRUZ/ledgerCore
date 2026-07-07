@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -27,6 +28,9 @@ public class HistoryModel implements Serializable {
 
   @Column(nullable = false, name = "account_id")
   private UUID accountId;
+
+  @Column(nullable = false)
+  private BigDecimal amount;
 
   @Column(nullable = false, name = "destinatary_name")
   private String destinataryName;

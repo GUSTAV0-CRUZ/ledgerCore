@@ -18,6 +18,7 @@ public class CreateHistoryService implements CreateHistoryUseCase {
   public History execute(CreateHistoryCommand command) {
     History history = History.create(
         command.accountId(),
+        command.amount(),
         command.destinataryName(),
         command.institutionName(),
         LocalDateTime.now()

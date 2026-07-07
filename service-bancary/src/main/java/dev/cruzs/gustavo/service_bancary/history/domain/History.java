@@ -1,11 +1,13 @@
 package dev.cruzs.gustavo.service_bancary.history.domain;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 public class History {
-  private UUID id;
+  private final UUID id;
   private UUID accountId;
+  private BigDecimal amount;
   private String destinataryName;
   private String institutionName;
   private LocalDateTime transferDate;
@@ -13,12 +15,14 @@ public class History {
   private History(
       UUID id,
       UUID accountId,
+      BigDecimal amount,
       String destinataryName,
       String institutionName,
       LocalDateTime transferDate
   ) {
     this.id = id;
     this.checkAccountId(accountId);
+    this.checkAmount(amount);
     this.checkDestinataryName(destinataryName);
     this.checkInstitutionName(institutionName);
     this.checkTransferDate(transferDate);
@@ -26,6 +30,7 @@ public class History {
 
   public static History create(
       UUID accountId,
+      BigDecimal amount,
       String destinataryName,
       String institutionName,
       LocalDateTime transferDate
@@ -33,6 +38,7 @@ public class History {
     return new History(
         UUID.randomUUID(),
         accountId,
+        amount,
         destinataryName,
         institutionName,
         transferDate
@@ -42,6 +48,7 @@ public class History {
   public static History restore(
       UUID id,
       UUID accountId,
+      BigDecimal amount,
       String destinataryName,
       String institutionName,
       LocalDateTime transferDate
@@ -49,6 +56,7 @@ public class History {
     return new History(
         id,
         accountId,
+        amount,
         destinataryName,
         institutionName,
         transferDate
@@ -59,6 +67,12 @@ public class History {
     if (accountId == null) throw new IllegalArgumentException("AccountId must not be null");
 
     this.accountId = accountId;
+  }
+
+  private void checkAmount(BigDecimal amount) {
+    if (amount == null) throw new IllegalArgumentException("Amount must not be null");
+
+    this.amount = amount;
   }
 
   private void checkDestinataryName(String destinataryName) {
@@ -93,6 +107,10 @@ public class History {
 
   public UUID getAccountId() {
     return accountId;
+  }
+
+  public BigDecimal getAmount() {
+    return amount;
   }
 
   public String getDestinataryName() {
