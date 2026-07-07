@@ -28,7 +28,8 @@ spring:
         depositAccountConsumer;
         withdrawAccountConsumer;
         transferMoneyAccountConsumer;
-        createUserConsumer
+        createUserConsumer;
+        createHistoryConsumer
     stream:
       default:
         consumer:
@@ -57,6 +58,9 @@ spring:
         createUserConsumer-in-0:
           destination: exchange-user
           group: queue-create-user
+        createHistoryConsumer-in-0:
+          destination: exchange-history
+          group: queue-create-history
       rabbit:
         default:
           consumer:
