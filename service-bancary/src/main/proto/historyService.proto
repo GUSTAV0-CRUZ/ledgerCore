@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "dev.cruzs.gustavo.service_bancary.history.adapters.inbound.gRPC.generated";
+
+message HistoryResponse {
+  string id = 1;
+  string account_id = 2;
+  string amount = 3;
+  string institution_name = 4;
+  string destinatary_name = 5;
+  string transfer_date = 6;
+}
+
+message FindAllHistoryByAccountIdRequest {
+  string account_id = 1;
+}
+
+message FindHistoryByIdRequest {
+  string id = 1;
+}
+
+message ListHistoriesResponse {
+  repeated HistoryResponse histories_response = 1;
+}
+
+service HistoryService {
+  rpc FindAllHistoryByAccountId (FindAllHistoryByAccountIdRequest) returns (ListHistoriesResponse);
+  rpc FindHistoryById (FindHistoryByIdRequest) returns (HistoryResponse);
+}

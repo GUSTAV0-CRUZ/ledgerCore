@@ -6,7 +6,11 @@ import dev.cruzs.gustavo.service_bancary.history.application.ports.outbound.Hist
 import dev.cruzs.gustavo.service_bancary.history.domain.History;
 
 public class FindHistoryByIdService implements FindHistoryByIdUseCase {
-  private HistoryRepository historyRepository;
+  private final HistoryRepository historyRepository;
+
+  public FindHistoryByIdService(HistoryRepository historyRepository) {
+    this.historyRepository = historyRepository;
+  }
 
   @Override
   public History execute(FindHistoryByIdCommand command) {
