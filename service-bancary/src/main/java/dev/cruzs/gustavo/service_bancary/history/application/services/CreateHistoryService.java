@@ -5,8 +5,6 @@ import dev.cruzs.gustavo.service_bancary.history.application.ports.inbound.comma
 import dev.cruzs.gustavo.service_bancary.history.application.ports.outbound.HistoryRepository;
 import dev.cruzs.gustavo.service_bancary.history.domain.History;
 
-import java.time.LocalDateTime;
-
 public class CreateHistoryService implements CreateHistoryUseCase {
   private final HistoryRepository historyRepository;
 
@@ -20,8 +18,7 @@ public class CreateHistoryService implements CreateHistoryUseCase {
         command.accountId(),
         command.amount(),
         command.destinataryName(),
-        command.institutionName(),
-        LocalDateTime.now()
+        command.institutionName()
     );
 
     return historyRepository.save(history);

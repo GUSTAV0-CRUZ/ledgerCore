@@ -12,8 +12,9 @@ message HistoryResponse {
   string transfer_date = 6;
 }
 
-message FindAllHistoryByAccountIdRequest {
+message FindAllByAccountIdAndYearMonthRequest {
   string account_id = 1;
+  string yearMonth = 2;
 }
 
 message FindHistoryByIdRequest {
@@ -25,6 +26,6 @@ message ListHistoriesResponse {
 }
 
 service HistoryService {
-  rpc FindAllHistoryByAccountId (FindAllHistoryByAccountIdRequest) returns (ListHistoriesResponse);
+  rpc FindAllByAccountIdAndYearMonth (FindAllByAccountIdAndYearMonthRequest) returns (ListHistoriesResponse);
   rpc FindHistoryById (FindHistoryByIdRequest) returns (HistoryResponse);
 }

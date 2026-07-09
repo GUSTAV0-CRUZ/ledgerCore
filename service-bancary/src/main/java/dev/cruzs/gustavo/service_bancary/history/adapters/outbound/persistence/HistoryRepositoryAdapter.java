@@ -7,6 +7,8 @@ import dev.cruzs.gustavo.service_bancary.history.application.ports.outbound.Hist
 import dev.cruzs.gustavo.service_bancary.history.domain.History;
 import dev.cruzs.gustavo.service_bancary.history.domain.exceptions.NotFoundHistoryException;
 
+import java.time.LocalDateTime;
+import java.time.YearMonth;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -27,8 +29,17 @@ public class HistoryRepositoryAdapter implements HistoryRepository {
   }
 
   @Override
-  public List<History> findAllByAccountId(UUID accountId) {
-    return historyJpaRepository.findAllByAccountId(accountId)
+  public List<History> findAllByAccountIdAndYearMonth(UUID accountId, YearMonth yearMonth) {
+    LocalDateTime startOfMonth = yearMonth.atDay(1)
+      .atStartOfDay();
+    LocalDateTime endOfMonth = yearMonth.atEndOfMonth()
+      .atTime(23, 59, 59, 999999999);
+
+    return historyJpaRepository.findAllByAccountIdAndTransferDateBetween(
+        accountId,
+        startOfMonth,
+        endOfMonth
+      )
       .stream()
       .map(HistoryMap::mapToHistory)
       .toList();

@@ -1,11 +1,11 @@
 package dev.cruzs.gustavo.service_bancary.history.adapters.inbound.configs;
 
 import dev.cruzs.gustavo.service_bancary.history.application.ports.inbound.CreateHistoryUseCase;
-import dev.cruzs.gustavo.service_bancary.history.application.ports.inbound.FindAllHistoryByAccountIdUseCase;
+import dev.cruzs.gustavo.service_bancary.history.application.ports.inbound.FindAllByAccountIdAndYearMonthUseCase;
 import dev.cruzs.gustavo.service_bancary.history.application.ports.inbound.FindHistoryByIdUseCase;
 import dev.cruzs.gustavo.service_bancary.history.application.ports.outbound.HistoryRepository;
 import dev.cruzs.gustavo.service_bancary.history.application.services.CreateHistoryService;
-import dev.cruzs.gustavo.service_bancary.history.application.services.FindAllHistoryByAccountIdService;
+import dev.cruzs.gustavo.service_bancary.history.application.services.FindAllByAccountIdAndYearMonthService;
 import dev.cruzs.gustavo.service_bancary.history.application.services.FindHistoryByIdService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,8 +18,8 @@ public class UseCasesConfigs {
   }
 
   @Bean
-  public FindAllHistoryByAccountIdUseCase findAllHistoryByAccountIdUseCase(HistoryRepository historyRepository) {
-    return new FindAllHistoryByAccountIdService(historyRepository);
+  public FindAllByAccountIdAndYearMonthUseCase findAllHistoryByAccountIdUseCase(HistoryRepository historyRepository) {
+    return new FindAllByAccountIdAndYearMonthService(historyRepository);
   }
 
   @Bean

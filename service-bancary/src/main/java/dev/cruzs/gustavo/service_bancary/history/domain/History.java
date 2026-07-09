@@ -32,8 +32,7 @@ public class History {
       UUID accountId,
       BigDecimal amount,
       String destinataryName,
-      String institutionName,
-      LocalDateTime transferDate
+      String institutionName
   ) {
     return new History(
         UUID.randomUUID(),
@@ -41,7 +40,7 @@ public class History {
         amount,
         destinataryName,
         institutionName,
-        transferDate
+        LocalDateTime.now()
     );
   }
 
