@@ -28,8 +28,7 @@ class HistoryTest {
         accountId,
         amount,
         destinataryName,
-        institutionName,
-        transferDate
+        institutionName
     );
 
     assertNotNull(result.getId());
@@ -37,7 +36,6 @@ class HistoryTest {
     assertEquals(amount, result.getAmount());
     assertEquals(destinataryName, result.getDestinataryName());
     assertEquals(institutionName, result.getInstitutionName());
-    assertEquals(transferDate, result.getTransferDate());
   }
 
   @BeforeAll
@@ -46,8 +44,7 @@ class HistoryTest {
       UUID.randomUUID(),
       BigDecimal.valueOf(99.99),
       "Gustavo Cruz",
-      "ledger core - Institution",
-      LocalDateTime.now()
+      "ledger core - Institution"
     );
   }
 
@@ -60,8 +57,7 @@ class HistoryTest {
             null,
             history.getAmount(),
             history.getDestinataryName(),
-            history.getInstitutionName(),
-            history.getTransferDate()
+            history.getInstitutionName()
         )
     );
 
@@ -77,8 +73,7 @@ class HistoryTest {
             history.getAccountId(),
             null,
             history.getDestinataryName(),
-            history.getInstitutionName(),
-            history.getTransferDate()
+            history.getInstitutionName()
         )
     );
 
@@ -95,8 +90,7 @@ class HistoryTest {
             history.getAccountId(),
             history.getAmount(),
             destinataryName,
-            history.getInstitutionName(),
-            history.getTransferDate()
+            history.getInstitutionName()
         )
     );
 
@@ -112,8 +106,7 @@ class HistoryTest {
             history.getAccountId(),
             history.getAmount(),
             "gu",
-            history.getInstitutionName(),
-            history.getTransferDate()
+            history.getInstitutionName()
         )
     );
 
@@ -130,8 +123,7 @@ class HistoryTest {
             history.getAccountId(),
             history.getAmount(),
             history.getDestinataryName(),
-            institutionName,
-            history.getTransferDate()
+            institutionName
         )
     );
 
@@ -147,28 +139,10 @@ class HistoryTest {
             history.getAccountId(),
             history.getAmount(),
             history.getDestinataryName(),
-            "lc",
-            history.getTransferDate()
+            "lc"
         )
     );
 
     assertEquals("InstitutionName must have at least 3 characters", result.getMessage());
-  }
-
-  @Test
-  @DisplayName("Should return error: (TransferDate must not be null)")
-  void checkTransferDateError() {
-    IllegalArgumentException result = assertThrows(
-        IllegalArgumentException.class,
-        () -> History.create(
-            history.getAccountId(),
-            history.getAmount(),
-            history.getDestinataryName(),
-            history.getInstitutionName(),
-            null
-        )
-    );
-
-    assertEquals("TransferDate must not be null", result.getMessage());
   }
 }
