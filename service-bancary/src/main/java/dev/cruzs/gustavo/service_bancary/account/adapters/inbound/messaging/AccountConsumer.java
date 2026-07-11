@@ -9,6 +9,7 @@ import dev.cruzs.gustavo.service_bancary.account.application.ports.inbound.comma
 import dev.cruzs.gustavo.service_bancary.account.application.ports.inbound.commands.TransferMoneyCommand;
 import dev.cruzs.gustavo.service_bancary.account.application.ports.inbound.commands.WithdrawAccountCommand;
 import dev.cruzs.gustavo.service_bancary.account.domain.Account;
+import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,6 +55,7 @@ public class AccountConsumer {
     };
   }
 
+  @Transactional
   public Consumer<TransferMoneyCommand> transferMoneyAccountConsumer() {
     return transferMoneyCommand -> {
       Account account = this.transferMoneyUseCase.execute(transferMoneyCommand);
