@@ -1,12 +1,30 @@
 spring:
+  threads:
+    virtual:
+      enabled: true
   application:
     name: notification-service
 
   mail:
-    host: {HOST_MAIL}
-    port: {PORT_MAIL}
-    username: {USERNAME_MAIL}
-    password: {PASSWORD_MAIL}
-    properties.mail.smtp.auth: {true}
-    properties.mail.smtp.starttls.enable: {true}
+    host: ${HOST_MAIL:sandbox.smtp.mailtrap.io}
+    port: ${PORT_MAIL:2525}
+    username: ${USERNAME_MAIL}
+    password: ${PASSWORD_MAIL}
+    properties.mail.smtp.auth: true
+    properties.mail.smtp.starttls.enable: true
 
+  rabbitmq:
+    host: ${HOST_RMQ:localhost}
+    port: ${PORT_RMQ:5672}
+    username: ${USERNAME_RMQ:guest}
+    password: ${PASSWORD_RMQ:guest}
+    virtual-host: /
+
+  cloud:
+    function:
+      definition: sendEmailConsumer
+    stream:
+      bindings:
+        sendEmailConsumer-in-0:
+          destination: exchange-notification
+          group: queue-sendEmail
