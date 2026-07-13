@@ -24,7 +24,20 @@ spring:
     function:
       definition: sendEmailConsumer
     stream:
+      default:
+        consumer:
+          max-attempts: 3
+          backOffInitialInterval: 5000
+          error-channel-enabled: true
+          retryable-exceptions:
+            java.lang.ClassCastException: false
+            jakarta.validation.ConstraintViolationException: false
       bindings:
         sendEmailConsumer-in-0:
           destination: exchange-notification
           group: queue-sendEmail
+      rabbit:
+        default:
+          consumer:
+            auto-bind-dlq: true
+            republish-to-dlq: true

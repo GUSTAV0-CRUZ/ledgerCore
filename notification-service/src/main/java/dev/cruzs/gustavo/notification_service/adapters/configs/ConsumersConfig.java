@@ -1,6 +1,7 @@
 package dev.cruzs.gustavo.notification_service.adapters.configs;
 
 import dev.cruzs.gustavo.notification_service.adapters.in.messaging.NotificationConsumer;
+import dev.cruzs.gustavo.notification_service.adapters.in.messaging.dtos.SendEmailRequest;
 import dev.cruzs.gustavo.notification_service.application.ports.in.commands.SendEmailCommand;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,7 +17,7 @@ public class ConsumersConfig {
   }
 
   @Bean
-  public Consumer<SendEmailCommand> sendEmailConsumer() {
+  public Consumer<SendEmailRequest> sendEmailConsumer() {
     return this.notificationConsumer::sendEmail;
   }
 }
