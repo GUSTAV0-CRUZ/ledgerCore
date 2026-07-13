@@ -1,11 +1,11 @@
 package dev.cruzs.gustavo.service_bancary.account.adapters.configs;
 
 import dev.cruzs.gustavo.service_bancary.account.adapters.inbound.messaging.AccountConsumer;
-import dev.cruzs.gustavo.service_bancary.account.application.ports.inbound.CreateAccountUseCase;
+import dev.cruzs.gustavo.service_bancary.account.application.ports.inbound.CreateAccountCurrentUseCase;
 import dev.cruzs.gustavo.service_bancary.account.application.ports.inbound.DepositAccountUseCase;
 import dev.cruzs.gustavo.service_bancary.account.application.ports.inbound.TransferMoneyUseCase;
 import dev.cruzs.gustavo.service_bancary.account.application.ports.inbound.WithdrawAccountUseCase;
-import dev.cruzs.gustavo.service_bancary.account.application.ports.inbound.commands.CreateAccountCommand;
+import dev.cruzs.gustavo.service_bancary.account.application.ports.inbound.commands.CreateAccountCurrentCommand;
 import dev.cruzs.gustavo.service_bancary.account.application.ports.inbound.commands.DepositAccountCommand;
 import dev.cruzs.gustavo.service_bancary.account.application.ports.inbound.commands.TransferMoneyCommand;
 import dev.cruzs.gustavo.service_bancary.account.application.ports.inbound.commands.WithdrawAccountCommand;
@@ -18,13 +18,13 @@ import java.util.function.Consumer;
 public class MessagingAccountConfig {
   @Bean
   public AccountConsumer accountConsumer(
-      CreateAccountUseCase createAccountUseCase,
+      CreateAccountCurrentUseCase createAccountCurrentUseCase,
       DepositAccountUseCase depositAccountUseCase,
       WithdrawAccountUseCase withdrawAccountUseCase,
       TransferMoneyUseCase transferMoneyUseCase
   ) {
     return new AccountConsumer(
-        createAccountUseCase,
+        createAccountCurrentUseCase,
         depositAccountUseCase,
         withdrawAccountUseCase,
         transferMoneyUseCase
@@ -32,7 +32,7 @@ public class MessagingAccountConfig {
   }
 
   @Bean
-  public Consumer<CreateAccountCommand> createAccountConsumer(AccountConsumer accountConsumer) {
+  public Consumer<CreateAccountCurrentCommand> createAccountConsumer(AccountConsumer accountConsumer) {
     return accountConsumer.createAccountConsumer();
   }
 

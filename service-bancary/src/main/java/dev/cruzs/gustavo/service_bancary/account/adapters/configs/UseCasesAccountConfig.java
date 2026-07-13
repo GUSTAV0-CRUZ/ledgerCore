@@ -16,8 +16,8 @@ public class UseCasesAccountConfig {
   }
 
   @Bean
-  public CreateAccountUseCase createAccountUseCase() {
-    return new CreateAccountService(this.accountRepository);
+  public CreateAccountCurrentUseCase createAccountUseCase() {
+    return new CreateAccountCurrentService(this.accountRepository);
   }
 
   @Bean

@@ -1,10 +1,10 @@
 package dev.cruzs.gustavo.service_bancary.account.adapters.inbound.messaging;
 
-import dev.cruzs.gustavo.service_bancary.account.application.ports.inbound.CreateAccountUseCase;
+import dev.cruzs.gustavo.service_bancary.account.application.ports.inbound.CreateAccountCurrentUseCase;
 import dev.cruzs.gustavo.service_bancary.account.application.ports.inbound.DepositAccountUseCase;
 import dev.cruzs.gustavo.service_bancary.account.application.ports.inbound.TransferMoneyUseCase;
 import dev.cruzs.gustavo.service_bancary.account.application.ports.inbound.WithdrawAccountUseCase;
-import dev.cruzs.gustavo.service_bancary.account.application.ports.inbound.commands.CreateAccountCommand;
+import dev.cruzs.gustavo.service_bancary.account.application.ports.inbound.commands.CreateAccountCurrentCommand;
 import dev.cruzs.gustavo.service_bancary.account.application.ports.inbound.commands.DepositAccountCommand;
 import dev.cruzs.gustavo.service_bancary.account.application.ports.inbound.commands.TransferMoneyCommand;
 import dev.cruzs.gustavo.service_bancary.account.application.ports.inbound.commands.WithdrawAccountCommand;
@@ -17,26 +17,26 @@ import java.util.function.Consumer;
 
 public class AccountConsumer {
   private final Logger logger = LoggerFactory.getLogger(AccountConsumer.class);
-  private final CreateAccountUseCase createAccountUseCase;
+  private final CreateAccountCurrentUseCase createAccountCurrentUseCase;
   private final DepositAccountUseCase depositAccountUseCase;
   private final WithdrawAccountUseCase withdrawAccountUseCase;
   private final TransferMoneyUseCase transferMoneyUseCase;
 
   public AccountConsumer(
-      CreateAccountUseCase createAccountUseCase,
+      CreateAccountCurrentUseCase createAccountCurrentUseCase,
       DepositAccountUseCase depositAccountUseCase,
       WithdrawAccountUseCase withdrawAccountUseCase,
       TransferMoneyUseCase transferMoneyUseCase
   ) {
-    this.createAccountUseCase = createAccountUseCase;
+    this.createAccountCurrentUseCase = createAccountCurrentUseCase;
     this.depositAccountUseCase = depositAccountUseCase;
     this.withdrawAccountUseCase = withdrawAccountUseCase;
     this.transferMoneyUseCase = transferMoneyUseCase;
   }
 
-  public Consumer<CreateAccountCommand> createAccountConsumer() {
-    return createAccountCommand -> {
-      Account account = this.createAccountUseCase.execute(createAccountCommand);
+  public Consumer<CreateAccountCurrentCommand> createAccountConsumer() {
+    return createAccountCurrentCommand -> {
+      Account account = this.createAccountCurrentUseCase.execute(createAccountCurrentCommand);
       logger.info("Account Id: {} created.", account.getId());
     };
   }
