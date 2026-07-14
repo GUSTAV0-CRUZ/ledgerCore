@@ -14,8 +14,7 @@ public class CreateAccountCurrentService implements CreateAccountCurrentUseCase 
   @Override
   public void execute(CreateAccountCurrentCommand createAccountCommand) {
     this.accountService.createCurrentAccount(
-        createAccountCommand.userId(),
-        createAccountCommand.balance()
+        createAccountCommand.userId()
     );
   }
 }
