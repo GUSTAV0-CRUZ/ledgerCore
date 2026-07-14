@@ -6,6 +6,8 @@ import dev.cruzs.gustavo.service_bancary.account.application.ports.inbound.comma
 import dev.cruzs.gustavo.service_bancary.account.domain.Account;
 import dev.cruzs.gustavo.service_bancary.account.domain.enums.AccountTypeEnum;
 
+import java.math.BigDecimal;
+
 public class CreateAccountCurrentService implements CreateAccountCurrentUseCase {
   private final AccountRepository accountRepository;
 
@@ -17,7 +19,7 @@ public class CreateAccountCurrentService implements CreateAccountCurrentUseCase 
   public Account execute(CreateAccountCurrentCommand createAccountCurrentCommand) {
     var account = Account.create(
         createAccountCurrentCommand.userId(),
-        createAccountCurrentCommand.balance(),
+        BigDecimal.valueOf(10.00),
         AccountTypeEnum.CURRENT
     );
 
