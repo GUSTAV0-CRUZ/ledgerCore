@@ -9,7 +9,6 @@ public class AccountMap {
     return Account.restore(
         accountModel.getId(),
         accountModel.getUserId(),
-        accountModel.getAgency(),
         NumberAccount.restore(accountModel.getNumber()),
         accountModel.getBalance(),
         accountModel.getTypeAccount(),
@@ -23,7 +22,7 @@ public class AccountMap {
         account.getUserId(),
         Account.BANK_CODE,
         Account.INSTITUTION,
-        account.getAgency(),
+        Account.AGENCY,
         account.getNumber().getNumber(),
         account.getBalance(),
         account.getTypeAccount(),

@@ -32,7 +32,7 @@ public class AccountService extends AccountServiceImplBase {
     AccountResponse accountResponse = AccountResponse.newBuilder()
         .setId(account.getId().toString())
         .setUserId(account.getUserId().toString())
-        .setAgency(account.getAgency())
+        .setAgency(Account.AGENCY)
         .setNumber(account.getNumber().getNumber())
         .setBalance(account.getBalance().toString())
         .setTypeAccount(AccountTypeEnum.valueOf(account.getTypeAccount().name()))

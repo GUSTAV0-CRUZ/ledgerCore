@@ -17,13 +17,11 @@ class AccountTest {
   @BeforeEach
   void setUp() {
     UUID userId = UUID.randomUUID();
-    Integer agency = 999;
     BigDecimal balance = BigDecimal.valueOf(9999.99);
     AccountTypeEnum typeAccount = AccountTypeEnum.CURRENT;
 
     this.account = Account.create(
         userId,
-        agency,
         balance,
         typeAccount
     );
@@ -39,13 +37,11 @@ class AccountTest {
 
     Account result = Account.create(
         userId,
-        agency,
         balance,
         typeAccount
     );
 
     assertEquals(userId, result.getUserId());
-    assertEquals(agency, result.getAgency());
     assertNotNull(result.getNumber());
     assertEquals(balance, result.getBalance());
     assertEquals(typeAccount, result.getTypeAccount());
@@ -57,7 +53,6 @@ class AccountTest {
     var result = Account.restore(
         account.getId(),
         account.getUserId(),
-        account.getAgency(),
         account.getNumber(),
         account.getBalance(),
         account.getTypeAccount(),
@@ -66,7 +61,6 @@ class AccountTest {
 
     assertEquals(account.getId(), result.getId());
     assertEquals(account.getUserId(), result.getUserId());
-    assertEquals(account.getAgency(), result.getAgency());
     assertEquals(account.getNumber(), result.getNumber());
     assertEquals(account.getBalance(), result.getBalance());
     assertEquals(account.getTypeAccount(), result.getTypeAccount());
@@ -80,7 +74,6 @@ class AccountTest {
         IllegalArgumentException.class,
         () -> Account.create(
             null,
-            account.getAgency(),
             account.getBalance(),
             account.getTypeAccount()
         )
@@ -90,45 +83,12 @@ class AccountTest {
   }
 
   @Test
-  @DisplayName("Should return error: (Agency can't be null)")
-  void checkAgencyErrorCase1() {
-    IllegalArgumentException result = assertThrows(
-        IllegalArgumentException.class,
-        () -> Account.create(
-            account.getUserId(),
-            null,
-            account.getBalance(),
-            account.getTypeAccount()
-        )
-    );
-
-    assertEquals("Agency can't be null", result.getMessage());
-  }
-
-  @Test
-  @DisplayName("Should return error: (Agency can't be negative)")
-  void checkAgencyErrorCase2() {
-    IllegalArgumentException result = assertThrows(
-        IllegalArgumentException.class,
-        () -> Account.create(
-            account.getUserId(),
-            -1,
-            account.getBalance(),
-            account.getTypeAccount()
-        )
-    );
-
-    assertEquals("Agency can't be negative", result.getMessage());
-  }
-
-  @Test
   @DisplayName("Should return error: (Balance can't be null)")
   void checkBalanceErrorCase1() {
     var result = assertThrows(
         IllegalArgumentException.class,
         () -> Account.create(
             account.getUserId(),
-            account.getAgency(),
             null,
             account.getTypeAccount()
         )
@@ -144,7 +104,6 @@ class AccountTest {
         IllegalArgumentException.class,
         () -> Account.create(
             account.getUserId(),
-            account.getAgency(),
             BigDecimal.valueOf(-1),
             account.getTypeAccount()
         )
@@ -160,7 +119,6 @@ class AccountTest {
         IllegalArgumentException.class,
         () -> Account.create(
             account.getUserId(),
-            account.getAgency(),
             account.getBalance(),
             null
         )

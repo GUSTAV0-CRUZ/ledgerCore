@@ -12,8 +12,8 @@ public class Account {
   private UUID userId;
   public static final Integer BANK_CODE = 999;
   public static final String INSTITUTION = "LedgerCore Bank - institution";
-  private Integer agency;
-  private NumberAccount number;
+  public static final Integer AGENCY = 1;
+  private final NumberAccount number;
   private BigDecimal balance;
   private AccountTypeEnum typeAccount;
   private AccountStatusEnum status;
@@ -21,7 +21,6 @@ public class Account {
   private Account(
       UUID id,
       UUID userId,
-      Integer agency,
       NumberAccount number,
       BigDecimal balance,
       AccountTypeEnum typeAccount,
@@ -29,7 +28,6 @@ public class Account {
   ) {
     this.id = id;
     this.checkUserId(userId);
-    this.checkAgency(agency);
     this.number = number;
     this.checkBalance(balance);
     this.checkTypeAccount(typeAccount);
@@ -38,7 +36,6 @@ public class Account {
 
   public static Account create(
       UUID userId,
-      Integer agency,
       BigDecimal balance,
       AccountTypeEnum typeAccount
   ) {
@@ -46,7 +43,6 @@ public class Account {
     return new Account(
         id,
         userId,
-        agency,
         NumberAccount.create(id),
         balance,
         typeAccount,
@@ -57,7 +53,6 @@ public class Account {
   public static Account restore(
       UUID id,
       UUID userId,
-      Integer agency,
       NumberAccount number,
       BigDecimal balance,
       AccountTypeEnum typeAccount,
@@ -66,7 +61,6 @@ public class Account {
     return new Account(
         id,
         userId,
-        agency,
         number,
         balance,
         typeAccount,
@@ -77,13 +71,6 @@ public class Account {
   private void checkUserId(UUID userId) {
     if (userId == null) throw new IllegalArgumentException("UserId can't be null");
     this.userId = userId;
-  }
-
-  private void checkAgency(Integer newAgency) {
-    if (newAgency == null) throw new IllegalArgumentException("Agency can't be null");
-    if (newAgency < 0) throw new IllegalArgumentException("Agency can't be negative");
-
-    this.agency = newAgency;
   }
 
   private void checkBalance(BigDecimal balance) {
@@ -109,10 +96,6 @@ public class Account {
 
   public UUID getUserId() {
     return userId;
-  }
-
-  public Integer getAgency() {
-    return agency;
   }
 
   public NumberAccount getNumber() {
