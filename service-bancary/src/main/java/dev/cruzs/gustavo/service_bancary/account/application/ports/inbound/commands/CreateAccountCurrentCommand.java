@@ -6,7 +6,6 @@ import java.util.UUID;
 public record CreateAccountCurrentCommand(
     UUID userId,
     Integer agency,
-    String number,
     BigDecimal balance
 ) {
 }

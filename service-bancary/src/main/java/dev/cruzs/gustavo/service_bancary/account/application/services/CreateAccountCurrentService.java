@@ -18,7 +18,6 @@ public class CreateAccountCurrentService implements CreateAccountCurrentUseCase 
     var account = Account.create(
         createAccountCurrentCommand.userId(),
         createAccountCurrentCommand.agency(),
-        createAccountCurrentCommand.number(),
         createAccountCurrentCommand.balance(),
         AccountTypeEnum.CURRENT
     );

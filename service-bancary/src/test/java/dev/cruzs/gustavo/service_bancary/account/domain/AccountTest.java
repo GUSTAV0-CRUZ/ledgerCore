@@ -5,8 +5,6 @@ import dev.cruzs.gustavo.service_bancary.account.domain.enums.AccountTypeEnum;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.NullAndEmptySource;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -20,14 +18,12 @@ class AccountTest {
   void setUp() {
     UUID userId = UUID.randomUUID();
     Integer agency = 999;
-    String number = "9999999-9";
     BigDecimal balance = BigDecimal.valueOf(9999.99);
     AccountTypeEnum typeAccount = AccountTypeEnum.CURRENT;
 
     this.account = Account.create(
         userId,
         agency,
-        number,
         balance,
         typeAccount
     );
@@ -38,21 +34,19 @@ class AccountTest {
   void createSuccess() {
     UUID userId = UUID.randomUUID();
     Integer agency = 999;
-    String number = "9999999-9";
     BigDecimal balance = BigDecimal.valueOf(9999.99);
     AccountTypeEnum typeAccount = AccountTypeEnum.CURRENT;
 
     Account result = Account.create(
         userId,
         agency,
-        number,
         balance,
         typeAccount
     );
 
     assertEquals(userId, result.getUserId());
     assertEquals(agency, result.getAgency());
-    assertEquals(number, result.getNumber());
+    assertNotNull(result.getNumber());
     assertEquals(balance, result.getBalance());
     assertEquals(typeAccount, result.getTypeAccount());
   }
@@ -87,7 +81,6 @@ class AccountTest {
         () -> Account.create(
             null,
             account.getAgency(),
-            account.getNumber(),
             account.getBalance(),
             account.getTypeAccount()
         )
@@ -104,7 +97,6 @@ class AccountTest {
         () -> Account.create(
             account.getUserId(),
             null,
-            account.getNumber(),
             account.getBalance(),
             account.getTypeAccount()
         )
@@ -121,31 +113,12 @@ class AccountTest {
         () -> Account.create(
             account.getUserId(),
             -1,
-            account.getNumber(),
             account.getBalance(),
             account.getTypeAccount()
         )
     );
 
     assertEquals("Agency can't be negative", result.getMessage());
-  }
-
-  @ParameterizedTest
-  @NullAndEmptySource
-  @DisplayName("Should return error: (Number can't be null or empty)")
-  void checkNumberError(String invalidNumber) {
-    var result = assertThrows(
-        IllegalArgumentException.class,
-        () -> Account.create(
-            account.getUserId(),
-            account.getAgency(),
-            invalidNumber,
-            account.getBalance(),
-            account.getTypeAccount()
-        )
-    );
-
-    assertEquals("Number can't be null or empty", result.getMessage());
   }
 
   @Test
@@ -156,7 +129,6 @@ class AccountTest {
         () -> Account.create(
             account.getUserId(),
             account.getAgency(),
-            account.getNumber(),
             null,
             account.getTypeAccount()
         )
@@ -173,7 +145,6 @@ class AccountTest {
         () -> Account.create(
             account.getUserId(),
             account.getAgency(),
-            account.getNumber(),
             BigDecimal.valueOf(-1),
             account.getTypeAccount()
         )
@@ -190,7 +161,6 @@ class AccountTest {
         () -> Account.create(
             account.getUserId(),
             account.getAgency(),
-            account.getNumber(),
             account.getBalance(),
             null
         )

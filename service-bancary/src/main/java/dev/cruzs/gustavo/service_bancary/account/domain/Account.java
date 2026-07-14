@@ -2,6 +2,7 @@ package dev.cruzs.gustavo.service_bancary.account.domain;
 
 import dev.cruzs.gustavo.service_bancary.account.domain.enums.AccountStatusEnum;
 import dev.cruzs.gustavo.service_bancary.account.domain.enums.AccountTypeEnum;
+import dev.cruzs.gustavo.service_bancary.account.domain.valueObjects.NumberAccount;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -12,7 +13,7 @@ public class Account {
   public static final Integer BANK_CODE = 999;
   public static final String INSTITUTION = "LedgerCore Bank - institution";
   private Integer agency;
-  private String number;
+  private NumberAccount number;
   private BigDecimal balance;
   private AccountTypeEnum typeAccount;
   private AccountStatusEnum status;
@@ -21,7 +22,7 @@ public class Account {
       UUID id,
       UUID userId,
       Integer agency,
-      String number,
+      NumberAccount number,
       BigDecimal balance,
       AccountTypeEnum typeAccount,
       AccountStatusEnum status
@@ -29,7 +30,7 @@ public class Account {
     this.id = id;
     this.checkUserId(userId);
     this.checkAgency(agency);
-    this.checkNumber(number);
+    this.number = number;
     this.checkBalance(balance);
     this.checkTypeAccount(typeAccount);
     this.changeAccountStatus(status);
@@ -38,15 +39,15 @@ public class Account {
   public static Account create(
       UUID userId,
       Integer agency,
-      String number,
       BigDecimal balance,
       AccountTypeEnum typeAccount
   ) {
+    UUID id =  UUID.randomUUID();
     return new Account(
-        UUID.randomUUID(),
+        id,
         userId,
         agency,
-        number,
+        NumberAccount.create(id),
         balance,
         typeAccount,
         AccountStatusEnum.ACTIVE
@@ -57,7 +58,7 @@ public class Account {
       UUID id,
       UUID userId,
       Integer agency,
-      String number,
+      NumberAccount number,
       BigDecimal balance,
       AccountTypeEnum typeAccount,
       AccountStatusEnum status
@@ -83,12 +84,6 @@ public class Account {
     if (newAgency < 0) throw new IllegalArgumentException("Agency can't be negative");
 
     this.agency = newAgency;
-  }
-
-  private void checkNumber(String newNumber) {
-    if (newNumber == null || newNumber.isEmpty()) throw new IllegalArgumentException("Number can't be null or empty");
-
-    this.number = newNumber;
   }
 
   private void checkBalance(BigDecimal balance) {
@@ -120,7 +115,7 @@ public class Account {
     return agency;
   }
 
-  public String getNumber() {
+  public NumberAccount getNumber() {
     return number;
   }
 

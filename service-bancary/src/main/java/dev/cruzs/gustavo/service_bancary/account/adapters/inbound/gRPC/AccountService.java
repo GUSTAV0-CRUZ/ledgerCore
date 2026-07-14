@@ -33,7 +33,7 @@ public class AccountService extends AccountServiceImplBase {
         .setId(account.getId().toString())
         .setUserId(account.getUserId().toString())
         .setAgency(account.getAgency())
-        .setNumber(account.getNumber())
+        .setNumber(account.getNumber().getNumber())
         .setBalance(account.getBalance().toString())
         .setTypeAccount(AccountTypeEnum.valueOf(account.getTypeAccount().name()))
         .setStatus(AccountStatusEnum.valueOf(account.getStatus().name()))
