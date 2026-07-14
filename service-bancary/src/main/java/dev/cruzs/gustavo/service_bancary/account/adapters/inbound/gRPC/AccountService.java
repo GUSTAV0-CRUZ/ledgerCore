@@ -32,6 +32,8 @@ public class AccountService extends AccountServiceImplBase {
     AccountResponse accountResponse = AccountResponse.newBuilder()
         .setId(account.getId().toString())
         .setUserId(account.getUserId().toString())
+        .setBankCode(Account.BANK_CODE)
+        .setInstitution(Account.INSTITUTION)
         .setAgency(Account.AGENCY)
         .setNumber(account.getNumber().getNumber())
         .setBalance(account.getBalance().toString())

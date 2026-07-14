@@ -18,11 +18,13 @@ enum AccountTypeEnum {
 message AccountResponse {
   string id = 1;
   string user_id = 2;
-  int32 agency = 3;
-  string number = 4;
-  string balance = 5;
-  AccountTypeEnum typeAccount = 6;
-  AccountStatusEnum status = 7;
+  int32 bank_code = 3;
+  string institution = 4;
+  int32 agency = 5;
+  string number = 6;
+  string balance = 7;
+  AccountTypeEnum typeAccount = 8;
+  AccountStatusEnum status = 9;
 }
 
 message FindAccountByUserIdRequest {
