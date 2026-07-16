@@ -14,6 +14,36 @@ spring:
     hibernate:
       ddl-auto: update
 
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+    virtual-host: /
+
+  cloud:
+    function:
+      definition: createUserConsumer
+    stream:
+      default:
+        consumer:
+          max-attempts: 3
+          backOffInitialInterval: 5000
+          error-channel-enabled: true
+          retryable-exceptions:
+            java.lang.IllegalArgumentException: false
+            java.time.format.DateTimeParseException: false
+            org.springframework.dao.DataIntegrityViolationException: false
+      bindings:
+        createUserConsumer-in-0:
+          destination: exchange-auth-service
+          group: queue-create-user
+      rabbit:
+        default:
+          consumer:
+            auto-bind-dlq: true
+            republish-to-dlq: true
+
 auth:
   jwt:
     secretKey: "${SECRET_KEY_JWT:secreteKeyDefaultWith123456789012}"
