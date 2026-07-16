@@ -1,3 +1,8 @@
 spring:
   application:
     name: auth-service
+
+auth:
+  jwt:
+    secretKey: "${SECRET_KEY_JWT:secreteKeyDefaultWith123456789012}"
+    expiration-ms: ${EXPIRATION_MS_JWT:3600000}
