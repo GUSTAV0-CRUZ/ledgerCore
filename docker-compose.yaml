@@ -1,5 +1,5 @@
 services:
-  postgres:
+  postgres-service-bancary:
     image: postgres:17-alpine
     container_name: postgres_service-bancary
     environment:
@@ -9,7 +9,21 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - postgres-service-bancary_data:/var/lib/postgresql/data
+    networks:
+      - ledger-core
+
+  postgres-auth-service:
+    image: postgres:17-alpine
+    container_name: postgres_auth-service
+    environment:
+      POSTGRES_USER: 'user'
+      POSTGRES_PASSWORD: 'password'
+      POSTGRES_DB: 'auth-service'
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres-auth-service_data:/var/lib/postgresql/data
     networks:
       - ledger-core
 
@@ -30,7 +44,8 @@ services:
 
 volumes:
   rabbitmq_data:
-  postgres_data:
+  postgres-service-bancary_data:
+  postgres-auth-service_data:
 
 networks:
   ledger-core:

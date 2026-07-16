@@ -2,6 +2,18 @@ spring:
   application:
     name: auth-service
 
+  datasource:
+    url: "${URL_DB:jdbc:postgresql://localhost:5433/auth-service}"
+    username: "${USERNAME_DB:user}"
+    password: "${PASSWORD_DB:password}"
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    generate-ddl: true
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+
 auth:
   jwt:
     secretKey: "${SECRET_KEY_JWT:secreteKeyDefaultWith123456789012}"
