@@ -5,10 +5,12 @@ import dev.cruzs.gustavo.auth_service.adapters.out.persistence.models.UserModel;
 import dev.cruzs.gustavo.auth_service.adapters.out.persistence.repository.UserJpaRepository;
 import dev.cruzs.gustavo.auth_service.application.ports.out.UserRepository;
 import dev.cruzs.gustavo.auth_service.domain.User;
+import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 import java.util.UUID;
 
+@Component
 public class UserRepositoryAdapter implements UserRepository {
   private final UserJpaRepository userJpaRepository;
 
