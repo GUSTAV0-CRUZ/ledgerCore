@@ -4,10 +4,11 @@ import dev.cruzs.gustavo.auth_service.domain.User;
 import dev.cruzs.gustavo.auth_service.domain.exceptions.NotFoundException;
 
 import java.util.Optional;
+import java.util.UUID;
 
 public interface UserRepository {
   User save(User user);
-  Optional<User> findById(Long id);
+  Optional<User> findById(UUID id);
   Optional<User> findByEmail(String email);
 
   default User findByEmailOrNotFoundException(String email) {
