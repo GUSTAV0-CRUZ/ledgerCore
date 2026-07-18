@@ -5,6 +5,7 @@ import dev.cruzs.gustavo.auth_service.adapters.out.persistence.models.UserModel;
 import dev.cruzs.gustavo.auth_service.adapters.out.persistence.repository.UserJpaRepository;
 import dev.cruzs.gustavo.auth_service.application.ports.out.UserRepository;
 import dev.cruzs.gustavo.auth_service.domain.User;
+import dev.cruzs.gustavo.auth_service.domain.valueObjects.Email;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
@@ -32,7 +33,7 @@ public class UserRepositoryAdapter implements UserRepository {
   }
 
   @Override
-  public Optional<User> findByEmail(String email) {
-    return this.userJpaRepository.findByEmail(email).map(UserMap::toUser);
+  public Optional<User> findByEmail(Email email) {
+    return this.userJpaRepository.findByEmail(email.getValue()).map(UserMap::toUser);
   }
 }

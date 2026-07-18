@@ -1,9 +1,12 @@
 package dev.cruzs.gustavo.auth_service.adapters.configs;
 
 import dev.cruzs.gustavo.auth_service.application.ports.in.CreateUserUseCase;
+import dev.cruzs.gustavo.auth_service.application.ports.in.UserAuthenticationUseCase;
 import dev.cruzs.gustavo.auth_service.application.ports.out.Hash;
+import dev.cruzs.gustavo.auth_service.application.ports.out.Jwt;
 import dev.cruzs.gustavo.auth_service.application.ports.out.UserRepository;
 import dev.cruzs.gustavo.auth_service.application.services.CreateUserService;
+import dev.cruzs.gustavo.auth_service.application.services.UserAuthenticationService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -12,5 +15,10 @@ public class UseCasesConfig {
   @Bean
   public CreateUserUseCase createUserUseCase(UserRepository userRepository, Hash hash) {
     return new CreateUserService(userRepository, hash);
+  }
+
+  @Bean
+  public UserAuthenticationUseCase userAuthenticationUseCase(UserRepository userRepository, Jwt jwt, Hash hash) {
+    return new UserAuthenticationService(userRepository, jwt, hash);
   }
 }
