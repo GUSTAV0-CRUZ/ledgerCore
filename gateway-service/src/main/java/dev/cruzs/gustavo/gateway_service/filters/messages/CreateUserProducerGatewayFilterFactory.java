@@ -1,6 +1,8 @@
 package dev.cruzs.gustavo.gateway_service.filters.messages;
 
 import dev.cruzs.gustavo.gateway_service.filters.messages.dtos.CreateUserDto;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.cloud.gateway.filter.factory.rewrite.ModifyRequestBodyGatewayFilterFactory;
@@ -11,6 +13,7 @@ import reactor.core.publisher.Mono;
 
 @Component
 public class CreateUserProducerGatewayFilterFactory extends AbstractGatewayFilterFactory<Object> {
+  private final Logger logger = LoggerFactory.getLogger(CreateUserProducerGatewayFilterFactory.class);
   private final StreamBridge streamBridge;
   private final ModifyRequestBodyGatewayFilterFactory modifyRequestBodyGatewayFilterFactory;
 
@@ -35,6 +38,7 @@ public class CreateUserProducerGatewayFilterFactory extends AbstractGatewayFilte
           if (createUserDto == null) throw new IllegalArgumentException("createUserDto is null");
 
           this.streamBridge.send("createUserProducer-out-0", createUserDto);
+          this.logger.info("Try create user, with email: ({})", createUserDto.email());
           exchange.getResponse().setStatusCode(HttpStatus.ACCEPTED);
 
           return Mono.just("");
