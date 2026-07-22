@@ -62,6 +62,11 @@
 			<groupId>org.springframework.grpc</groupId>
 			<artifactId>spring-grpc-client-spring-boot-starter</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>com.google.protobuf</groupId>
+			<artifactId>protobuf-java-util</artifactId>
+			<version>${protobuf-java.version}</version>
+		</dependency>
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -109,6 +114,18 @@
 	</dependencyManagement>
 
 	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+			</resource>
+			<resource>
+				<directory>${project.build.directory}/generated-sources/protobuf</directory>
+				<includes>
+					<include>all-services.pb</include>
+				</includes>
+			</resource>
+		</resources>
+
 		<plugins>
 			<plugin>
 				<groupId>io.github.ascopes</groupId>
@@ -116,6 +133,11 @@
 				<version>4.0.3</version>
 				<configuration>
 					<protoc>${protobuf-java.version}</protoc>
+					<arguments>
+						<argument>--descriptor_set_out=${project.build.directory}/generated-sources/protobuf/all-services.pb</argument>
+						<argument>--include_imports</argument>
+						<argument>--include_source_info</argument>
+					</arguments>
 					<binaryMavenPlugins>
 						<binaryMavenPlugin>
 							<groupId>io.grpc</groupId>

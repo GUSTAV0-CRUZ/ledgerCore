@@ -1,3 +1,6 @@
+server:
+  port: 8081
+
 spring:
   application:
     name: gateway-service
@@ -19,6 +22,17 @@ spring:
                 - Method=POST
               filters:
                 - CreateUserProducer
+            - id: auth-service-authentication
+              uri: grpc://localhost:9090
+              predicates:
+                - Path=/api/v1/auth/authentication
+                - Method=POST
+              filters:
+                - name: JsonToGrpc
+                  args:
+                    service: AuthService
+                    method: Authentication
+                    protoDescriptor: classpath:all-services.pb
     stream:
       bindings:
         createUserProducer-out-0:
