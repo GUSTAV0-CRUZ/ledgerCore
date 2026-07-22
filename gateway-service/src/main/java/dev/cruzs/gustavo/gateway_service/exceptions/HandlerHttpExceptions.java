@@ -1,6 +1,5 @@
 package dev.cruzs.gustavo.gateway_service.exceptions;
 
-import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
 import org.jspecify.annotations.NullMarked;
 import org.slf4j.Logger;
@@ -29,12 +28,11 @@ public class HandlerHttpExceptions implements ErrorWebExceptionHandler {
       return Mono.error(ex);
     }
 
-    this.logger.warn(ex.getMessage(), ex);
+    this.logger.warn(ex.getMessage());
     return switch (ex) {
       case IllegalArgumentException e -> this.sendError(response, e.getMessage(), HttpStatus.BAD_REQUEST);
-      case NoSuchElementException e -> this.sendError(response, "Body is null", HttpStatus.BAD_REQUEST);
+      case NoSuchElementException ignored -> this.sendError(response, "Body is null", HttpStatus.BAD_REQUEST);
       case StatusRuntimeException e -> this.grpcException(response, e);
-      case RuntimeException e -> this.sendError(response, e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 
       default -> this.sendError(response, "Internal server error", HttpStatus.INTERNAL_SERVER_ERROR);
     };

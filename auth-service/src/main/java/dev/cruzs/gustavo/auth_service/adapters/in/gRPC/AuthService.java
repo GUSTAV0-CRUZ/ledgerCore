@@ -22,6 +22,9 @@ public class AuthService extends AuthServiceImplBase {
 
   @Override
   public void authentication(AuthenticationRequest request, StreamObserver<AuthenticationResponse> responseObserver) {
+    if (request.getPassword().isEmpty())
+      throw new IllegalArgumentException("password required");
+
     String token = this.userAuthenticationUseCase.execute(
         new UserAuthenticationCommand(
             new Email(request.getEmail()),

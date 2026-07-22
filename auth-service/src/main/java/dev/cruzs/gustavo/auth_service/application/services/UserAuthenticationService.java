@@ -24,7 +24,7 @@ public class UserAuthenticationService implements UserAuthenticationUseCase {
     User user = this.userRepository.findByEmailOrNotFoundException(userAuthenticationCommand.email());
 
     if (!this.hash.validate(userAuthenticationCommand.password(), user.getPassword()))
-      throw new IllegalArgumentException("Wrong password");
+      throw new IllegalArgumentException("Invalid password");
 
     return this.jwt.generate(new GenerateJwtCommand(
         user.getId(),
