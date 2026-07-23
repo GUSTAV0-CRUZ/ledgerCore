@@ -49,6 +49,7 @@ public class HandlerHttpExceptions implements ErrorWebExceptionHandler {
 
     HttpStatus status = switch (e.getStatus().getCode()) {
       case INVALID_ARGUMENT -> HttpStatus.BAD_REQUEST;
+      case NOT_FOUND -> HttpStatus.NOT_FOUND;
       default -> HttpStatus.INTERNAL_SERVER_ERROR;
     };
 

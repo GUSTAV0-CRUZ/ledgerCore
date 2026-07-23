@@ -8,14 +8,23 @@ import org.springframework.cloud.gateway.config.HttpClientProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 @Configuration
 public class GrpcConfig {
+  private final Map<String, ManagedChannel> channelCache = new ConcurrentHashMap<>();
+
   @Bean
   public GrpcSslConfigurer grpcSslConfigurer(HttpClientProperties httpClientProperties, SslBundles sslBundles) {
     return new GrpcSslConfigurer(httpClientProperties.getSsl(), sslBundles) {
       @Override
-      public ManagedChannel configureSsl(NettyChannelBuilder NettyChannelBuilder) {
-        return NettyChannelBuilder.usePlaintext().build();
+      public ManagedChannel configureSsl(NettyChannelBuilder nettyChannelBuilder) {
+        nettyChannelBuilder.usePlaintext();
+
+        String target = "default-grpc-target";
+
+        return channelCache.computeIfAbsent(target, key -> nettyChannelBuilder.build());
       }
     };
   }
