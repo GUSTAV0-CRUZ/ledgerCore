@@ -35,6 +35,13 @@ spring:
                     service: AuthService
                     method: Authentication
                     protoDescriptor: classpath:all-services.pb
+
+            - id: tests-delete-me
+              uri: no-op://localhost
+              predicates:
+                - Path=/api/v1/test
+                - Method=GET
+
     stream:
       bindings:
         createUserProducer-out-0:
