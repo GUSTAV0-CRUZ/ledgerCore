@@ -1,6 +1,8 @@
 server:
   port: 8081
-
+jwt:
+  secrete:
+    key: "${JWT_SECRETE_KEY:secreteKeyDefaultWith123456789012}"
 spring:
   application:
     name: gateway-service
