@@ -1,52 +1,113 @@
+networks:
+  ledger-core:
+    driver: bridge
+    name: ledger-core-network
+
+volumes:
+  postgres_bancary_data:
+    name: postgres_bancary_data
+  postgres_auth_data:
+    name: postgres_auth_data
+  rabbitmq_data:
+    name: rabbitmq_data
+
 services:
   postgres-service-bancary:
     image: postgres:17-alpine
     container_name: postgres_service-bancary
+    restart: unless-stopped
     environment:
-      POSTGRES_USER: 'user'
-      POSTGRES_PASSWORD: 'password'
-      POSTGRES_DB: 'service-bancary'
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: service-bancary
     ports:
-      - "5432:5432"
+      - "127.0.0.1:5432:5432"
     volumes:
-      - postgres-service-bancary_data:/var/lib/postgresql/data
+      - postgres_bancary_data:/var/lib/postgresql/data
     networks:
       - ledger-core
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user -d service-bancary"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 512M
 
   postgres-auth-service:
     image: postgres:17-alpine
     container_name: postgres_auth-service
+    restart: unless-stopped
     environment:
-      POSTGRES_USER: 'user'
-      POSTGRES_PASSWORD: 'password'
-      POSTGRES_DB: 'auth-service'
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: auth-service
     ports:
-      - "5433:5432"
+      - "127.0.0.1:5433:5432"
     volumes:
-      - postgres-auth-service_data:/var/lib/postgresql/data
+      - postgres_auth_data:/var/lib/postgresql/data
     networks:
       - ledger-core
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user -d auth-service"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 512M
 
   rabbitmq:
-    image: rabbitmq:3.13-management
+    image: rabbitmq:3.13-management-alpine
     container_name: rabbitmq
+    restart: unless-stopped
     environment:
-      RABBITMQ_DEFAULT_USER: 'guest'
-      RABBITMQ_DEFAULT_PASS: 'guest'
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
       RABBITMQ_DEFAULT_VHOST: /
     ports:
-      - "5672:5672"
-      - "15672:15672"
+      - "127.0.0.1:5672:5672"
+      - "127.0.0.1:15672:15672"
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq
     networks:
       - ledger-core
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1G
 
-volumes:
-  rabbitmq_data:
-  postgres-service-bancary_data:
-  postgres-auth-service_data:
-
-networks:
-  ledger-core:
-    driver: bridge
+  auth-service:
+    build:
+      context: ./auth-service
+      dockerfile: dockerfile
+    container_name: auth-service
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+      - "9090:9090"
+    environment:
+      - URL_DB=jdbc:postgresql://postgres-auth-service:5432/auth-service
+      - USERNAME_DB=user
+      - PASSWORD_DB=password
+    networks:
+      - ledger-core
+    depends_on:
+      postgres-auth-service:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy

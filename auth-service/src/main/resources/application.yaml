@@ -3,7 +3,7 @@ spring:
     name: auth-service
 
   datasource:
-    url: "${URL_DB:jdbc:postgresql://localhost:5433/auth-service}"
+    url: "${URL_DB:jdbc:postgresql://postgres-auth-service:5432/auth-service}"
     username: "${USERNAME_DB:user}"
     password: "${PASSWORD_DB:password}"
     driver-class-name: org.postgresql.Driver
@@ -15,7 +15,7 @@ spring:
       ddl-auto: update
 
   rabbitmq:
-    host: localhost
+    host: rabbitmq
     port: 5672
     username: guest
     password: guest
