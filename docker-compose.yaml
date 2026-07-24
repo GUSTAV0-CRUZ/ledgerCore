@@ -98,7 +98,7 @@ services:
     container_name: auth-service
     restart: unless-stopped
     ports:
-      - "8080:8080"
+      - "8081:8080"
       - "9090:9090"
     environment:
       - URL_DB=jdbc:postgresql://postgres-auth-service:5432/auth-service
@@ -108,6 +108,27 @@ services:
       - ledger-core
     depends_on:
       postgres-auth-service:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+
+  service-bancary:
+    build:
+      context: ./service-bancary
+      dockerfile: dockerfile
+    container_name: service-bancary
+    restart: unless-stopped
+    ports:
+      - "8082:8080"
+      - "9091:9090"
+    environment:
+      - URL_DB=jdbc:postgresql://postgres-service-bancary:5432/service-bancary
+      - USERNAME_DB=user
+      - PASSWORD_DB=password
+    networks:
+      - ledger-core
+    depends_on:
+      postgres-service-bancary:
         condition: service_healthy
       rabbitmq:
         condition: service_healthy

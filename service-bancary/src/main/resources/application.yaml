@@ -7,7 +7,7 @@ spring:
     name: service-bancary
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/service-bancary
+    url: jdbc:postgresql://postgres-service-bancary:5432/service-bancary
     username: user
     password: password
     driver-class-name: org.postgresql.Driver
@@ -19,7 +19,7 @@ spring:
       ddl-auto: update
 
   rabbitmq:
-    host: localhost
+    host: rabbitmq
     port: 5672
     username: guest
     password: guest
