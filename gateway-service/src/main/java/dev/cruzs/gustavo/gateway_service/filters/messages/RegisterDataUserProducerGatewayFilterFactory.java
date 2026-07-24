@@ -2,16 +2,15 @@ package dev.cruzs.gustavo.gateway_service.filters.messages;
 
 import dev.cruzs.gustavo.gateway_service.filters.messages.dtos.RegisterDataUserDto;
 import dev.cruzs.gustavo.gateway_service.filters.messages.dtos.RegisterDataUserRequestDto;
+import dev.cruzs.gustavo.gateway_service.utils.GetHeadersOfRequest;
+import dev.cruzs.gustavo.gateway_service.utils.dtos.UserHeadersRequestDto;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
-import org.jspecify.annotations.NonNull;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.cloud.gateway.filter.factory.rewrite.ModifyRequestBodyGatewayFilterFactory;
 import org.springframework.cloud.stream.function.StreamBridge;
-import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
-import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 import java.util.Set;
@@ -57,31 +56,20 @@ public class RegisterDataUserProducerGatewayFilterFactory extends AbstractGatewa
                 throw new IllegalArgumentException(messagesError);
               }
 
-              RegisterDataUserDto registerDataUserDto = createRegisterDataUserDto(exchange, registerDataUserRequestDto);
+              UserHeadersRequestDto userHeadersRequestDto = GetHeadersOfRequest.getFullUser(exchange);
+              RegisterDataUserDto registerDataUserDto = new RegisterDataUserDto(
+                  userHeadersRequestDto.id(),
+                  registerDataUserRequestDto.name(),
+                  registerDataUserRequestDto.dateOfBirth(),
+                  userHeadersRequestDto.email(),
+                  registerDataUserRequestDto.cpf()
+              );
 
               streamBridge.send("registerDataUserProducer-out-0", registerDataUserDto);
 
               return Mono.just("");
             }
         )
-    );
-  }
-
-  private static @NonNull RegisterDataUserDto createRegisterDataUserDto(
-      ServerWebExchange exchange,
-      RegisterDataUserRequestDto registerDataUserRequestDto
-  ) {
-    HttpHeaders headers = exchange.getRequest().getHeaders();
-
-    String id = headers.get("X-User-Id") != null ? headers.get("X-User-Id").getFirst() : "";
-    String email = headers.get("X-User-Id") != null  ? headers.get("X-User-Email").getFirst() : "";
-
-    return new RegisterDataUserDto(
-        id,
-        registerDataUserRequestDto.name(),
-        registerDataUserRequestDto.dateOfBirth(),
-        email,
-        registerDataUserRequestDto.cpf()
     );
   }
 }
