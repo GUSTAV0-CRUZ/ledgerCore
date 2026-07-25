@@ -48,12 +48,19 @@ spring:
               filters:
                 - CreateAccountProducer
             - id: service-bancary-deposit-account
-              uri: no:op://localhost
+              uri: no-op://localhost
               predicates:
                 - Path=/api/deposit-account
                 - Method=PATCH
               filters:
                 - DepositAccountProducer
+            - id: service-bancary-withdraw-account
+              uri: no-op://localhost
+              predicates:
+                - Path=/api/withdraw-account
+                - Method=PATCH
+              filters:
+                - WithdrawAccountProducer
 
             - id: tests-delete-me
               uri: no-op://localhost
@@ -71,6 +78,8 @@ spring:
           destination: exchange-account-bancary
         depositAccountProducer-out-0:
           destination: exchange-account-bancary
+        withdrawAccountProducer-out-0:
+          destination: exchange-account-bancary
       rabbit:
         bindings:
           createAccountProducer-out-0:
@@ -85,3 +94,6 @@ spring:
           registerDataUserProducer-out-0:
             producer:
               routing-key-expression: "'rk-register-data-user'"
+          withdrawAccountProducer-out-0:
+            producer:
+              routing-key-expression: "'rk-withdraw-account'"
