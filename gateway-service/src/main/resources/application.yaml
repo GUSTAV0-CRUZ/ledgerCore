@@ -33,13 +33,20 @@ spring:
                     service: AuthService
                     method: Authentication
                     protoDescriptor: classpath:all-services.pb
-            - id: register-data-user
+            - id: service-bancary-register-data-user
               uri: no-op://localhost
               predicates:
                 - Path=/api/register-data-user
                 - Method=POST
               filters:
                 - RegisterDataUserProducer
+            - id: service-bancary-create-account
+              uri: no-op://localhost
+              predicates:
+                - Path=/api/create-account
+                - Method=POST
+              filters:
+                - CreateAccountConsumer
 
             - id: tests-delete-me
               uri: no-op://localhost
@@ -53,3 +60,5 @@ spring:
           destination: exchange-auth-service
         registerDataUserProducer-out-0:
           destination: exchange-user
+        createAccountConsumer-out-0:
+          destination: exchange-account-bancary
