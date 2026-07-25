@@ -70,3 +70,22 @@ spring:
           consumer:
             auto-bind-dlq: true
             republish-to-dlq: true
+        bindings:
+          createAccountConsumer-in-0:
+            consumer:
+              binding-routing-key: rk-create-account
+          depositAccountConsumer-in-0:
+            consumer:
+              binding-routing-key: rk-deposit-account
+          withdrawAccountConsumer-in-0:
+            consumer:
+              binding-routing-key: rk-withdraw-account
+          transferMoneyAccountConsumer-in-0:
+            consumer:
+              binding-routing-key: rk-transfer-money
+          createUserConsumer-in-0:
+            consumer:
+              binding-routing-key: rk-create-user
+          createHistoryConsumer-in-0:
+            consumer:
+              binding-routing-key: '#'
