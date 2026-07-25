@@ -46,14 +46,14 @@ spring:
                 - Path=/api/create-account
                 - Method=POST
               filters:
-                - CreateAccountConsumer
+                - CreateAccountProducer
             - id: service-bancary-deposit-account
               uri: no:op://localhost
               predicates:
                 - Path=/api/deposit-account
                 - Method=PATCH
               filters:
-                - DepositAccountConsumer
+                - DepositAccountProducer
 
             - id: tests-delete-me
               uri: no-op://localhost
@@ -67,7 +67,21 @@ spring:
           destination: exchange-auth-service
         registerDataUserProducer-out-0:
           destination: exchange-user
-        createAccountConsumer-out-0:
+        createAccountProducer-out-0:
           destination: exchange-account-bancary
-        depositAccountConsumer-out-0:
+        depositAccountProducer-out-0:
           destination: exchange-account-bancary
+      rabbit:
+        bindings:
+          createAccountProducer-out-0:
+            producer:
+              routing-key-expression: "'rk-create-account'"
+          depositAccountProducer-out-0:
+            producer:
+              routing-key-expression: "'rk-deposit-account'"
+          createUserProducer-out-0:
+            producer:
+              routing-key-expression: "'rk-create-user'"
+          registerDataUserProducer-out-0:
+            producer:
+              routing-key-expression: "'rk-register-data-user'"

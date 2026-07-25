@@ -17,12 +17,12 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Component
-public class DepositAccountConsumerGatewayFilterFactory extends AbstractGatewayFilterFactory<Object> {
+public class DepositAccountProducerGatewayFilterFactory extends AbstractGatewayFilterFactory<Object> {
   private final ModifyRequestBodyGatewayFilterFactory modifyRequestBodyGatewayFilterFactory;
   private final Validator validator;
   private final StreamBridge streamBridge;
 
-  public DepositAccountConsumerGatewayFilterFactory(
+  public DepositAccountProducerGatewayFilterFactory(
       ModifyRequestBodyGatewayFilterFactory modifyRequestBodyGatewayFilterFactory,
       Validator validator,
       StreamBridge streamBridge
@@ -63,7 +63,7 @@ public class DepositAccountConsumerGatewayFilterFactory extends AbstractGatewayF
                   depositAccountRequestDto.amount()
               );
 
-              this.streamBridge.send("depositAccountConsumer-out-0", depositAccountDto);
+              this.streamBridge.send("depositAccountProducer-out-0", depositAccountDto);
 
               return Mono.just("");
             }
