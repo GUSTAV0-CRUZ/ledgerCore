@@ -9,6 +9,8 @@ import org.springframework.cloud.gateway.filter.factory.rewrite.ModifyRequestBod
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.stereotype.Component;
 
+import java.util.UUID;
+
 @Component
 public class CreateAccountConsumerGatewayFilterFactory extends AbstractGatewayFilterFactory<Object> {
   private final StreamBridge streamBridge;
@@ -24,7 +26,7 @@ public class CreateAccountConsumerGatewayFilterFactory extends AbstractGatewayFi
     return (exchange, chain) -> {
       String id = GetHeadersOfRequest.getFullUser(exchange).id();
 
-      this.streamBridge.send("createAccountConsumer-out-0",  new CreateAccountDto(id));
+      this.streamBridge.send("createAccountConsumer-out-0",  new CreateAccountDto(UUID.fromString(id)));
 
       return chain.filter(exchange);
     };

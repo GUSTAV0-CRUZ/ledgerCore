@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Component
@@ -58,7 +59,7 @@ public class RegisterDataUserProducerGatewayFilterFactory extends AbstractGatewa
 
               UserHeadersRequestDto userHeadersRequestDto = GetHeadersOfRequest.getFullUser(exchange);
               RegisterDataUserDto registerDataUserDto = new RegisterDataUserDto(
-                  userHeadersRequestDto.id(),
+                  UUID.fromString(userHeadersRequestDto.id()),
                   registerDataUserRequestDto.name(),
                   registerDataUserRequestDto.dateOfBirth(),
                   userHeadersRequestDto.email(),

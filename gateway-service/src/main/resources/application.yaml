@@ -47,6 +47,13 @@ spring:
                 - Method=POST
               filters:
                 - CreateAccountConsumer
+            - id: service-bancary-deposit-account
+              uri: no:op://localhost
+              predicates:
+                - Path=/api/deposit-account
+                - Method=PATCH
+              filters:
+                - DepositAccountConsumer
 
             - id: tests-delete-me
               uri: no-op://localhost
@@ -61,4 +68,6 @@ spring:
         registerDataUserProducer-out-0:
           destination: exchange-user
         createAccountConsumer-out-0:
+          destination: exchange-account-bancary
+        depositAccountConsumer-out-0:
           destination: exchange-account-bancary

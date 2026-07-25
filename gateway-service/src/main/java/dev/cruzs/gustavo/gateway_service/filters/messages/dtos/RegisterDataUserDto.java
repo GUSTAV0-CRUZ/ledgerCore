@@ -1,4 +1,6 @@
 package dev.cruzs.gustavo.gateway_service.filters.messages.dtos;
 
-public record RegisterDataUserDto(String id, String name, String dateOfBirth, String email, String cpf) {
+import java.util.UUID;
+
+public record RegisterDataUserDto(UUID id, String name, String dateOfBirth, String email, String cpf) {
 }

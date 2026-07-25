@@ -9,6 +9,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
+import org.springframework.web.reactive.resource.NoResourceFoundException;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
@@ -31,6 +32,7 @@ public class HandlerHttpExceptions implements ErrorWebExceptionHandler {
     this.logger.warn(ex.getMessage());
     return switch (ex) {
       case IllegalArgumentException e -> this.sendError(response, e.getMessage(), HttpStatus.BAD_REQUEST);
+      case NoResourceFoundException e -> this.sendError(response, e.getMessage(), HttpStatus.NOT_FOUND);
       case NoSuchElementException ignored -> this.sendError(response, "Body is null", HttpStatus.BAD_REQUEST);
       case StatusRuntimeException e -> this.grpcException(response, e);
 
