@@ -3,5 +3,5 @@ package dev.cruzs.gustavo.service_bancary.account.application.ports.inbound.comm
 import java.math.BigDecimal;
 import java.util.UUID;
 
-public record TransferMoneyCommand(UUID sender, BigDecimal amount, UUID recipient) {
+public record TransferMoneyCommand(UUID senderUserId, BigDecimal amount, UUID recipientAccountId) {
 }

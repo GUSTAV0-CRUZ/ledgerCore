@@ -16,4 +16,8 @@ public interface AccountRepository {
   default Account findByIdOrException(UUID id) {
     return this.findById(id).orElseThrow(() -> new NotFoundAccountException("Account not found"));
   }
+
+  default Account findByUserIdOrException(UUID id) {
+    return this.findByUserId(id).orElseThrow(() -> new NotFoundAccountException("Account not found"));
+  }
 }

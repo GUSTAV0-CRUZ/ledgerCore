@@ -61,9 +61,9 @@ public class AccountConsumer {
       Account account = this.transferMoneyUseCase.execute(transferMoneyCommand);
       logger.info(
           "Account Id: ({}) transfer money with amount: {} for account Id: ({})",
-          transferMoneyCommand.sender(),
+          transferMoneyCommand.senderUserId(),
           transferMoneyCommand.amount(),
-          transferMoneyCommand.recipient()
+          transferMoneyCommand.recipientAccountId()
       );
     };
   }

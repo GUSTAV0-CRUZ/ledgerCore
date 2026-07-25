@@ -14,11 +14,11 @@ public class WithdrawAccountService implements WithdrawAccountUseCase {
 
   @Override
   public Account execute(WithdrawAccountCommand command) {
-    var account = accountRepository.findByIdOrException(command.id());
+    var account = accountRepository.findByUserIdOrException(command.userId());
 
     account.withdraw(command.amount());
     this.accountRepository.updateBalance(
-        command.id(),
+        account.getId(),
         account.getBalance()
     );
 

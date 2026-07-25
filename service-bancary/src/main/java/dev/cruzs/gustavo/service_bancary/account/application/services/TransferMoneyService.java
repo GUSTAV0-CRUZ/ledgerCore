@@ -14,17 +14,17 @@ public class TransferMoneyService implements TransferMoneyUseCase {
 
   @Override
   public Account execute(TransferMoneyCommand command) {
-    if (command.sender().equals(command.recipient()))
-      throw new IllegalArgumentException("You cannot transfer to yourself.");
+    var accountSender = accountRepository.findByUserIdOrException(command.senderUserId());
+    var accountRecipient = accountRepository.findByIdOrException(command.recipientAccountId());
 
-    var accountSender = accountRepository.findByIdOrException(command.sender());
-    var accountRecipient = accountRepository.findByIdOrException(command.recipient());
+    if (accountSender.getId().equals(accountRecipient.getId()))
+      throw new IllegalArgumentException("You cannot transfer to yourself.");
 
     accountSender.withdraw(command.amount());
     accountRecipient.deposit(command.amount());
 
-    this.accountRepository.updateBalance(command.sender(), accountSender.getBalance());
-    this.accountRepository.updateBalance(command.recipient(), accountRecipient.getBalance());
+    this.accountRepository.updateBalance(accountSender.getId(), accountSender.getBalance());
+    this.accountRepository.updateBalance(accountRecipient.getId(), accountRecipient.getBalance());
 
     return accountSender;
   }

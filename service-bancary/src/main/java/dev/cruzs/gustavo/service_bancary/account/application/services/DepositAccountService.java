@@ -14,12 +14,12 @@ public class DepositAccountService implements DepositAccountUseCase {
 
   @Override
   public Account execute(DepositAccountCommand depositAccountCommand) {
-    var account = accountRepository.findByIdOrException(depositAccountCommand.id());
+    var account = accountRepository.findByUserIdOrException(depositAccountCommand.userId());
 
     account.deposit(depositAccountCommand.amount());
 
     this.accountRepository.updateBalance(
-        depositAccountCommand.id(),
+        account.getId(),
         account.getBalance()
     );
 

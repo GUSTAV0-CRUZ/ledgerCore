@@ -14,8 +14,6 @@ public class FindAccountByUserIdService implements FindAccountByUserIdUseCase {
   }
 
   public Account execute(FindAccountByUserIdCommand command) {
-    return this.accountRepository.findByUserId(command.userId()).orElseThrow(
-        () -> new NotFoundAccountException("Account not found")
-    );
+    return this.accountRepository.findByUserIdOrException(command.userId());
   }
 }
