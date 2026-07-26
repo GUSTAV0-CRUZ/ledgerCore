@@ -61,6 +61,13 @@ spring:
                 - Method=PATCH
               filters:
                 - WithdrawAccountProducer
+            - id: transfer-money-account
+              uri: no-op://localhost
+              predicates:
+                - Path=/api/transfer-money-account
+                - Method=PATCH
+              filters:
+                - TransferMoneyAccountProducer
 
             - id: tests-delete-me
               uri: no-op://localhost
@@ -80,20 +87,25 @@ spring:
           destination: exchange-account-bancary
         withdrawAccountProducer-out-0:
           destination: exchange-account-bancary
+        transferMoneyAccountProducer-out-0:
+          destination: exchange-account-bancary
       rabbit:
         bindings:
-          createAccountProducer-out-0:
-            producer:
-              routing-key-expression: "'rk-create-account'"
-          depositAccountProducer-out-0:
-            producer:
-              routing-key-expression: "'rk-deposit-account'"
           createUserProducer-out-0:
             producer:
               routing-key-expression: "'rk-create-user'"
+          createAccountProducer-out-0:
+            producer:
+              routing-key-expression: "'rk-create-account'"
           registerDataUserProducer-out-0:
             producer:
-              routing-key-expression: "'rk-register-data-user'"
+              routing-key-expression: "'rk-create-user'"
+          depositAccountProducer-out-0:
+            producer:
+              routing-key-expression: "'rk-deposit-account'"
           withdrawAccountProducer-out-0:
             producer:
               routing-key-expression: "'rk-withdraw-account'"
+          transferMoneyAccountProducer-out-0:
+            producer:
+              routing-key-expression: "'rk-transfer-money'"
