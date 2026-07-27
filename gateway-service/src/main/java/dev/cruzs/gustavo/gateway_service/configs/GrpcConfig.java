@@ -2,6 +2,7 @@ package dev.cruzs.gustavo.gateway_service.configs;
 
 import io.grpc.ManagedChannel;
 import io.grpc.netty.NettyChannelBuilder;
+import jakarta.annotation.PreDestroy;
 import org.springframework.boot.ssl.SslBundles;
 import org.springframework.cloud.gateway.config.GrpcSslConfigurer;
 import org.springframework.cloud.gateway.config.HttpClientProperties;
@@ -22,10 +23,24 @@ public class GrpcConfig {
       public ManagedChannel configureSsl(NettyChannelBuilder nettyChannelBuilder) {
         nettyChannelBuilder.usePlaintext();
 
-        String target = "default-grpc-target";
+        ManagedChannel newManagedChannel = nettyChannelBuilder.build();
 
-        return channelCache.computeIfAbsent(target, key -> nettyChannelBuilder.build());
+        String target = newManagedChannel.authority();
+
+        ManagedChannel existingChannel =  channelCache.putIfAbsent(target, newManagedChannel);
+
+        if (existingChannel != null) {
+          newManagedChannel.shutdownNow();
+          return existingChannel;
+        }
+
+        return newManagedChannel;
       }
     };
+  }
+  
+  @PreDestroy
+  public void shutdownNowAllChannelCache() {
+    channelCache.values().forEach(ManagedChannel::shutdownNow);
   }
 }

@@ -121,7 +121,8 @@
 			<resource>
 				<directory>${project.build.directory}/generated-sources/protobuf</directory>
 				<includes>
-					<include>all-services.pb</include>
+					<include>auth-service.pb</include>
+					<include>account-service.pb</include>
 				</includes>
 			</resource>
 		</resources>
@@ -133,11 +134,6 @@
 				<version>4.0.3</version>
 				<configuration>
 					<protoc>${protobuf-java.version}</protoc>
-					<arguments>
-						<argument>--descriptor_set_out=${project.build.directory}/generated-sources/protobuf/all-services.pb</argument>
-						<argument>--include_imports</argument>
-						<argument>--include_source_info</argument>
-					</arguments>
 					<binaryMavenPlugins>
 						<binaryMavenPlugin>
 							<groupId>io.grpc</groupId>
@@ -149,10 +145,37 @@
 				</configuration>
 				<executions>
 					<execution>
-						<id>generate</id>
+						<id>generate-auth</id>
 						<goals>
 							<goal>generate</goal>
 						</goals>
+						<configuration>
+							<includes>
+								<include>AuthService.proto</include>
+							</includes>
+							<arguments>
+								<argument>--descriptor_set_out=${project.build.directory}/generated-sources/protobuf/auth-service.pb</argument>
+								<argument>--include_imports</argument>
+								<argument>--include_source_info</argument>
+							</arguments>
+						</configuration>
+					</execution>
+
+					<execution>
+						<id>generate-account</id>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<includes>
+								<include>AccountService.proto</include>
+							</includes>
+							<arguments>
+								<argument>--descriptor_set_out=${project.build.directory}/generated-sources/protobuf/account-service.pb</argument>
+								<argument>--include_imports</argument>
+								<argument>--include_source_info</argument>
+							</arguments>
+						</configuration>
 					</execution>
 				</executions>
 			</plugin>
