@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "dev.cruzs.gustavo.gateway_service.filters.gRPC.generated";
+
+enum AccountStatusEnum {
+  ACTIVE = 0;
+  BLOCKED = 1;
+  SUSPENDED = 2;
+  CLOSED = 3;
+}
+
+enum AccountTypeEnum {
+  CURRENT = 0;
+  SAVINGS = 1;
+}
+
+message AccountResponse {
+  string id = 1;
+  string user_id = 2;
+  int32 bank_code = 3;
+  string institution = 4;
+  int32 agency = 5;
+  string number = 6;
+  string balance = 7;
+  AccountTypeEnum typeAccount = 8;
+  AccountStatusEnum status = 9;
+}
+
+message FindAccountByUserIdRequest {
+  string user_id = 1;
+}
+
+service AccountService {
+  rpc FindAccountByUserId (FindAccountByUserIdRequest) returns (AccountResponse);
+}
