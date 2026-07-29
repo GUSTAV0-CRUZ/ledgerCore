@@ -38,7 +38,7 @@ public class GrpcConfig {
       }
     };
   }
-  
+
   @PreDestroy
   public void shutdownNowAllChannelCache() {
     channelCache.values().forEach(ManagedChannel::shutdownNow);

@@ -3,7 +3,7 @@ package dev.cruzs.gustavo.gateway_service.filters.messages;
 import dev.cruzs.gustavo.gateway_service.filters.messages.dtos.RegisterDataUserDto;
 import dev.cruzs.gustavo.gateway_service.filters.messages.dtos.RegisterDataUserRequestDto;
 import dev.cruzs.gustavo.gateway_service.utils.GetHeadersOfRequest;
-import dev.cruzs.gustavo.gateway_service.utils.dtos.UserHeadersRequestDto;
+import dev.cruzs.gustavo.gateway_service.utils.dtos.FullUserHeadersRequestDto;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
@@ -57,12 +57,12 @@ public class RegisterDataUserProducerGatewayFilterFactory extends AbstractGatewa
                 throw new IllegalArgumentException(messagesError);
               }
 
-              UserHeadersRequestDto userHeadersRequestDto = GetHeadersOfRequest.getFullUser(exchange);
+              FullUserHeadersRequestDto fullUserHeadersRequestDto = GetHeadersOfRequest.getFullUser(exchange);
               RegisterDataUserDto registerDataUserDto = new RegisterDataUserDto(
-                  UUID.fromString(userHeadersRequestDto.id()),
+                  UUID.fromString(fullUserHeadersRequestDto.id()),
                   registerDataUserRequestDto.name(),
                   registerDataUserRequestDto.dateOfBirth(),
-                  userHeadersRequestDto.email(),
+                  fullUserHeadersRequestDto.email(),
                   registerDataUserRequestDto.cpf()
               );
 

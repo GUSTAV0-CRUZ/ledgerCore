@@ -3,7 +3,7 @@ package dev.cruzs.gustavo.gateway_service.filters.messages;
 import dev.cruzs.gustavo.gateway_service.filters.messages.dtos.TransferMoneyAccountDto;
 import dev.cruzs.gustavo.gateway_service.filters.messages.dtos.TransferMoneyAccountRequestDto;
 import dev.cruzs.gustavo.gateway_service.utils.GetHeadersOfRequest;
-import dev.cruzs.gustavo.gateway_service.utils.dtos.UserHeadersRequestDto;
+import dev.cruzs.gustavo.gateway_service.utils.dtos.FullUserHeadersRequestDto;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
@@ -57,9 +57,9 @@ public class TransferMoneyAccountProducerGatewayFilterFactory extends AbstractGa
                 throw new IllegalArgumentException(messagesError);
               }
 
-              UserHeadersRequestDto userHeadersRequestDto = GetHeadersOfRequest.getFullUser(exchange);
+              FullUserHeadersRequestDto fullUserHeadersRequestDto = GetHeadersOfRequest.getFullUser(exchange);
               TransferMoneyAccountDto transferMoneyAccountDto = new TransferMoneyAccountDto(
-                  UUID.fromString(userHeadersRequestDto.id()),
+                  UUID.fromString(fullUserHeadersRequestDto.id()),
                   transferMoneyAccountRequestDto.amount(),
                   transferMoneyAccountRequestDto.recipientAccountId()
               );

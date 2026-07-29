@@ -22,6 +22,7 @@ spring:
                 - Method=POST
               filters:
                 - CreateUserProducer
+
             - id: auth-service-authentication
               uri: grpc://localhost:9090
               predicates:
@@ -32,7 +33,8 @@ spring:
                   args:
                     service: AuthService
                     method: Authentication
-                    protoDescriptor: classpath:all-services.pb
+                    protoDescriptor: classpath:auth-service.pb
+
             - id: service-bancary-register-data-user
               uri: no-op://localhost
               predicates:
@@ -40,6 +42,7 @@ spring:
                 - Method=POST
               filters:
                 - RegisterDataUserProducer
+
             - id: service-bancary-create-account
               uri: no-op://localhost
               predicates:
@@ -47,6 +50,7 @@ spring:
                 - Method=POST
               filters:
                 - CreateAccountProducer
+
             - id: service-bancary-deposit-account
               uri: no-op://localhost
               predicates:
@@ -54,6 +58,7 @@ spring:
                 - Method=PATCH
               filters:
                 - DepositAccountProducer
+
             - id: service-bancary-withdraw-account
               uri: no-op://localhost
               predicates:
@@ -61,6 +66,7 @@ spring:
                 - Method=PATCH
               filters:
                 - WithdrawAccountProducer
+
             - id: transfer-money-account
               uri: no-op://localhost
               predicates:
@@ -69,11 +75,13 @@ spring:
               filters:
                 - TransferMoneyAccountProducer
 
-            - id: tests-delete-me
+            - id: find-account-by-userId
               uri: no-op://localhost
               predicates:
-                - Path=/api/v1/test
+                - Path=/api/v1/account/view
                 - Method=GET
+              filters:
+                - FindAccountByUserId
 
     stream:
       bindings:
