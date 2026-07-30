@@ -17,6 +17,6 @@ public class MessagingUserConfig {
 
   @Bean
   public Consumer<CreateUserDto> createUserConsumer(UserConsumer userConsumer) {
-    return userConsumer.createUserConsumer();
+    return userConsumer::createUserConsumer;
   }
 }

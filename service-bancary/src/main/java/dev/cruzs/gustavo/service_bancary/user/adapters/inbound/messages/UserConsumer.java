@@ -8,7 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.LocalDate;
-import java.util.function.Consumer;
 
 public class UserConsumer {
   private final Logger logger = LoggerFactory.getLogger(UserConsumer.class);
@@ -18,8 +17,7 @@ public class UserConsumer {
     this.createUserUseCase = createUserUseCase;
   }
 
-  public Consumer<CreateUserDto> createUserConsumer() {
-    return createUserDto -> {
+  public void createUserConsumer(CreateUserDto createUserDto) {
       LocalDate dateOfBirth = LocalDate.parse(createUserDto.dateOfBirth());
 
       CreateUserCommand createUserCommand = new CreateUserCommand(
@@ -32,6 +30,5 @@ public class UserConsumer {
       User user = createUserUseCase.execute(createUserCommand);
 
       logger.info("Create user with id: {}", user.getId());
-    };
   }
 }
