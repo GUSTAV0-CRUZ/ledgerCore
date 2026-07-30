@@ -6,6 +6,7 @@ import dev.cruzs.gustavo.service_bancary.account.adapters.outbound.persistence.m
 import dev.cruzs.gustavo.service_bancary.account.adapters.outbound.persistence.repositories.AccountJpaRepository;
 import dev.cruzs.gustavo.service_bancary.account.application.ports.outbound.AccountRepository;
 import dev.cruzs.gustavo.service_bancary.account.domain.Account;
+import dev.cruzs.gustavo.service_bancary.account.domain.valueObjects.NumberAccount;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -52,6 +53,11 @@ public class AccountRepositoryAdapter implements AccountRepository {
     if (accountModel == null) return Optional.empty();
 
     return Optional.of(AccountMap.mapToAccount(accountModel));
+  }
+
+  @Override
+  public Optional<Account> findByNumber(NumberAccount number) {
+    return accountJpaRepository.findByNumber(number.getNumber()).map(AccountMap::mapToAccount);
   }
 
   @Transactional

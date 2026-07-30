@@ -18,4 +18,5 @@ public interface AccountJpaRepository extends JpaRepository<AccountModel, UUID> 
   int updateBalance(@Param("id") UUID id, @Param("balance") BigDecimal balance);
 
   Optional<AccountModel> findByUserId(UUID userId);
+  Optional<AccountModel> findByNumber(String number);
 }

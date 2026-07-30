@@ -1,5 +1,6 @@
 package dev.cruzs.gustavo.service_bancary.account.adapters.inbound.messaging;
 
+import dev.cruzs.gustavo.service_bancary.account.adapters.inbound.messaging.dtos.TransferMoneyRequestDto;
 import dev.cruzs.gustavo.service_bancary.account.application.ports.inbound.CreateAccountCurrentUseCase;
 import dev.cruzs.gustavo.service_bancary.account.application.ports.inbound.DepositAccountUseCase;
 import dev.cruzs.gustavo.service_bancary.account.application.ports.inbound.TransferMoneyUseCase;
@@ -9,6 +10,7 @@ import dev.cruzs.gustavo.service_bancary.account.application.ports.inbound.comma
 import dev.cruzs.gustavo.service_bancary.account.application.ports.inbound.commands.TransferMoneyCommand;
 import dev.cruzs.gustavo.service_bancary.account.application.ports.inbound.commands.WithdrawAccountCommand;
 import dev.cruzs.gustavo.service_bancary.account.domain.Account;
+import dev.cruzs.gustavo.service_bancary.account.domain.valueObjects.NumberAccount;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,14 +58,20 @@ public class AccountConsumer {
   }
 
   @Transactional
-  public Consumer<TransferMoneyCommand> transferMoneyAccountConsumer() {
-    return transferMoneyCommand -> {
-      Account account = this.transferMoneyUseCase.execute(transferMoneyCommand);
+  public Consumer<TransferMoneyRequestDto> transferMoneyAccountConsumer() {
+    return transferMoneyRequestDto -> {
+      Account account = this.transferMoneyUseCase.execute(
+          new TransferMoneyCommand(
+              transferMoneyRequestDto.senderUserId(),
+              transferMoneyRequestDto.amount(),
+              NumberAccount.restore(transferMoneyRequestDto.recipientNumberAccount())
+          )
+      );
       logger.info(
           "Account Id: ({}) transfer money with amount: {} for account Id: ({})",
-          transferMoneyCommand.senderUserId(),
-          transferMoneyCommand.amount(),
-          transferMoneyCommand.recipientAccountId()
+          transferMoneyRequestDto.senderUserId(),
+          transferMoneyRequestDto.amount(),
+          transferMoneyRequestDto.recipientNumberAccount()
       );
     };
   }

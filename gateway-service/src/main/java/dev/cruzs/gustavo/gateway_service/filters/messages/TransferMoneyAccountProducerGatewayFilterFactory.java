@@ -61,7 +61,7 @@ public class TransferMoneyAccountProducerGatewayFilterFactory extends AbstractGa
               TransferMoneyAccountDto transferMoneyAccountDto = new TransferMoneyAccountDto(
                   UUID.fromString(fullUserHeadersRequestDto.id()),
                   transferMoneyAccountRequestDto.amount(),
-                  transferMoneyAccountRequestDto.recipientAccountId()
+                  transferMoneyAccountRequestDto.recipientNumberAccount()
               );
 
               streamBridge.send("transferMoneyAccountProducer-out-0", transferMoneyAccountDto);

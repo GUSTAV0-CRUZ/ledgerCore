@@ -39,7 +39,7 @@ public class AccountModel implements Serializable {
   @Column(nullable = false)
   private Integer agency;
 
-  @Column(nullable = false)
+  @Column(nullable = false, unique = true)
   private String number;
 
   @Column(nullable = false)

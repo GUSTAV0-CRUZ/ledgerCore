@@ -1,6 +1,7 @@
 package dev.cruzs.gustavo.service_bancary.account.adapters.configs;
 
 import dev.cruzs.gustavo.service_bancary.account.adapters.inbound.messaging.AccountConsumer;
+import dev.cruzs.gustavo.service_bancary.account.adapters.inbound.messaging.dtos.TransferMoneyRequestDto;
 import dev.cruzs.gustavo.service_bancary.account.application.ports.inbound.CreateAccountCurrentUseCase;
 import dev.cruzs.gustavo.service_bancary.account.application.ports.inbound.DepositAccountUseCase;
 import dev.cruzs.gustavo.service_bancary.account.application.ports.inbound.TransferMoneyUseCase;
@@ -47,7 +48,7 @@ public class MessagingAccountConfig {
   }
 
   @Bean
-  public Consumer<TransferMoneyCommand> transferMoneyAccountConsumer(AccountConsumer accountConsumer) {
+  public Consumer<TransferMoneyRequestDto> transferMoneyAccountConsumer(AccountConsumer accountConsumer) {
     return accountConsumer.transferMoneyAccountConsumer();
   }
 }
