@@ -6,8 +6,6 @@ import dev.cruzs.gustavo.service_bancary.history.domain.History;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.function.Consumer;
-
 public class HistoryConsumer {
   private final Logger logger = LoggerFactory.getLogger(this.getClass());
   private final CreateHistoryUseCase createHistoryUseCase;
@@ -16,11 +14,9 @@ public class HistoryConsumer {
     this.createHistoryUseCase = createHistoryUseCase;
   }
 
-  public Consumer<CreateHistoryCommand> createHistoryConsumer() {
-    return createHistoryCommand -> {
-      History history = createHistoryUseCase.execute(createHistoryCommand);
+  public void createHistoryConsumer(CreateHistoryCommand createHistoryCommand) {
+    History history = createHistoryUseCase.execute(createHistoryCommand);
 
-      logger.info("Created history with id: {}", history.getId());
-    };
+    logger.info("Created history with id: {}", history.getId());
   }
 }

@@ -17,6 +17,6 @@ public class ConsumersConfig {
 
   @Bean
   public Consumer<CreateHistoryCommand> createHistoryConsumer(HistoryConsumer historyConsumer) {
-    return historyConsumer.createHistoryConsumer();
+    return historyConsumer::createHistoryConsumer;
   }
 }
