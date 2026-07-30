@@ -15,8 +15,6 @@ import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.function.Consumer;
-
 public class AccountConsumer {
   private final Logger logger = LoggerFactory.getLogger(AccountConsumer.class);
   private final CreateAccountCurrentUseCase createAccountCurrentUseCase;
@@ -36,43 +34,35 @@ public class AccountConsumer {
     this.transferMoneyUseCase = transferMoneyUseCase;
   }
 
-  public Consumer<CreateAccountCurrentCommand> createAccountConsumer() {
-    return createAccountCurrentCommand -> {
-      Account account = this.createAccountCurrentUseCase.execute(createAccountCurrentCommand);
-      logger.info("Account Id: {} created.", account.getId());
-    };
+  public void createAccountConsumer(CreateAccountCurrentCommand createAccountCurrentCommand) {
+    Account account = this.createAccountCurrentUseCase.execute(createAccountCurrentCommand);
+    logger.info("Account Id: {} created.", account.getId());
   }
 
-  public Consumer<DepositAccountCommand> depositAccountConsumer() {
-    return depositAccountCommand -> {
-      Account account = this.depositAccountUseCase.execute(depositAccountCommand);
-      logger.info("Account Id: ({}) deposit amount: {}", account.getId(), depositAccountCommand.amount());
-    };
+  public void depositAccountConsumer(DepositAccountCommand depositAccountCommand) {
+    Account account = this.depositAccountUseCase.execute(depositAccountCommand);
+    logger.info("Account Id: ({}) deposit amount: {}", account.getId(), depositAccountCommand.amount());
   }
 
-  public Consumer<WithdrawAccountCommand> withdrawAccountConsumer() {
-    return withdrawAccountCommand -> {
-      Account account = this.withdrawAccountUseCase.execute(withdrawAccountCommand);
-      logger.info("Account Id: ({}) withdraw amount: {}", account.getId(), withdrawAccountCommand.amount());
-    };
+  public void withdrawAccountConsumer(WithdrawAccountCommand withdrawAccountCommand) {
+    Account account = this.withdrawAccountUseCase.execute(withdrawAccountCommand);
+    logger.info("Account Id: ({}) withdraw amount: {}", account.getId(), withdrawAccountCommand.amount());
   }
 
   @Transactional
-  public Consumer<TransferMoneyRequestDto> transferMoneyAccountConsumer() {
-    return transferMoneyRequestDto -> {
-      Account account = this.transferMoneyUseCase.execute(
-          new TransferMoneyCommand(
-              transferMoneyRequestDto.senderUserId(),
-              transferMoneyRequestDto.amount(),
-              NumberAccount.restore(transferMoneyRequestDto.recipientNumberAccount())
-          )
-      );
-      logger.info(
-          "Account Id: ({}) transfer money with amount: {} for account Id: ({})",
-          transferMoneyRequestDto.senderUserId(),
-          transferMoneyRequestDto.amount(),
-          transferMoneyRequestDto.recipientNumberAccount()
-      );
-    };
+  public void transferMoneyAccountConsumer(TransferMoneyRequestDto transferMoneyRequestDto) {
+    Account account = this.transferMoneyUseCase.execute(
+        new TransferMoneyCommand(
+            transferMoneyRequestDto.senderUserId(),
+            transferMoneyRequestDto.amount(),
+            NumberAccount.restore(transferMoneyRequestDto.recipientNumberAccount())
+        )
+    );
+    logger.info(
+        "Account Id: ({}) transfer money with amount: {} for account Id: ({})",
+        transferMoneyRequestDto.senderUserId(),
+        transferMoneyRequestDto.amount(),
+        transferMoneyRequestDto.recipientNumberAccount()
+    );
   }
 }

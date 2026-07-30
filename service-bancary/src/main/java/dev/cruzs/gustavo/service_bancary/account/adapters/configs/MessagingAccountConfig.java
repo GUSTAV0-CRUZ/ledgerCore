@@ -34,21 +34,21 @@ public class MessagingAccountConfig {
 
   @Bean
   public Consumer<CreateAccountCurrentCommand> createAccountConsumer(AccountConsumer accountConsumer) {
-    return accountConsumer.createAccountConsumer();
+    return accountConsumer::createAccountConsumer;
   }
 
   @Bean
   public Consumer<DepositAccountCommand> depositAccountConsumer(AccountConsumer accountConsumer) {
-    return accountConsumer.depositAccountConsumer();
+    return accountConsumer::depositAccountConsumer;
   }
 
   @Bean
   public Consumer<WithdrawAccountCommand> withdrawAccountConsumer(AccountConsumer accountConsumer) {
-    return accountConsumer.withdrawAccountConsumer();
+    return accountConsumer::withdrawAccountConsumer;
   }
 
   @Bean
   public Consumer<TransferMoneyRequestDto> transferMoneyAccountConsumer(AccountConsumer accountConsumer) {
-    return accountConsumer.transferMoneyAccountConsumer();
+    return accountConsumer::transferMoneyAccountConsumer;
   }
 }
