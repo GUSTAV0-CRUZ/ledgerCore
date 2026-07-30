@@ -4,15 +4,22 @@ import dev.cruzs.gustavo.gateway_service.filters.gRPC.generated.AccountServiceGr
 import dev.cruzs.gustavo.gateway_service.filters.gRPC.generated.AccountServiceGrpc.AccountServiceStub;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class AccountGrpcConfig {
+  @Value("${grpc.gateway-service.host}")
+  private String accountServiceHost;
+
+  @Value("${grpc.gateway-service.port}")
+  private int accountServicePort;
+
   @Bean
   public ManagedChannel managedChannel() {
     return ManagedChannelBuilder
-        .forAddress("localhost", 9091)
+        .forAddress(accountServiceHost, accountServicePort)
         .usePlaintext()
         .build();
   }
