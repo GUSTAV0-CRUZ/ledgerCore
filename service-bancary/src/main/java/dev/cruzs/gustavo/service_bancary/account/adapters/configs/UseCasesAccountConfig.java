@@ -2,6 +2,7 @@ package dev.cruzs.gustavo.service_bancary.account.adapters.configs;
 
 import dev.cruzs.gustavo.service_bancary.account.adapters.outbound.persistence.decorators.TransactionalTransferMoneyDecorator;
 import dev.cruzs.gustavo.service_bancary.account.application.ports.inbound.*;
+import dev.cruzs.gustavo.service_bancary.account.application.ports.outbound.AntiFraudService;
 import dev.cruzs.gustavo.service_bancary.account.application.ports.outbound.HistoryService;
 import dev.cruzs.gustavo.service_bancary.account.application.services.*;
 import dev.cruzs.gustavo.service_bancary.account.application.ports.outbound.AccountRepository;
@@ -12,10 +13,16 @@ import org.springframework.context.annotation.Configuration;
 public class UseCasesAccountConfig {
   private final AccountRepository accountRepository;
   private final HistoryService historyService;
+  private final AntiFraudService antiFraudService;
 
-  public UseCasesAccountConfig(AccountRepository accountRepository, HistoryService historyService) {
+  public UseCasesAccountConfig(
+      AccountRepository accountRepository,
+      HistoryService historyService,
+      AntiFraudService antiFraudService
+  ) {
     this.accountRepository = accountRepository;
     this.historyService = historyService;
+    this.antiFraudService = antiFraudService;
   }
 
   @Bean
@@ -30,12 +37,16 @@ public class UseCasesAccountConfig {
 
   @Bean
   public WithdrawAccountUseCase withdrawAccountUseCase() {
-    return new WithdrawAccountService(this.accountRepository, this.historyService);
+    return new WithdrawAccountService(this.accountRepository, this.historyService, this.antiFraudService);
   }
 
   @Bean
   public TransferMoneyUseCase transferMoneyUseCase() {
-    TransferMoneyUseCase transferMoneyUseCase = new TransferMoneyService(this.accountRepository, this.historyService);
+    TransferMoneyUseCase transferMoneyUseCase = new TransferMoneyService(
+        this.accountRepository,
+        this.historyService,
+        this.antiFraudService
+    );
 
     return new TransactionalTransferMoneyDecorator(transferMoneyUseCase);
   }
