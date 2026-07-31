@@ -65,6 +65,9 @@ spring:
         createHistoryConsumer-in-0:
           destination: exchange-history
           group: queue-create-history
+
+        createHistoryProducer-out-0:
+          destination: exchange-history
       rabbit:
         default:
           consumer:
@@ -88,4 +91,8 @@ spring:
               binding-routing-key: rk-create-user
           createHistoryConsumer-in-0:
             consumer:
-              binding-routing-key: '#'
+              binding-routing-key: rk-create-history
+
+          createHistoryProducer-out-0:
+            producer:
+              routing-key-expression: "'rk-create-history'"

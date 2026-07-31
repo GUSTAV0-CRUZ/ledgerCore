@@ -4,5 +4,5 @@ import dev.cruzs.gustavo.service_bancary.account.application.ports.inbound.comma
 import dev.cruzs.gustavo.service_bancary.account.domain.Account;
 
 public interface TransferMoneyUseCase {
-  Account execute(TransferMoneyCommand command);
+  Account execute(TransferMoneyCommand transferMoneyCommand);
 }
