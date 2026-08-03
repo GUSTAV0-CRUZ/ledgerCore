@@ -14,7 +14,7 @@ message HistoryResponse {
 
 message FindAllByAccountIdAndYearMonthRequest {
   string account_id = 1;
-  string yearMonth = 2;
+  string year_month = 2;
 }
 
 message FindHistoryByIdRequest {

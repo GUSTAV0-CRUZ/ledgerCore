@@ -7,9 +7,9 @@ spring:
     name: service-bancary
 
   datasource:
-    url: jdbc:postgresql://postgres-service-bancary:5432/service-bancary
-    username: user
-    password: password
+    url: ${URL_SERVICE_BANCARY_DB:jdbc:postgresql://localhost:5432/service-bancary}
+    username: "${USERNAME_SERVICE_BANCARY_DB:user}"
+    password: "${PASSWORD_SERVICE_BANCARY_DB:password}"
     driver-class-name: org.postgresql.Driver
 
   jpa:
@@ -19,10 +19,10 @@ spring:
       ddl-auto: update
 
   rabbitmq:
-    host: rabbitmq
+    host: ${RMQ_HOST:localhost}
     port: 5672
-    username: guest
-    password: guest
+    username: ${RMQ_USERNAME:guest}
+    password: ${RMQ_PASSWORD:guest}
     virtual-host: /
 
   cloud:
@@ -96,3 +96,9 @@ spring:
           createHistoryProducer-out-0:
             producer:
               routing-key-expression: "'rk-create-history'"
+
+grpc:
+  client:
+    history-service:
+      address: "${GRPC_HISTORY_SERVICE_ADDRESS:static://localhost:9090}"
+      negotiation-type: plaintext

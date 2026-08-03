@@ -34,7 +34,7 @@ public class TransferMoneyService implements TransferMoneyUseCase {
             transferMoneyCommand.amount()
         )
     );
-    
+
     var accountRecipient = accountRepository.findByNumberOrException(transferMoneyCommand.recipientNumberAccount());
 
     if (accountSender.getId().equals(accountRecipient.getId()))

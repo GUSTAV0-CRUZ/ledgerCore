@@ -30,7 +30,7 @@ public class WithdrawAccountService implements WithdrawAccountUseCase {
           withdrawAccountCommand.amount()
         )
     );
-    
+
     account.withdraw(withdrawAccountCommand.amount());
     this.accountRepository.updateBalance(
         account.getId(),

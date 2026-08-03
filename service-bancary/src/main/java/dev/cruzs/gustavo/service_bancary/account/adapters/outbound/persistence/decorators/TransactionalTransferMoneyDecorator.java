@@ -14,7 +14,7 @@ public class TransactionalTransferMoneyDecorator implements TransferMoneyUseCase
 
   @Transactional
   @Override
-  public Account execute(TransferMoneyCommand command) {
-    return transferMoneyUseCase.execute(command);
+  public Account execute(TransferMoneyCommand transferMoneyCommand) {
+    return transferMoneyUseCase.execute(transferMoneyCommand);
   }
 }

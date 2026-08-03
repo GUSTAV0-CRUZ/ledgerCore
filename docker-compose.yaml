@@ -122,10 +122,12 @@ services:
       - "8082:8080"
       - "9091:9090"
     environment:
-      - URL_DB=jdbc:postgresql://postgres-service-bancary:5432/service-bancary
-      - USERNAME_DB=user
-      - PASSWORD_DB=password
+      - URL_SERVICE_BANCARY_DB=jdbc:postgresql://postgres-service-bancary:5432/service-bancary
+      - USERNAME_SERVICE_BANCARY_DB=user
+      - PASSWORD_SERVICE_BANCARY_DB=password
+      - RMQ_HOST=rabbitmq
       - SECRET_KEY_JWT=secreteKeyDefaultWith123456789012
+      - GRPC_HISTORY_SERVICE_ADDRESS=static://service-bancary:9090
     networks:
       - ledger-core
     depends_on:
