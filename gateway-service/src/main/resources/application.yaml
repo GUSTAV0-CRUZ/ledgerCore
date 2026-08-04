@@ -22,7 +22,7 @@ spring:
             - id: auth-service-create-user
               uri: no-op://localhost
               predicates:
-                - Path=/api/v1/auth/create-user
+                - Path=/api/v1/auth/register
                 - Method=POST
               filters:
                 - CreateUserProducer
@@ -30,7 +30,7 @@ spring:
             - id: auth-service-authentication
               uri: ${GRPC_AUTH_SERVICE_URI:grpc://localhost:9090}
               predicates:
-                - Path=/api/v1/auth/authentication
+                - Path=/api/v1/auth/login
                 - Method=POST
               filters:
                 - name: JsonToGrpc
@@ -42,7 +42,7 @@ spring:
             - id: service-bancary-register-data-user
               uri: no-op://localhost
               predicates:
-                - Path=/api/register-data-user
+                - Path=/api/user
                 - Method=POST
               filters:
                 - RegisterDataUserProducer
@@ -50,7 +50,7 @@ spring:
             - id: service-bancary-create-account
               uri: no-op://localhost
               predicates:
-                - Path=/api/create-account
+                - Path=/api/account
                 - Method=POST
               filters:
                 - CreateAccountProducer
@@ -58,7 +58,7 @@ spring:
             - id: service-bancary-deposit-account
               uri: no-op://localhost
               predicates:
-                - Path=/api/deposit-account
+                - Path=/api/account/deposit
                 - Method=PATCH
               filters:
                 - DepositAccountProducer
@@ -66,7 +66,7 @@ spring:
             - id: service-bancary-withdraw-account
               uri: no-op://localhost
               predicates:
-                - Path=/api/withdraw-account
+                - Path=/api/account/withdraw
                 - Method=PATCH
               filters:
                 - WithdrawAccountProducer
@@ -74,7 +74,7 @@ spring:
             - id: transfer-money-account
               uri: no-op://localhost
               predicates:
-                - Path=/api/transfer-money-account
+                - Path=/api/account/transfer
                 - Method=PATCH
               filters:
                 - TransferMoneyAccountProducer
@@ -82,7 +82,7 @@ spring:
             - id: find-account-by-userId
               uri: no-op://localhost
               predicates:
-                - Path=/api/v1/account/view
+                - Path=/api/v1/account
                 - Method=GET
               filters:
                 - FindAccountByUserId
