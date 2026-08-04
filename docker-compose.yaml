@@ -155,3 +155,23 @@ services:
     depends_on:
       rabbitmq:
         condition: service_healthy
+
+  notification-service:
+    build:
+      context: ./notification-service
+      dockerfile: dockerfile
+    container_name: notification-service
+    restart: unless-stopped
+    ports:
+      - "8083:8080"
+    environment:
+      - HOST_MAIL=sandbox.smtp.mailtrap.io
+      - PORT_MAIL=2525
+      - USERNAME_MAIL=
+      - PASSWORD_MAIL=
+      - HOST_RMQ=rabbitmq
+    networks:
+      - ledger-core
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
