@@ -1,4 +1,4 @@
-package dev.cruzs.gustavo.service_bancary.account.adapters.outbound.persistence.historyService;
+package dev.cruzs.gustavo.service_bancary.account.adapters.outbound.history;
 
 import dev.cruzs.gustavo.service_bancary.account.application.ports.outbound.HistoryService;
 import dev.cruzs.gustavo.service_bancary.account.application.ports.outbound.dtos.CreateHistoryCommand;

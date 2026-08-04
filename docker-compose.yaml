@@ -128,6 +128,7 @@ services:
       - RMQ_HOST=rabbitmq
       - SECRET_KEY_JWT=secreteKeyDefaultWith123456789012
       - GRPC_HISTORY_SERVICE_ADDRESS=static://service-bancary:9090
+      - GRPC_USER_SERVICE_ADDRESS=static://service-bancary:9090
     networks:
       - ledger-core
     depends_on:
@@ -167,8 +168,8 @@ services:
     environment:
       - HOST_MAIL=sandbox.smtp.mailtrap.io
       - PORT_MAIL=2525
-      - USERNAME_MAIL=
-      - PASSWORD_MAIL=
+      - USERNAME_MAIL=${USERNAME_MAIL}
+      - PASSWORD_MAIL=${PASSWORD_MAIL}
       - HOST_RMQ=rabbitmq
     networks:
       - ledger-core

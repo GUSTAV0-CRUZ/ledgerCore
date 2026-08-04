@@ -5,6 +5,7 @@ import dev.cruzs.gustavo.service_bancary.account.application.ports.outbound.Acco
 import dev.cruzs.gustavo.service_bancary.account.application.ports.inbound.commands.CreateAccountCurrentCommand;
 import dev.cruzs.gustavo.service_bancary.account.application.ports.outbound.NotificationService;
 import dev.cruzs.gustavo.service_bancary.account.application.ports.outbound.UserService;
+import dev.cruzs.gustavo.service_bancary.account.application.ports.outbound.dtos.SendEmailCommand;
 import dev.cruzs.gustavo.service_bancary.account.application.ports.outbound.dtos.UserResponseDto;
 import dev.cruzs.gustavo.service_bancary.account.domain.Account;
 import dev.cruzs.gustavo.service_bancary.account.domain.enums.AccountTypeEnum;
@@ -38,9 +39,11 @@ public class CreateAccountCurrentService implements CreateAccountCurrentUseCase 
 
     Account accountCreated = accountRepository.save(account);
     notificationService.sendEmail(
-        userResponseDto.email(),
-        "Account created in " + Account.INSTITUTION,
-        "Hi " + userResponseDto.name() + ", account created with success. Welcome the " + Account.INSTITUTION
+        new SendEmailCommand(
+          userResponseDto.email(),
+          "Account created in " + Account.INSTITUTION,
+          "Hi " + userResponseDto.name() + ", account created with success. Welcome the " + Account.INSTITUTION
+        )
     );
 
     return accountCreated;
