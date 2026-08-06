@@ -28,10 +28,9 @@ public class Scheduling {
   public static Scheduling create(
       UUID senderUserId,
       BigDecimal amount,
-      String recipientNumberAccount,
-      LocalDateTime scheduledDate
+      String recipientNumberAccount
   ) {
-    return new Scheduling(UUID.randomUUID(), senderUserId, amount, recipientNumberAccount, scheduledDate);
+    return new Scheduling(UUID.randomUUID(), senderUserId, amount, recipientNumberAccount, LocalDateTime.now());
   }
 
   public static Scheduling restore(
