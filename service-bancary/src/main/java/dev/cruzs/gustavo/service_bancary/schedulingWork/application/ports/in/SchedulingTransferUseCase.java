@@ -1,7 +1,7 @@
-package dev.cruzs.gustavo.service_bancary.schedulingWork.application.ports;
+package dev.cruzs.gustavo.service_bancary.schedulingWork.application.ports.in;
 
-import dev.cruzs.gustavo.service_bancary.schedulingWork.application.ports.commands.TransferMoneyCommand;
+import dev.cruzs.gustavo.service_bancary.schedulingWork.application.ports.in.commands.SchedulingTransferCommand;
 
-public interface TransferMoney {
-  void execute(TransferMoneyCommand TransferMoneyCommand);
+public interface SchedulingTransferUseCase {
+  void execute(SchedulingTransferCommand SchedulingTransferCommand);
 }
