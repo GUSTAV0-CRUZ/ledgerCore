@@ -1,5 +1,7 @@
 package dev.cruzs.gustavo.service_bancary.schedulingWork.domain;
 
+import dev.cruzs.gustavo.service_bancary.schedulingWork.domain.enums.SchedulingEnum;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -10,19 +12,22 @@ public class Scheduling {
   private BigDecimal amount;
   private String recipientNumberAccount;
   private LocalDateTime scheduledDate;
+  private SchedulingEnum status;
 
   private Scheduling(
       UUID id,
       UUID senderUserId,
       BigDecimal amount,
       String recipientNumberAccount,
-      LocalDateTime scheduledDate
+      LocalDateTime scheduledDate,
+      SchedulingEnum schedulingStatus
   ) {
     this.checkId(id);
     this.checkSenderUserId(senderUserId);
     this.checkAmount(amount);
     this.checkRecipientNumberAccount(recipientNumberAccount);
     this.checkScheduledDate(scheduledDate);
+    this.checkSchedulingType(schedulingStatus);
   }
 
   public static Scheduling create(
@@ -30,7 +35,14 @@ public class Scheduling {
       BigDecimal amount,
       String recipientNumberAccount
   ) {
-    return new Scheduling(UUID.randomUUID(), senderUserId, amount, recipientNumberAccount, LocalDateTime.now());
+    return new Scheduling(
+        UUID.randomUUID(),
+        senderUserId,
+        amount,
+        recipientNumberAccount,
+        LocalDateTime.now(),
+        SchedulingEnum.PENDING
+    );
   }
 
   public static Scheduling restore(
@@ -38,9 +50,10 @@ public class Scheduling {
       UUID senderUserId,
       BigDecimal amount,
       String recipientNumberAccount,
-      LocalDateTime scheduledDate
+      LocalDateTime scheduledDate,
+      SchedulingEnum schedulingStatus
   ) {
-    return new Scheduling(id, senderUserId, amount, recipientNumberAccount, scheduledDate);
+    return new Scheduling(id, senderUserId, amount, recipientNumberAccount, scheduledDate,  schedulingStatus);
   }
 
   private void checkId(UUID id) {
@@ -84,8 +97,19 @@ public class Scheduling {
     this.scheduledDate = scheduledDate;
   }
 
+  private void checkSchedulingType(SchedulingEnum schedulingStatus) {
+    if (schedulingStatus == null)
+      throw new IllegalArgumentException("schedulingStatus must not be null");
+
+    this.status = schedulingStatus;
+  }
+
   public void updateScheduledDate(LocalDateTime scheduledDate) {
     this.checkScheduledDate(scheduledDate);
+  }
+
+  public void updateSchedulingType(SchedulingEnum schedulingStatus) {
+    this.checkSchedulingType(schedulingStatus);
   }
 
   public UUID getId() {
@@ -106,5 +130,9 @@ public class Scheduling {
 
   public LocalDateTime getScheduledDate() {
     return scheduledDate;
+  }
+
+  public SchedulingEnum geStatus() {
+    return status;
   }
 }
