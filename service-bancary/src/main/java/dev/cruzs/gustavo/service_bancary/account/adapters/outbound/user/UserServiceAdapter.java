@@ -22,7 +22,7 @@ public class UserServiceAdapter implements UserService {
         .build();
 
     UserResponse userResponse = userServiceBlockingStub.findUserById(findUserByIdRequest);
-    
+
     return new UserResponseDto(
         UUID.fromString(userResponse.getId()),
         userResponse.getEmail(),
