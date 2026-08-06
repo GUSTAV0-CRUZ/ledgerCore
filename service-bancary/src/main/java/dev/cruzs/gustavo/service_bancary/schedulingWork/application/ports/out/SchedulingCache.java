@@ -7,5 +7,5 @@ import java.util.UUID;
 public interface SchedulingCache {
   void save(UUID SchedulingId, LocalDateTime scheduledDate);
   List<UUID> findByScheduledDate(LocalDateTime scheduledDate);
-  void delete(UUID SchedulingId);
+  void deleteAll(List<UUID> SchedulingIds);
 }
