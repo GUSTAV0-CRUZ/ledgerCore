@@ -8,6 +8,7 @@ import java.util.UUID;
 public interface SchedulingRepository {
   Scheduling save(Scheduling scheduling);
   Optional<Scheduling> findById(UUID id);
+  void deleteById(UUID id);
 
   default Scheduling findByIdOrIllegalArgumentException(UUID id) {
     return this.findById(id).orElseThrow(() -> new IllegalArgumentException("Scheduling not found"));
