@@ -132,7 +132,7 @@ public class Scheduling {
     return scheduledDate;
   }
 
-  public SchedulingEnum geStatus() {
+  public SchedulingEnum getStatus() {
     return status;
   }
 }

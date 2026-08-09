@@ -6,7 +6,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface SchedulingRepository {
-  Scheduling save(Scheduling scheduling);
+  void insert(Scheduling scheduling);
+  void update(Scheduling scheduling);
   Optional<Scheduling> findById(UUID id);
   void deleteById(UUID id);
 

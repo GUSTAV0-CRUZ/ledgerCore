@@ -23,7 +23,7 @@ public class SchedulingTransferService implements SchedulingTransferUseCase {
         schedulingTransferCommand.recipientNumberAccount()
     );
 
-    schedulingRepository.save(scheduling);
+    schedulingRepository.insert(scheduling);
     schedulingCache.save(scheduling.getId(), scheduling.getScheduledDate());
   }
 }

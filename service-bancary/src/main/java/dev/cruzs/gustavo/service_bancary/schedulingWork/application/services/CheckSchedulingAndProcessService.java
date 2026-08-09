@@ -4,6 +4,7 @@ import dev.cruzs.gustavo.service_bancary.schedulingWork.application.ports.in.Che
 import dev.cruzs.gustavo.service_bancary.schedulingWork.application.ports.out.SchedulingCache;
 import dev.cruzs.gustavo.service_bancary.schedulingWork.application.ports.out.SchedulingRepository;
 import dev.cruzs.gustavo.service_bancary.schedulingWork.domain.enums.SchedulingEnum;
+import jakarta.transaction.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -18,6 +19,7 @@ public class CheckSchedulingAndProcessService implements CheckSchedulingAndProce
     this.schedulingCache = schedulingCache;
   }
 
+  @Transactional
   @Override
   public void execute() {
     LocalDateTime now = LocalDateTime.now();
@@ -29,7 +31,7 @@ public class CheckSchedulingAndProcessService implements CheckSchedulingAndProce
     schedulingCacheListUuid.forEach(uuid -> {
       schedulingRepository.findById(uuid).ifPresent(scheduling -> {
         scheduling.updateSchedulingType(SchedulingEnum.PROCESSED);
-        schedulingRepository.save(scheduling);
+        schedulingRepository.update(scheduling);
       });
     });
 

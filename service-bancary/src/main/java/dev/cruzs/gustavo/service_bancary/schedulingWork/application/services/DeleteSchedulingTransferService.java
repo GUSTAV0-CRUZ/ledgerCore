@@ -14,7 +14,6 @@ public class DeleteSchedulingTransferService implements DeleteSchedulingTransfer
 
   @Override
   public void execute(DeleteSchedulingTransferCommand command) {
-    Scheduling scheduling = schedulingRepository.findByIdOrIllegalArgumentException(command.schedulingTransferId());
-    schedulingRepository.deleteById(scheduling.getId());
+    schedulingRepository.deleteById(command.schedulingTransferId());
   }
 }
