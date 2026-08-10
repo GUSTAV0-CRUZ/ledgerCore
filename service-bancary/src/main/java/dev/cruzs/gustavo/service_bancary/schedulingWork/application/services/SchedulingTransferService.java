@@ -20,6 +20,7 @@ public class SchedulingTransferService implements SchedulingTransferUseCase {
     Scheduling scheduling = Scheduling.create(
         schedulingTransferCommand.senderUserId(),
         schedulingTransferCommand.amount(),
+        schedulingTransferCommand.scheduledDate(),
         schedulingTransferCommand.recipientNumberAccount()
     );
 

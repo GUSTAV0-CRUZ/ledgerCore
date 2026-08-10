@@ -35,6 +35,6 @@ public class CheckSchedulingAndProcessService implements CheckSchedulingAndProce
       });
     });
 
-    schedulingCache.deleteAll(schedulingCacheListUuid);
+    schedulingCache.deleteAllById(schedulingCacheListUuid);
   }
 }

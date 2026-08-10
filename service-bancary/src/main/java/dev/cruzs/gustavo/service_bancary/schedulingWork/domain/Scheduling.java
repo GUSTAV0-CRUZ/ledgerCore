@@ -26,13 +26,14 @@ public class Scheduling {
     this.checkSenderUserId(senderUserId);
     this.checkAmount(amount);
     this.checkRecipientNumberAccount(recipientNumberAccount);
-    this.checkScheduledDate(scheduledDate);
+    this.scheduledDate = scheduledDate;
     this.checkSchedulingType(schedulingStatus);
   }
 
   public static Scheduling create(
       UUID senderUserId,
       BigDecimal amount,
+      LocalDateTime scheduledDate,
       String recipientNumberAccount
   ) {
     return new Scheduling(
@@ -40,7 +41,7 @@ public class Scheduling {
         senderUserId,
         amount,
         recipientNumberAccount,
-        LocalDateTime.now(),
+        checkScheduledDate(scheduledDate),
         SchedulingEnum.PENDING
     );
   }
@@ -53,6 +54,7 @@ public class Scheduling {
       LocalDateTime scheduledDate,
       SchedulingEnum schedulingStatus
   ) {
+    if (scheduledDate == null) throw new NullPointerException("scheduledDate is null");
     return new Scheduling(id, senderUserId, amount, recipientNumberAccount, scheduledDate,  schedulingStatus);
   }
 
@@ -87,14 +89,14 @@ public class Scheduling {
     this.recipientNumberAccount = recipientNumberAccount;
   }
 
-  private void checkScheduledDate(LocalDateTime scheduledDate) {
+  private static LocalDateTime checkScheduledDate(LocalDateTime scheduledDate) {
     if (scheduledDate == null)
       throw new IllegalArgumentException("scheduledDate must not be null");
 
     if (scheduledDate.isBefore(LocalDateTime.now()))
       throw new IllegalArgumentException("scheduledDate must not be before now");
 
-    this.scheduledDate = scheduledDate;
+    return scheduledDate;
   }
 
   private void checkSchedulingType(SchedulingEnum schedulingStatus) {
@@ -105,7 +107,9 @@ public class Scheduling {
   }
 
   public void updateScheduledDate(LocalDateTime scheduledDate) {
-    this.checkScheduledDate(scheduledDate);
+    if (status != SchedulingEnum.PENDING)
+      throw new IllegalArgumentException("scheduling must be PENDING to update scheduledDate");
+    this.scheduledDate = checkScheduledDate(scheduledDate);
   }
 
   public void updateSchedulingType(SchedulingEnum schedulingStatus) {
