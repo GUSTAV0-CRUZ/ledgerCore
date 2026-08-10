@@ -10,6 +10,8 @@ volumes:
     name: postgres_auth_data
   rabbitmq_data:
     name: rabbitmq_data
+  redis_data:
+    name: redis_data
 
 services:
   postgres-service-bancary:
@@ -91,6 +93,29 @@ services:
           cpus: '1.0'
           memory: 1G
 
+redis:
+  image: redis:7-alpine
+  container_name: redis
+  restart: unless-stopped
+  command: redis-server --save 60 1 --loglevel warning
+  ports:
+    - "127.0.0.1:6379:6379"
+  volumes:
+    - redis_data:/data
+  networks:
+    - ledger-core
+  healthcheck:
+    test: ["CMD", "redis-cli", "ping"]
+    interval: 10s
+    timeout: 5s
+    retries: 5
+    start_period: 5s
+  deploy:
+    resources:
+      limits:
+        cpus: '0.5'
+        memory: 256M
+
   auth-service:
     build:
       context: ./auth-service
@@ -104,6 +129,8 @@ services:
       - URL_DB=jdbc:postgresql://postgres-auth-service:5432/auth-service
       - USERNAME_DB=user
       - PASSWORD_DB=password
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
     networks:
       - ledger-core
     depends_on:
@@ -135,6 +162,8 @@ services:
       postgres-service-bancary:
         condition: service_healthy
       rabbitmq:
+        condition: service_healthy
+      redis:
         condition: service_healthy
 
   gateway-service:
