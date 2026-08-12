@@ -38,7 +38,10 @@ spring:
         withdrawAccountConsumer;
         transferMoneyAccountConsumer;
         createUserConsumer;
-        createHistoryConsumer
+        createHistoryConsumer;
+        schedulingTransferConsumer;
+        updateDateSchedulingTransferConsumer;
+        deleteSchedulingTransferConsumer
     stream:
       default:
         consumer:
@@ -70,6 +73,15 @@ spring:
         createHistoryConsumer-in-0:
           destination: exchange-history
           group: queue-create-history
+        schedulingTransferConsumer-in-0:
+          destination: exchange-scheduling
+          group: queue-transfer-scheduling
+        updateDateSchedulingTransferConsumer-in-0:
+          destination: exchange-scheduling
+          group: queue-update-transfer-scheduling
+        deleteSchedulingTransferConsumer-in-0:
+          destination: exchange-scheduling
+          group: queue-delete-transfer-scheduling
 
         createHistoryProducer-out-0:
           destination: exchange-history
@@ -99,6 +111,15 @@ spring:
           createHistoryConsumer-in-0:
             consumer:
               binding-routing-key: rk-create-history
+          schedulingTransferConsumer-in-0:
+            consumer:
+              binding-routing-key: rk-tranfer-scheduling
+          updateDateSchedulingTransferConsumer-in-0:
+            consumer:
+              binding-routing-key: rk-update-tranfer-scheduling
+          deleteSchedulingTransferConsumer-in-0:
+            consumer:
+              binding-routing-key: rk-delete-tranfer-scheduling
 
           createHistoryProducer-out-0:
             producer:

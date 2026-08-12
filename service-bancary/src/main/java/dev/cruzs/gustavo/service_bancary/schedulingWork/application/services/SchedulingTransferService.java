@@ -5,6 +5,7 @@ import dev.cruzs.gustavo.service_bancary.schedulingWork.application.ports.in.com
 import dev.cruzs.gustavo.service_bancary.schedulingWork.application.ports.out.SchedulingCache;
 import dev.cruzs.gustavo.service_bancary.schedulingWork.application.ports.out.SchedulingRepository;
 import dev.cruzs.gustavo.service_bancary.schedulingWork.domain.Scheduling;
+import jakarta.transaction.Transactional;
 
 public class SchedulingTransferService implements SchedulingTransferUseCase {
   private final SchedulingRepository schedulingRepository;
@@ -15,6 +16,7 @@ public class SchedulingTransferService implements SchedulingTransferUseCase {
     this.schedulingCache = schedulingCache;
   }
 
+  @Transactional
   @Override
   public void execute(SchedulingTransferCommand schedulingTransferCommand) {
     Scheduling scheduling = Scheduling.create(
