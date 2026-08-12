@@ -129,8 +129,6 @@ services:
       - URL_DB=jdbc:postgresql://postgres-auth-service:5432/auth-service
       - USERNAME_DB=user
       - PASSWORD_DB=password
-      - REDIS_HOST=redis
-      - REDIS_PORT=6379
     networks:
       - ledger-core
     depends_on:
@@ -156,6 +154,8 @@ services:
       - SECRET_KEY_JWT=secreteKeyDefaultWith123456789012
       - GRPC_HISTORY_SERVICE_ADDRESS=static://service-bancary:9090
       - GRPC_USER_SERVICE_ADDRESS=static://service-bancary:9090
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
     networks:
       - ledger-core
     depends_on:
