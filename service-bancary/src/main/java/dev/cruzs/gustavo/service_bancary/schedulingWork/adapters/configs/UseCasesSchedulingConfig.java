@@ -4,6 +4,7 @@ import dev.cruzs.gustavo.service_bancary.schedulingWork.application.ports.in.Che
 import dev.cruzs.gustavo.service_bancary.schedulingWork.application.ports.in.DeleteSchedulingTransferUseCase;
 import dev.cruzs.gustavo.service_bancary.schedulingWork.application.ports.in.SchedulingTransferUseCase;
 import dev.cruzs.gustavo.service_bancary.schedulingWork.application.ports.in.UpdateDateSchedulingTransferUseCase;
+import dev.cruzs.gustavo.service_bancary.schedulingWork.application.ports.out.AccountGateway;
 import dev.cruzs.gustavo.service_bancary.schedulingWork.application.ports.out.SchedulingCache;
 import dev.cruzs.gustavo.service_bancary.schedulingWork.application.ports.out.SchedulingRepository;
 import dev.cruzs.gustavo.service_bancary.schedulingWork.application.services.CheckSchedulingAndProcessService;
@@ -39,7 +40,7 @@ public class UseCasesSchedulingConfig {
   }
 
   @Bean
-  public CheckSchedulingAndProcessUseCase checkSchedulingAndProcessUseCase() {
-    return new CheckSchedulingAndProcessService(schedulingRepository, schedulingCache);
+  public CheckSchedulingAndProcessUseCase checkSchedulingAndProcessUseCase(AccountGateway accountGateway) {
+    return new CheckSchedulingAndProcessService(schedulingRepository, schedulingCache, accountGateway);
   }
 }

@@ -1,3 +1,6 @@
+#server:
+#  port: 8088
+
 spring:
   data:
     redis:
@@ -87,6 +90,8 @@ spring:
           destination: exchange-history
         sendEmailProducer-out-0:
           destination: exchange-notification
+        transferMoneyAccountProducer-out-0:
+          destination: exchange-account-bancary
       rabbit:
         default:
           consumer:
@@ -124,6 +129,9 @@ spring:
           createHistoryProducer-out-0:
             producer:
               routing-key-expression: "'rk-create-history'"
+          transferMoneyAccountProducer-out-0:
+            producer:
+              routing-key-expression: "'rk-transfer-money'"
 
 grpc:
   client:
