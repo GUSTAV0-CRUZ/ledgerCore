@@ -17,7 +17,7 @@ public class SchedulingCronAdapter {
     this.checkSchedulingAndProcessUseCase = checkSchedulingAndProcessUseCase;
   }
 
-  @Scheduled(cron = "0 0 * * * *")
+  @Scheduled(cron = "0 * * * * *")
   public void checkSchedulingAndProcess() {
     checkSchedulingAndProcessUseCase.execute();
 
