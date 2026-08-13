@@ -42,7 +42,7 @@ spring:
             - id: service-bancary-register-data-user
               uri: no-op://localhost
               predicates:
-                - Path=/api/user
+                - Path=/api/v1/user
                 - Method=POST
               filters:
                 - RegisterDataUserProducer
@@ -50,7 +50,7 @@ spring:
             - id: service-bancary-create-account
               uri: no-op://localhost
               predicates:
-                - Path=/api/account
+                - Path=/api/v1/account
                 - Method=POST
               filters:
                 - CreateAccountProducer
@@ -58,7 +58,7 @@ spring:
             - id: service-bancary-deposit-account
               uri: no-op://localhost
               predicates:
-                - Path=/api/account/deposit
+                - Path=/api/v1/account/deposit
                 - Method=PATCH
               filters:
                 - DepositAccountProducer
@@ -66,7 +66,7 @@ spring:
             - id: service-bancary-withdraw-account
               uri: no-op://localhost
               predicates:
-                - Path=/api/account/withdraw
+                - Path=/api/v1/account/withdraw
                 - Method=PATCH
               filters:
                 - WithdrawAccountProducer
@@ -74,7 +74,7 @@ spring:
             - id: transfer-money-account
               uri: no-op://localhost
               predicates:
-                - Path=/api/account/transfer
+                - Path=/api/v1/account/transfer
                 - Method=PATCH
               filters:
                 - TransferMoneyAccountProducer
@@ -86,6 +86,14 @@ spring:
                 - Method=GET
               filters:
                 - FindAccountByUserId
+
+            - id: schedule-transfer-money
+              uri: no-op://localhost
+              predicates:
+                - Path=/api/v1/schedule/transfer
+                - Method=PATCH
+              filters:
+                - ScheduleTransferMoneyProducer
 
     stream:
       bindings:
@@ -101,6 +109,8 @@ spring:
           destination: exchange-account-bancary
         transferMoneyAccountProducer-out-0:
           destination: exchange-account-bancary
+        schedulingTransferProducer-out-0:
+          destination: exchange-scheduling
       rabbit:
         bindings:
           createUserProducer-out-0:
@@ -121,3 +131,6 @@ spring:
           transferMoneyAccountProducer-out-0:
             producer:
               routing-key-expression: "'rk-transfer-money'"
+          schedulingTransferProducer-out-0:
+            producer:
+              routing-key-expression: "'rk-tranfer-scheduling'"
