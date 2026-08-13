@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.UUID;
 
 @Entity
@@ -31,7 +31,7 @@ public class SchedulingModel {
   private String recipientNumberAccount;
 
   @Column(name = "scheduled_date",  nullable = false)
-  private LocalDateTime scheduledDate;
+  private Instant scheduledDate;
 
   @Column(nullable = false)
   @Enumerated(EnumType.STRING)

@@ -8,7 +8,7 @@ import dev.cruzs.gustavo.service_bancary.schedulingWork.application.ports.out.co
 import dev.cruzs.gustavo.service_bancary.schedulingWork.domain.enums.SchedulingEnum;
 import jakarta.transaction.Transactional;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
@@ -30,7 +30,7 @@ public class CheckSchedulingAndProcessService implements CheckSchedulingAndProce
   @Transactional
   @Override
   public void execute() {
-    LocalDateTime now = LocalDateTime.now();
+    Instant now = Instant.now();
 
     List<UUID> schedulingCacheListUuid = schedulingCache.findByScheduledDate(now);
 

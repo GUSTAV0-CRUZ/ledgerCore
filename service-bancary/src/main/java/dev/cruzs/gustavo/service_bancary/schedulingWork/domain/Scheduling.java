@@ -3,7 +3,7 @@ package dev.cruzs.gustavo.service_bancary.schedulingWork.domain;
 import dev.cruzs.gustavo.service_bancary.schedulingWork.domain.enums.SchedulingEnum;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.UUID;
 
 public class Scheduling {
@@ -11,7 +11,7 @@ public class Scheduling {
   private UUID senderUserId;
   private BigDecimal amount;
   private String recipientNumberAccount;
-  private LocalDateTime scheduledDate;
+  private Instant scheduledDate;
   private SchedulingEnum status;
 
   private Scheduling(
@@ -19,7 +19,7 @@ public class Scheduling {
       UUID senderUserId,
       BigDecimal amount,
       String recipientNumberAccount,
-      LocalDateTime scheduledDate,
+      Instant scheduledDate,
       SchedulingEnum schedulingStatus
   ) {
     this.checkId(id);
@@ -33,7 +33,7 @@ public class Scheduling {
   public static Scheduling create(
       UUID senderUserId,
       BigDecimal amount,
-      LocalDateTime scheduledDate,
+      Instant scheduledDate,
       String recipientNumberAccount
   ) {
     return new Scheduling(
@@ -51,7 +51,7 @@ public class Scheduling {
       UUID senderUserId,
       BigDecimal amount,
       String recipientNumberAccount,
-      LocalDateTime scheduledDate,
+      Instant scheduledDate,
       SchedulingEnum schedulingStatus
   ) {
     if (scheduledDate == null) throw new NullPointerException("scheduledDate is null");
@@ -89,11 +89,11 @@ public class Scheduling {
     this.recipientNumberAccount = recipientNumberAccount;
   }
 
-  private static LocalDateTime checkScheduledDate(LocalDateTime scheduledDate) {
+  private static Instant checkScheduledDate(Instant scheduledDate) {
     if (scheduledDate == null)
       throw new IllegalArgumentException("scheduledDate must not be null");
 
-    if (scheduledDate.isBefore(LocalDateTime.now()))
+    if (scheduledDate.isBefore(Instant.now()))
       throw new IllegalArgumentException("scheduledDate must not be before now");
 
     return scheduledDate;
@@ -106,7 +106,7 @@ public class Scheduling {
     this.status = schedulingStatus;
   }
 
-  public void updateScheduledDate(LocalDateTime scheduledDate) {
+  public void updateScheduledDate(Instant scheduledDate) {
     if (status != SchedulingEnum.PENDING)
       throw new IllegalArgumentException("scheduling must be PENDING to update scheduledDate");
     this.scheduledDate = checkScheduledDate(scheduledDate);
@@ -132,7 +132,7 @@ public class Scheduling {
     return recipientNumberAccount;
   }
 
-  public LocalDateTime getScheduledDate() {
+  public Instant getScheduledDate() {
     return scheduledDate;
   }
 

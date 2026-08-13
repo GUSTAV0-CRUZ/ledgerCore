@@ -1,11 +1,11 @@
 package dev.cruzs.gustavo.gateway_service.filters.messages.dtos;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 public record ScheduleTransferMoneyRequestDto(
     String recipientNumberAccount,
     BigDecimal amount,
-    LocalDateTime scheduledDate
+    Instant scheduledDate
 ) {
 }

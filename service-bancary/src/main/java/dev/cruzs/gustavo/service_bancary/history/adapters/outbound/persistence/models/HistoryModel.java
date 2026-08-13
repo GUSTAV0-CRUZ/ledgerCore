@@ -11,7 +11,7 @@ import lombok.Setter;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.UUID;
 
 @Getter
@@ -39,5 +39,5 @@ public class HistoryModel implements Serializable {
   private String institutionName;
 
   @Column(nullable = false, name = "transfer_date")
-  private LocalDateTime transferDate;
+  private Instant transferDate;
 }

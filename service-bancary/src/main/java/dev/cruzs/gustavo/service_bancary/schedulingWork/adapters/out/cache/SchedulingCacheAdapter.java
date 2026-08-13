@@ -4,7 +4,7 @@ import dev.cruzs.gustavo.service_bancary.schedulingWork.application.ports.out.Sc
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Set;
@@ -20,14 +20,14 @@ public class SchedulingCacheAdapter implements SchedulingCache {
   }
 
   @Override
-  public void save(UUID SchedulingId, LocalDateTime scheduledDate) {
-    double score = scheduledDate.toEpochSecond(ZoneOffset.UTC);
+  public void save(UUID SchedulingId, Instant scheduledDate) {
+    double score = scheduledDate.getEpochSecond();
     stringRedisTemplate.opsForZSet().add(CACHE_KEY, SchedulingId.toString(), score);
   }
 
   @Override
-  public List<UUID> findByScheduledDate(LocalDateTime scheduledDate) {
-    double maxScore = scheduledDate.toEpochSecond(ZoneOffset.UTC);
+  public List<UUID> findByScheduledDate(Instant scheduledDate) {
+    double maxScore = scheduledDate.getEpochSecond();
     Set<String> ids = stringRedisTemplate.opsForZSet().rangeByScore(CACHE_KEY, 0, maxScore);
 
     if (ids == null || ids.isEmpty()) return List.of();

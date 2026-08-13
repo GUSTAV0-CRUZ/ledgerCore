@@ -1,7 +1,7 @@
 package dev.cruzs.gustavo.service_bancary.history.domain;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.UUID;
 
 public class History {
@@ -10,7 +10,7 @@ public class History {
   private BigDecimal amount;
   private String destinataryName;
   private String institutionName;
-  private LocalDateTime transferDate;
+  private Instant transferDate;
 
   private History(
       UUID id,
@@ -18,7 +18,7 @@ public class History {
       BigDecimal amount,
       String destinataryName,
       String institutionName,
-      LocalDateTime transferDate
+      Instant transferDate
   ) {
     this.id = id;
     this.checkAccountId(accountId);
@@ -40,7 +40,7 @@ public class History {
         amount,
         destinataryName,
         institutionName,
-        LocalDateTime.now()
+        Instant.now()
     );
   }
 
@@ -50,7 +50,7 @@ public class History {
       BigDecimal amount,
       String destinataryName,
       String institutionName,
-      LocalDateTime transferDate
+      Instant transferDate
   ) {
     return new History(
         id,
@@ -94,7 +94,7 @@ public class History {
     this.institutionName = institutionName;
   }
 
-  private void checkTransferDate(LocalDateTime transferDate) {
+  private void checkTransferDate(Instant transferDate) {
     if (transferDate == null) throw new IllegalArgumentException("TransferDate must not be null");
 
     this.transferDate = transferDate;
@@ -120,7 +120,7 @@ public class History {
     return institutionName;
   }
 
-  public LocalDateTime getTransferDate() {
+  public Instant getTransferDate() {
     return transferDate;
   }
 }
