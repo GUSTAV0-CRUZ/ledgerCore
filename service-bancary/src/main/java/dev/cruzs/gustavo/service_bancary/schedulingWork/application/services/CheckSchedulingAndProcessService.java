@@ -46,7 +46,7 @@ public class CheckSchedulingAndProcessService implements CheckSchedulingAndProce
             )
         );
 
-        scheduling.updateSchedulingType(SchedulingEnum.PROCESSED);
+        scheduling.updateSchedulingStatus(SchedulingEnum.PROCESSED);
         schedulingRepository.update(scheduling);
       });
     });

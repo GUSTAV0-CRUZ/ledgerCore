@@ -112,7 +112,7 @@ public class Scheduling {
     this.scheduledDate = checkScheduledDate(scheduledDate);
   }
 
-  public void updateSchedulingType(SchedulingEnum schedulingStatus) {
+  public void updateSchedulingStatus(SchedulingEnum schedulingStatus) {
     this.checkSchedulingType(schedulingStatus);
   }
 
