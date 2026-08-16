@@ -1,0 +1,217 @@
+openapi: 3.0.1
+info:
+  title: Gateway API (ledgerCore)
+  description: Documentation of ledgerCore.
+  version: v1
+security:
+  - bearerAuth: []
+paths:
+  /api/v1/auth/register:
+    post:
+      summary: Register new user
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUserDto'
+      responses:
+        '202':
+          description: Event accept.
+
+  /api/v1/auth/login:
+    post:
+      summary: Authenticate one user
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthenticationRequestDto'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthenticationResponseDto'
+
+  /api/v1/user:
+    post:
+      summary: Add data per user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterDataUserRequestDto'
+      responses:
+        '202':
+          description: Event accept.
+
+  /api/v1/account:
+    post:
+      summary: Create account with data of token
+      responses:
+        '202':
+          description: Event accept.
+    get:
+      summary: Find account by id of token
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FindAccountByUserIdResponseDto'
+
+  /api/v1/account/deposit:
+    patch:
+      summary: Deposit into an account
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DepositAccountRequestDto'
+      responses:
+        '202':
+          description: Event accept.
+
+  /api/v1/account/withdraw:
+    patch:
+      summary: Withdraw to an account
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WithdrawAccountRequestDto'
+      responses:
+        '202':
+          description: Event accept.
+
+  /api/v1/account/transfer:
+    patch:
+      summary: transfer to an account
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransferMoneyAccountRequestDto'
+      responses:
+        '202':
+          description: Event accept.
+
+
+
+  /api/v1/schedule/transfer:
+    patch:
+      summary: schedule one transfer.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ScheduleTransferMoneyRequestDto'
+      responses:
+        '202':
+          description: Event accept.
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+
+    CreateUserDto:
+      type: object
+      properties:
+        username:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+
+    AuthenticationRequestDto:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+
+    AuthenticationResponseDto:
+      type: object
+      properties:
+        token:
+          type: string
+
+    RegisterDataUserRequestDto:
+      type: object
+      properties:
+        name:
+          type: string
+        dateOfBirth:
+          type: string
+        cpf:
+          type: string
+
+    DepositAccountRequestDto:
+      type: object
+      properties:
+        amount:
+          type: string
+
+    WithdrawAccountRequestDto:
+      type: object
+      properties:
+        amount:
+          type: string
+
+    FindAccountByUserIdResponseDto:
+      type: object
+      properties:
+        id:
+          type: string
+        userId:
+          type: string
+        bank_code:
+          type: number
+        institution:
+          type: string
+        agency:
+          type: number
+        number:
+          type: string
+        balance:
+          type: string
+        typeAccount:
+          type: string
+        status:
+          type: string
+
+    TransferMoneyAccountRequestDto:
+      type: object
+      properties:
+        amount:
+          type: string
+        recipientNumberAccount:
+          type: string
+
+    ScheduleTransferMoneyRequestDto:
+      type: object
+      properties:
+        amount:
+          type: string
+        recipientNumberAccount:
+          type: string
+        scheduledDate:
+          type: string

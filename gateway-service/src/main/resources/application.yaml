@@ -28,7 +28,7 @@ spring:
                 - CreateUserProducer
 
             - id: auth-service-authentication
-              uri: ${GRPC_AUTH_SERVICE_URI:grpc://localhost:9090}
+              uri: ${GRPC_AUTH_SERVICE_URI:grpc://localhost:9091}
               predicates:
                 - Path=/api/v1/auth/login
                 - Method=POST
@@ -134,3 +134,10 @@ spring:
           schedulingTransferProducer-out-0:
             producer:
               routing-key-expression: "'rk-tranfer-scheduling'"
+
+springdoc:
+  api-docs:
+    path: /api/v1/docs/api-docs
+  swagger-ui:
+    path: /api/v1/docs/swagger-ui.html
+    url: /openapi.yaml
