@@ -232,7 +232,7 @@ class SchedulingTest {
   @Test
   void updateScheduledDateWithError() {
     scheduling.updateSchedulingStatus(SchedulingEnum.PROCESSED);
-    
+
     var result = assertThrows(
         IllegalArgumentException.class,
         () -> scheduling.updateScheduledDate(Instant.now().plusSeconds(1))

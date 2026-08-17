@@ -10,8 +10,9 @@ import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.time.Duration;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.time.YearMonth;
+import java.time.ZoneId;
 import java.util.UUID;
 
 @Component
@@ -26,19 +27,22 @@ public class AntiFraudServiceAdapter implements AntiFraudService {
     if (evaluateCommand.amount().compareTo(MOVEMENT_LIMIT) > 0)
       throw new IllegalArgumentException("Movement limit exceeded, limit: " + MOVEMENT_LIMIT);
 
-    LocalDateTime now = LocalDateTime.now();
+    Instant nowInstant = Instant.now();
+    YearMonth yearMonth = YearMonth.from(nowInstant.atZone(ZoneId.of("UTC")));
+
 
     var findAllByAccountIdAndYearMonthRequest = this.createFindAllByAccountIdAndYearMonthRequest(
         evaluateCommand.accountId(),
-        YearMonth.from(now)
+        yearMonth
     );
+
     ListHistoriesResponse listHistoriesResponse =  historyServiceBlockingStub.findAllByAccountIdAndYearMonth(
         findAllByAccountIdAndYearMonthRequest
     );
 
     long movements = listHistoriesResponse.getHistoriesResponseList().stream()
-        .map(historyResponse -> LocalDateTime.parse(historyResponse.getTransferDate()))
-        .filter(transferDate -> Duration.between(transferDate, now).abs().toMinutes() < 1)
+        .map(historyResponse -> Instant.parse(historyResponse.getTransferDate()))
+        .filter(transferDate -> Duration.between(transferDate, nowInstant).abs().toMinutes() < 1)
         .limit(2)
         .count();
 
