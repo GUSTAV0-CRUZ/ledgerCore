@@ -10,7 +10,7 @@ import java.util.UUID;
 
 public interface HistoryRepository {
    History save(History history);
-   List<History> findAllByAccountIdAndYearMonth(UUID accountId, YearMonth yearMonth);
+   List<History> findAllByAccountIdOrDestinataryNameAndYearMonth(UUID accountId, String destinataryName, YearMonth yearMonth);
    Optional<History> findById(UUID id) throws NotFoundHistoryException;
 
    default History findByIdOrNotFoundExceptions(UUID id) {

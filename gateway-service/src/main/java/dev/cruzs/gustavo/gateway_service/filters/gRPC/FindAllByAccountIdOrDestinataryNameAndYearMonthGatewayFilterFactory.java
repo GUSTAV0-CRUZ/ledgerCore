@@ -21,11 +21,11 @@ import java.time.ZoneOffset;
 import java.util.Map;
 
 @Component
-public class FindAllHistoryByAccountIdAndYearMonthGatewayFilterFactory extends AbstractGatewayFilterFactory<FindAllHistoryByAccountIdAndYearMonthGatewayFilterFactory.Config> {
+public class FindAllByAccountIdOrDestinataryNameAndYearMonthGatewayFilterFactory extends AbstractGatewayFilterFactory<FindAllByAccountIdOrDestinataryNameAndYearMonthGatewayFilterFactory.Config> {
   private final ReactorHistoryServiceStub reactorHistoryServiceStub;
   private final ReactorAccountServiceStub reactorAccountServiceStub;
 
-  public FindAllHistoryByAccountIdAndYearMonthGatewayFilterFactory(
+  public FindAllByAccountIdOrDestinataryNameAndYearMonthGatewayFilterFactory(
       ReactorHistoryServiceStub reactorHistoryServiceStub,
       ReactorAccountServiceStub reactorAccountServiceStub) {
     super(Config.class);
@@ -45,6 +45,8 @@ public class FindAllHistoryByAccountIdAndYearMonthGatewayFilterFactory extends A
       String year = uriVariables.getOrDefault("year", String.valueOf(yearMonth.getYear()));
       String month = uriVariables.getOrDefault("month", String.valueOf(yearMonth.getMonthValue()));
 
+      String yearMonthToString = year + '-' + (month.length() == 1 ? "0" + month : month);
+
       FullUserHeadersRequestDto fullUserHeadersRequestDto = GetHeadersOfRequest.getFullUser(exchange);
 
       FindAccountByUserIdRequest findAccountByUserIdRequest = FindAccountByUserIdRequest.newBuilder()
@@ -53,20 +55,16 @@ public class FindAllHistoryByAccountIdAndYearMonthGatewayFilterFactory extends A
 
       return reactorAccountServiceStub.findAccountByUserId(findAccountByUserIdRequest)
           .flatMap(accountResponse -> {
-            FindAllByAccountIdAndYearMonthRequest findAllByAccountIdAndYearMonthRequest =
-                FindAllByAccountIdAndYearMonthRequest.newBuilder()
+            FindAllByAccountIdOrDestinataryNameAndYearMonthRequest findAllByAccountIdOrDestinataryNameAndYearMonth =
+                FindAllByAccountIdOrDestinataryNameAndYearMonthRequest.newBuilder()
                   .setAccountId(accountResponse.getId())
-                  .setYearMonth(year + "-" + (month.length() > 1 ? month : "0" + month))
+                  .setDestinataryName(accountResponse.getNumber())
+                  .setYearMonth(yearMonthToString)
                   .build();
 
-            return reactorHistoryServiceStub.findAllByAccountIdAndYearMonth(findAllByAccountIdAndYearMonthRequest);
+            return reactorHistoryServiceStub.findAllByAccountIdOrDestinataryNameAndYearMonth(findAllByAccountIdOrDestinataryNameAndYearMonth);
           })
-          .flatMap(historyResponse -> sendResponse(exchange, historyResponse))
-          .onErrorResume(throwable -> {
-            ServerHttpResponse response = exchange.getResponse();
-            response.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR);
-            return response.setComplete();
-          });
+          .flatMap(historyResponse -> sendResponse(exchange, historyResponse));
     };
   }
 

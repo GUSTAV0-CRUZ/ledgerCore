@@ -31,6 +31,7 @@ public class TransferMoneyService implements TransferMoneyUseCase {
     this.antiFraudService.evaluate(
         new EvaluateCommand(
             accountSender.getId(),
+            accountSender.getNumber().getNumber(),
             transferMoneyCommand.amount()
         )
     );

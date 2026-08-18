@@ -3,5 +3,5 @@ package dev.cruzs.gustavo.service_bancary.account.application.ports.outbound.dto
 import java.math.BigDecimal;
 import java.util.UUID;
 
-public record EvaluateCommand(UUID accountId, BigDecimal amount) {
+public record EvaluateCommand(UUID accountId, String destinataryName, BigDecimal amount) {
 }

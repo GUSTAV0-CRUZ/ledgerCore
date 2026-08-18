@@ -105,7 +105,7 @@ spring:
                 - Path=/api/v1/history/{year:\d{4}}/{month:\d{2}}
                 - Method=GET
               filters:
-                - FindAllHistoryByAccountIdAndYearMonth
+                - FindAllByAccountIdOrDestinataryNameAndYearMonth
 
     stream:
       bindings:

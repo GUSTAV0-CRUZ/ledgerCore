@@ -30,7 +30,7 @@ public class HistoryRepositoryAdapter implements HistoryRepository {
   }
 
   @Override
-  public List<History> findAllByAccountIdAndYearMonth(UUID accountId, YearMonth yearMonth) {
+  public List<History> findAllByAccountIdOrDestinataryNameAndYearMonth(UUID accountId, String destinataryName, YearMonth yearMonth) {
     Instant startOfMonth = yearMonth.atDay(1)
       .atStartOfDay()
       .toInstant(ZoneOffset.UTC);
@@ -38,8 +38,9 @@ public class HistoryRepositoryAdapter implements HistoryRepository {
       .atTime(23, 59, 59, 999999999)
       .toInstant(ZoneOffset.UTC);
 
-    return historyJpaRepository.findAllByAccountIdAndTransferDateBetween(
+    return historyJpaRepository.findAllByAccountIdOrDestinataryNameAndTransferDateBetween(
         accountId,
+        destinataryName,
         startOfMonth,
         endOfMonth
       )

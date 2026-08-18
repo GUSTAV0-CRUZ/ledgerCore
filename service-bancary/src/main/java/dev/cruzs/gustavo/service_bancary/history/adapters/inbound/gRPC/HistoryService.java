@@ -1,9 +1,9 @@
 package dev.cruzs.gustavo.service_bancary.history.adapters.inbound.gRPC;
 
 import dev.cruzs.gustavo.service_bancary.history.adapters.inbound.gRPC.generated.*;
-import dev.cruzs.gustavo.service_bancary.history.application.ports.inbound.FindAllByAccountIdAndYearMonthUseCase;
+import dev.cruzs.gustavo.service_bancary.history.application.ports.inbound.FindAllByAccountIdOrDestinataryNameAndYearMonthUseCase;
 import dev.cruzs.gustavo.service_bancary.history.application.ports.inbound.FindHistoryByIdUseCase;
-import dev.cruzs.gustavo.service_bancary.history.application.ports.inbound.commands.FindAllByAccountIdAndYearMonthCommand;
+import dev.cruzs.gustavo.service_bancary.history.application.ports.inbound.commands.FindAllByAccountIdOrDestinataryNameAndYearMonthCommand;
 import dev.cruzs.gustavo.service_bancary.history.application.ports.inbound.commands.FindHistoryByIdCommand;
 import dev.cruzs.gustavo.service_bancary.history.domain.History;
 import io.grpc.stub.StreamObserver;
@@ -15,11 +15,11 @@ import java.util.UUID;
 
 @GrpcService
 public class HistoryService extends HistoryServiceGrpc.HistoryServiceImplBase {
-  private final FindAllByAccountIdAndYearMonthUseCase findAllHistoryByAccountIdAndYearMonthUseCase;
+  private final FindAllByAccountIdOrDestinataryNameAndYearMonthUseCase findAllHistoryByAccountIdAndYearMonthUseCase;
   private  final FindHistoryByIdUseCase findHistoryByIdUseCase;
 
   public HistoryService(
-      FindAllByAccountIdAndYearMonthUseCase findAllHistoryByAccountIdAndYearMonthUseCase,
+      FindAllByAccountIdOrDestinataryNameAndYearMonthUseCase findAllHistoryByAccountIdAndYearMonthUseCase,
       FindHistoryByIdUseCase findHistoryByIdUseCase
   ) {
     this.findAllHistoryByAccountIdAndYearMonthUseCase = findAllHistoryByAccountIdAndYearMonthUseCase;
@@ -27,18 +27,18 @@ public class HistoryService extends HistoryServiceGrpc.HistoryServiceImplBase {
   }
 
   @Override
-  public void findAllByAccountIdAndYearMonth(
-      FindAllByAccountIdAndYearMonthRequest request,
+  public void findAllByAccountIdOrDestinataryNameAndYearMonth(
+      FindAllByAccountIdOrDestinataryNameAndYearMonthRequest request,
       StreamObserver<ListHistoriesResponse> responseObserver
   ) {
     UUID accountId = UUID.fromString(request.getAccountId());
     List<History> histories = this.findAllHistoryByAccountIdAndYearMonthUseCase.execute(
-        new FindAllByAccountIdAndYearMonthCommand(
+        new FindAllByAccountIdOrDestinataryNameAndYearMonthCommand(
           accountId,
-            request.getYearMonth() == null ||
-            request.getYearMonth().isEmpty() ?
-            null :
-            YearMonth.parse(request.getYearMonth())
+          request.getDestinataryName(),
+          request.getYearMonth().isEmpty() ?
+          null :
+          YearMonth.parse(request.getYearMonth())
         )
     );
 

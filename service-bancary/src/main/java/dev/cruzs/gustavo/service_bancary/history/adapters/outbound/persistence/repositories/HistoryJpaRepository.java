@@ -2,16 +2,18 @@ package dev.cruzs.gustavo.service_bancary.history.adapters.outbound.persistence.
 
 import dev.cruzs.gustavo.service_bancary.history.adapters.outbound.persistence.models.HistoryModel;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
 public interface HistoryJpaRepository extends JpaRepository<HistoryModel, UUID> {
-  List<HistoryModel> findAllByAccountIdAndTransferDateBetween(
-    UUID accountId,
-    Instant start,
-    Instant end
+  @Query("SELECT h FROM HistoryModel h WHERE (h.accountId = :accountId OR h.destinataryName = :destinataryName) AND h.transferDate BETWEEN :start AND :end")
+  List<HistoryModel> findAllByAccountIdOrDestinataryNameAndTransferDateBetween(
+      UUID accountId,
+      String destinataryName,
+      Instant start,
+      Instant end
   );
 }

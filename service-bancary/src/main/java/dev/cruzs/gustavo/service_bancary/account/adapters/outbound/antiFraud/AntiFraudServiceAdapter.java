@@ -2,7 +2,7 @@ package dev.cruzs.gustavo.service_bancary.account.adapters.outbound.antiFraud;
 
 import dev.cruzs.gustavo.service_bancary.account.application.ports.outbound.AntiFraudService;
 import dev.cruzs.gustavo.service_bancary.account.application.ports.outbound.dtos.EvaluateCommand;
-import dev.cruzs.gustavo.service_bancary.history.adapters.inbound.gRPC.generated.FindAllByAccountIdAndYearMonthRequest;
+import dev.cruzs.gustavo.service_bancary.history.adapters.inbound.gRPC.generated.FindAllByAccountIdOrDestinataryNameAndYearMonthRequest;
 import dev.cruzs.gustavo.service_bancary.history.adapters.inbound.gRPC.generated.ListHistoriesResponse;
 import dev.cruzs.gustavo.service_bancary.history.adapters.inbound.gRPC.generated.HistoryServiceGrpc.HistoryServiceBlockingStub;
 import net.devh.boot.grpc.client.inject.GrpcClient;
@@ -31,12 +31,13 @@ public class AntiFraudServiceAdapter implements AntiFraudService {
     YearMonth yearMonth = YearMonth.from(nowInstant.atZone(ZoneId.of("UTC")));
 
 
-    var findAllByAccountIdAndYearMonthRequest = this.createFindAllByAccountIdAndYearMonthRequest(
+    var findAllByAccountIdAndYearMonthRequest = this.createFindAllByAccountIdOrDestinataryNameAndYearMonthRequest(
         evaluateCommand.accountId(),
+        evaluateCommand.destinataryName(),
         yearMonth
     );
 
-    ListHistoriesResponse listHistoriesResponse =  historyServiceBlockingStub.findAllByAccountIdAndYearMonth(
+    ListHistoriesResponse listHistoriesResponse =  historyServiceBlockingStub.findAllByAccountIdOrDestinataryNameAndYearMonth(
         findAllByAccountIdAndYearMonthRequest
     );
 
@@ -50,12 +51,14 @@ public class AntiFraudServiceAdapter implements AntiFraudService {
       throw new IllegalArgumentException("Too many movement per minute");
   }
 
-  private FindAllByAccountIdAndYearMonthRequest createFindAllByAccountIdAndYearMonthRequest (
+  private FindAllByAccountIdOrDestinataryNameAndYearMonthRequest createFindAllByAccountIdOrDestinataryNameAndYearMonthRequest (
       UUID accountId,
+      String destinataryName,
       YearMonth yearMonth
   ) {
-    return FindAllByAccountIdAndYearMonthRequest.newBuilder()
+    return FindAllByAccountIdOrDestinataryNameAndYearMonthRequest.newBuilder()
         .setAccountId(accountId.toString())
+        .setDestinataryName(destinataryName)
         .setYearMonth(yearMonth.toString())
         .build();
   }

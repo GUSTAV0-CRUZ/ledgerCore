@@ -27,6 +27,7 @@ public class WithdrawAccountService implements WithdrawAccountUseCase {
     this.antiFraudService.evaluate(
         new EvaluateCommand(
           account.getId(),
+          account.getNumber().getNumber(),
           withdrawAccountCommand.amount()
         )
     );

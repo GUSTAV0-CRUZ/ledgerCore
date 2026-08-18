@@ -35,12 +35,7 @@ public class FindAccountByUserIdGatewayFilterFactory extends AbstractGatewayFilt
           .build();
 
       return reactorAccountServiceStub.findAccountByUserId(findAccountByUserIdRequest)
-        .flatMap(accountResponse -> this.sendResponse(exchange, accountResponse))
-          .onErrorResume(throwable -> {
-            ServerHttpResponse response = exchange.getResponse();
-            response.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR);
-            return response.setComplete();
-          });
+        .flatMap(accountResponse -> this.sendResponse(exchange, accountResponse));
     };
   }
 
