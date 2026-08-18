@@ -119,7 +119,7 @@ paths:
         '202':
           description: Event accept.
 
-  /api/v1/auth/history/{year}/{month}:
+  /api/v1/history/{year}/{month}:
     get:
       summary: Find history the a account of user
       parameters:

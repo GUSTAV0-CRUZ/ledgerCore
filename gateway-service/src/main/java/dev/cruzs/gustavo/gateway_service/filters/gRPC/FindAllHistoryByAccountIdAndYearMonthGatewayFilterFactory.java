@@ -53,12 +53,13 @@ public class FindAllHistoryByAccountIdAndYearMonthGatewayFilterFactory extends A
 
       return reactorAccountServiceStub.findAccountByUserId(findAccountByUserIdRequest)
           .flatMap(accountResponse -> {
-            FindAllByAccountIdAndYearMonthRequest historyReq = FindAllByAccountIdAndYearMonthRequest.newBuilder()
-                .setAccountId(accountResponse.getId())
-                .setYearMonth(year + "-" + month)
-                .build();
+            FindAllByAccountIdAndYearMonthRequest findAllByAccountIdAndYearMonthRequest =
+                FindAllByAccountIdAndYearMonthRequest.newBuilder()
+                  .setAccountId(accountResponse.getId())
+                  .setYearMonth(year + "-" + (month.length() > 1 ? month : "0" + month))
+                  .build();
 
-            return reactorHistoryServiceStub.findAllByAccountIdAndYearMonth(historyReq);
+            return reactorHistoryServiceStub.findAllByAccountIdAndYearMonth(findAllByAccountIdAndYearMonthRequest);
           })
           .flatMap(historyResponse -> sendResponse(exchange, historyResponse))
           .onErrorResume(throwable -> {
