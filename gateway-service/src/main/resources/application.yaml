@@ -1,7 +1,11 @@
 grpc:
-  gateway-service:
-    host: "${GRPC_SERVICE_BANCARY_HOST:localhost}"
-    port: ${GRPC_SERVICE_BANCARY_PORT:9091}
+  account-service:
+    host: "${GRPC_ACCOUNT_SERVICE_HOST:localhost}"
+    port: ${GRPC_ACCOUNT_SERVICE_PORT:9092}
+  history-service:
+    host: "${GRPC_HISTORY_SERVICE_HOST:localhost}"
+    port: ${GRPC_HISTORY_SERVICE_PORT:9092}
+
 jwt:
   secrete:
     key: "${JWT_SECRETE_KEY:secreteKeyDefaultWith123456789012}"
@@ -94,6 +98,14 @@ spring:
                 - Method=PATCH
               filters:
                 - ScheduleTransferMoneyProducer
+
+            - id: findAll-history-by-accountId-and-yearMonth
+              uri: no-op://localhost
+              predicates:
+                - Path=/api/v1/history/{year:\d{4}}/{month:\d{2}}
+                - Method=GET
+              filters:
+                - FindAllHistoryByAccountIdAndYearMonth
 
     stream:
       bindings:

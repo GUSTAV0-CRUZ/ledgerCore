@@ -106,8 +106,6 @@ paths:
         '202':
           description: Event accept.
 
-
-
   /api/v1/schedule/transfer:
     patch:
       summary: schedule one transfer.
@@ -120,6 +118,30 @@ paths:
       responses:
         '202':
           description: Event accept.
+
+  /api/v1/auth/history/{year}/{month}:
+    get:
+      summary: Find history the a account of user
+      parameters:
+        - name: year
+          in: path
+          required: true
+          description: Year to query
+          schema:
+            type: integer
+        - name: month
+          in: path
+          required: true
+          description: Year to query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HistoryResponseDto'
 
 components:
   securitySchemes:
@@ -214,4 +236,20 @@ components:
         recipientNumberAccount:
           type: string
         scheduledDate:
+          type: string
+
+    HistoryResponseDto:
+      type: object
+      properties:
+        id:
+          type: string
+        accountId:
+          type: string
+        amount:
+          type: string
+        institutionName:
+          type: string
+        destinataryName:
+          type: string
+        transferDate:
           type: string

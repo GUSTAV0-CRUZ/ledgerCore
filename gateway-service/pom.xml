@@ -72,6 +72,11 @@
 			<artifactId>springdoc-openapi-starter-webflux-ui</artifactId>
 			<version>3.0.0</version>
 		</dependency>
+		<dependency>
+			<groupId>com.salesforce.servicelibs</groupId>
+			<artifactId>reactor-grpc-stub</artifactId>
+			<version>1.2.4</version>
+		</dependency>
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -146,6 +151,11 @@
 							<version>${grpc.version}</version>
 							<options>@generated=omit</options>
 						</binaryMavenPlugin>
+						<binaryMavenPlugin>
+							<groupId>com.salesforce.servicelibs</groupId>
+							<artifactId>reactor-grpc</artifactId>
+							<version>1.2.4</version>
+						</binaryMavenPlugin>
 					</binaryMavenPlugins>
 				</configuration>
 				<executions>
@@ -177,6 +187,23 @@
 							</includes>
 							<arguments>
 								<argument>--descriptor_set_out=${project.build.directory}/generated-sources/protobuf/account-service.pb</argument>
+								<argument>--include_imports</argument>
+								<argument>--include_source_info</argument>
+							</arguments>
+						</configuration>
+					</execution>
+
+					<execution>
+						<id>generate-history</id>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<includes>
+								<include>HistoryService.proto</include>
+							</includes>
+							<arguments>
+								<argument>--descriptor_set_out=${project.build.directory}/generated-sources/protobuf/history-service.pb</argument>
 								<argument>--include_imports</argument>
 								<argument>--include_source_info</argument>
 							</arguments>

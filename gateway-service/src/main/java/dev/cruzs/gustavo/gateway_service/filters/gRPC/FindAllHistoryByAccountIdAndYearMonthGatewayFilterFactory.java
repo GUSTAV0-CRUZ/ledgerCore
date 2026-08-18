@@ -1,12 +1,13 @@
 package dev.cruzs.gustavo.gateway_service.filters.gRPC;
-import dev.cruzs.gustavo.gateway_service.filters.gRPC.generated.AccountResponse;
-import dev.cruzs.gustavo.gateway_service.filters.gRPC.generated.FindAccountByUserIdRequest;
+import dev.cruzs.gustavo.gateway_service.filters.gRPC.generated.*;
+import dev.cruzs.gustavo.gateway_service.filters.gRPC.generated.ReactorHistoryServiceGrpc.ReactorHistoryServiceStub;
 import dev.cruzs.gustavo.gateway_service.filters.gRPC.generated.ReactorAccountServiceGrpc.ReactorAccountServiceStub;
 import dev.cruzs.gustavo.gateway_service.utils.ConversionsOfTypes;
 import dev.cruzs.gustavo.gateway_service.utils.GetHeadersOfRequest;
 import dev.cruzs.gustavo.gateway_service.utils.dtos.FullUserHeadersRequestDto;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
+import org.springframework.cloud.gateway.support.ServerWebExchangeUtils;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -15,12 +16,20 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
+import java.time.YearMonth;
+import java.time.ZoneOffset;
+import java.util.Map;
+
 @Component
-public class FindAccountByUserIdGatewayFilterFactory extends AbstractGatewayFilterFactory<FindAccountByUserIdGatewayFilterFactory.Config> {
+public class FindAllHistoryByAccountIdAndYearMonthGatewayFilterFactory extends AbstractGatewayFilterFactory<FindAllHistoryByAccountIdAndYearMonthGatewayFilterFactory.Config> {
+  private final ReactorHistoryServiceStub reactorHistoryServiceStub;
   private final ReactorAccountServiceStub reactorAccountServiceStub;
 
-  public FindAccountByUserIdGatewayFilterFactory(ReactorAccountServiceStub reactorAccountServiceStub) {
+  public FindAllHistoryByAccountIdAndYearMonthGatewayFilterFactory(
+      ReactorHistoryServiceStub reactorHistoryServiceStub,
+      ReactorAccountServiceStub reactorAccountServiceStub) {
     super(Config.class);
+    this.reactorHistoryServiceStub = reactorHistoryServiceStub;
     this.reactorAccountServiceStub = reactorAccountServiceStub;
   }
 
@@ -29,13 +38,29 @@ public class FindAccountByUserIdGatewayFilterFactory extends AbstractGatewayFilt
   @Override
   public GatewayFilter apply(Config config) {
     return (exchange, chain) -> {
+      Map<String, String> uriVariables = ServerWebExchangeUtils.getUriTemplateVariables(exchange);
+
+      YearMonth yearMonth = YearMonth.now(ZoneOffset.UTC);
+
+      String year = uriVariables.getOrDefault("year", String.valueOf(yearMonth.getYear()));
+      String month = uriVariables.getOrDefault("month", String.valueOf(yearMonth.getMonthValue()));
+
       FullUserHeadersRequestDto fullUserHeadersRequestDto = GetHeadersOfRequest.getFullUser(exchange);
+
       FindAccountByUserIdRequest findAccountByUserIdRequest = FindAccountByUserIdRequest.newBuilder()
           .setUserId(fullUserHeadersRequestDto.id())
           .build();
 
       return reactorAccountServiceStub.findAccountByUserId(findAccountByUserIdRequest)
-        .flatMap(accountResponse -> this.sendResponse(exchange, accountResponse))
+          .flatMap(accountResponse -> {
+            FindAllByAccountIdAndYearMonthRequest historyReq = FindAllByAccountIdAndYearMonthRequest.newBuilder()
+                .setAccountId(accountResponse.getId())
+                .setYearMonth(year + "-" + month)
+                .build();
+
+            return reactorHistoryServiceStub.findAllByAccountIdAndYearMonth(historyReq);
+          })
+          .flatMap(historyResponse -> sendResponse(exchange, historyResponse))
           .onErrorResume(throwable -> {
             ServerHttpResponse response = exchange.getResponse();
             response.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -44,8 +69,8 @@ public class FindAccountByUserIdGatewayFilterFactory extends AbstractGatewayFilt
     };
   }
 
-  private Mono<Void> sendResponse(ServerWebExchange exchange, AccountResponse accountResponse) {
-    byte[] data = ConversionsOfTypes.protobufToJson(accountResponse);
+  private Mono<Void> sendResponse(ServerWebExchange exchange, ListHistoriesResponse historyResponse) {
+    byte[] data = ConversionsOfTypes.protobufToJson(historyResponse);
     ServerHttpResponse response = exchange.getResponse();
     response.setStatusCode(HttpStatus.OK);
     response.getHeaders().setContentType(MediaType.APPLICATION_JSON);

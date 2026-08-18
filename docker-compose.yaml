@@ -166,25 +166,27 @@ services:
       redis:
         condition: service_healthy
 
-  gateway-service:
-    build:
-      context: ./gateway-service
-      dockerfile: dockerfile
-    container_name: gateway-service
-    restart: unless-stopped
-    ports:
-      - "8080:8080"
-    environment:
-      - JWT_SECRETE_KEY=secreteKeyDefaultWith123456789012
-      - GRPC_AUTH_SERVICE_URI=grpc://auth-service:9090
-      - GRPC_SERVICE_BANCARY_HOST=service-bancary
-      - GRPC_SERVICE_BANCARY_PORT=9090
-      - HOST_RMQ=rabbitmq
-    networks:
-      - ledger-core
-    depends_on:
-      rabbitmq:
-        condition: service_healthy
+#  gateway-service:
+#    build:
+#      context: ./gateway-service
+#      dockerfile: dockerfile
+#    container_name: gateway-service
+#    restart: unless-stopped
+#    ports:
+#      - "8080:8080"
+#    environment:
+#      - JWT_SECRETE_KEY=secreteKeyDefaultWith123456789012
+#      - GRPC_AUTH_SERVICE_URI=grpc://auth-service:9090
+#      - GRPC_ACCOUNT_SERVICE_HOST=service-bancary
+#      - GRPC_ACCOUNT_SERVICE_PORT=9090
+#      - HOST_RMQ=rabbitmq
+#      - GRPC_HISTORY_SERVICE_HOST=service-bancary
+#      - GRPC_HISTORY_SERVICE_PORT=9090
+#    networks:
+#      - ledger-core
+#    depends_on:
+#      rabbitmq:
+#        condition: service_healthy
 
   notification-service:
     build:
