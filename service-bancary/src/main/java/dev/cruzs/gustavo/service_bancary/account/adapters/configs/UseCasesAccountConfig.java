@@ -1,6 +1,8 @@
 package dev.cruzs.gustavo.service_bancary.account.adapters.configs;
 
+import dev.cruzs.gustavo.service_bancary.account.adapters.outbound.persistence.decorators.TransactionalDepositAccountDecorator;
 import dev.cruzs.gustavo.service_bancary.account.adapters.outbound.persistence.decorators.TransactionalTransferMoneyDecorator;
+import dev.cruzs.gustavo.service_bancary.account.adapters.outbound.persistence.decorators.TransactionalWithdrawAccountDecorator;
 import dev.cruzs.gustavo.service_bancary.account.application.ports.inbound.*;
 import dev.cruzs.gustavo.service_bancary.account.application.ports.outbound.*;
 import dev.cruzs.gustavo.service_bancary.account.application.services.*;
@@ -12,15 +14,18 @@ public class UseCasesAccountConfig {
   private final AccountRepository accountRepository;
   private final HistoryService historyService;
   private final AntiFraudService antiFraudService;
+  private final MovementRepository movementRepository;
 
   public UseCasesAccountConfig(
       AccountRepository accountRepository,
       HistoryService historyService,
-      AntiFraudService antiFraudService
+      AntiFraudService antiFraudService,
+      MovementRepository movementRepository
   ) {
     this.accountRepository = accountRepository;
     this.historyService = historyService;
     this.antiFraudService = antiFraudService;
+    this.movementRepository = movementRepository;
   }
 
   @Bean
@@ -33,12 +38,21 @@ public class UseCasesAccountConfig {
 
   @Bean
   public DepositAccountUseCase depositAccountUseCase() {
-    return new DepositAccountService(this.accountRepository, this.historyService);
+    DepositAccountUseCase depositAccountUseCase = new DepositAccountService(this.accountRepository, this.historyService, this.movementRepository);
+
+    return new TransactionalDepositAccountDecorator(depositAccountUseCase);
   }
 
   @Bean
   public WithdrawAccountUseCase withdrawAccountUseCase() {
-    return new WithdrawAccountService(this.accountRepository, this.historyService, this.antiFraudService);
+    WithdrawAccountUseCase withdrawAccountUseCase = new WithdrawAccountService(
+        this.accountRepository,
+        this.historyService,
+        this.antiFraudService,
+        this.movementRepository
+    );
+
+    return new TransactionalWithdrawAccountDecorator(withdrawAccountUseCase);
   }
 
   @Bean
@@ -46,7 +60,8 @@ public class UseCasesAccountConfig {
     TransferMoneyUseCase transferMoneyUseCase = new TransferMoneyService(
         this.accountRepository,
         this.historyService,
-        this.antiFraudService
+        this.antiFraudService,
+        this.movementRepository
     );
 
     return new TransactionalTransferMoneyDecorator(transferMoneyUseCase);
